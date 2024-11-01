@@ -24,9 +24,16 @@ public class ClockGuiPlugin extends JavaPlugin implements Listener {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         // Check if the player is right-clicking with a clock
-        if (event.getItem() != null && event.getItem().getType() == Material.CLOCK) {
-            openClockGui(event.getPlayer());
+        if (!event.getAction().name().contains("RIGHT_CLICK") || !event.hasItem()) {
+            return;
         }
+
+        // Check if the player is holding a clock
+        if (!event.hasItem() || event.getItem().getType() != Material.CLOCK) {
+            return;
+        }
+
+        openClockGui(event.getPlayer());
     }
 
     private void openClockGui(Player player) {
