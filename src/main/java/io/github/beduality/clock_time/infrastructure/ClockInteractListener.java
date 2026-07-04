@@ -17,10 +17,12 @@ public class ClockInteractListener implements Listener {
 
     private final TimeFormatter timeFormatter;
     private final TranslationService translationService;
+    private final String timeFormat;
 
-    public ClockInteractListener(TimeFormatter timeFormatter, TranslationService translationService) {
+    public ClockInteractListener(TimeFormatter timeFormatter, TranslationService translationService, String timeFormat) {
         this.timeFormatter = timeFormatter;
         this.translationService = translationService;
+        this.timeFormat = timeFormat;
     }
 
     @EventHandler
@@ -73,13 +75,7 @@ public class ClockInteractListener implements Listener {
         FormattedTime formattedTime = timeFormatter.formatTicks(time);
 
         // Display the formatted time as a colorful chat message
-        String message = translationService.getMessage(
-            "clock_time.message.time",
-            locale,
-            formattedTime.getFormattedHour(),
-            formattedTime.getFormattedMinute(),
-            formattedTime.period()
-        );
+        String message = translationService.getFormattedTimeMessage(formattedTime, locale, timeFormat);
         player.sendMessage(MiniMessage.miniMessage().deserialize(message));
     }
 }

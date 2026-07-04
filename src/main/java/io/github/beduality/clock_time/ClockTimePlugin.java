@@ -9,13 +9,19 @@ public class ClockTimePlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        // Instantiate core components
+        // Save default config if not present
+        saveDefaultConfig();
+
+        // Retrieve config values
+        String timeFormat = getConfig().getString("time-format", "locale");
+
+        // Instantiate core components (Manual Dependency Injection)
         var timeFormatter = new TimeFormatter();
         var translationService = new TranslationService(this.getClassLoader());
 
         // Register listeners
         getServer().getPluginManager().registerEvents(
-            new ClockInteractListener(timeFormatter, translationService),
+            new ClockInteractListener(timeFormatter, translationService, timeFormat),
             this
         );
 

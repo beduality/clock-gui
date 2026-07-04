@@ -10,7 +10,6 @@ Detailed guides and specifications are available in the [docs](./docs/) director
 * ⚙️ **[Configuration](./docs/configuration.md)**: Settings and translation resources.
 * 🔑 **[Permissions](./docs/permissions.md)**: Group permission references.
 * 🛠️ **[Developer API](./docs/api.md)**: Leveraging decoupled library components.
-* ❓ **[FAQ](./docs/faq.md)**: Frequently Asked Questions.
 
 ## Compatibility
 
