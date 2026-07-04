@@ -1,6 +1,6 @@
 # ClockTime Plugin
 
-**ClockTime** is a Minecraft plugin that enhances the in-game clock by providing a quick-access time check in a **12-hour format**. Right-click with a clock in hand, and you are sent a localized message containing the current time.
+**ClockTime** is a Minecraft plugin that enhances the in-game clock by providing a quick-access time check in customizable formats (12-hour, 24-hour, or player client locale). Right-click with a clock in hand, and you are sent a localized message containing the current time.
 
 ## Documentation
 

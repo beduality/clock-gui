@@ -4,13 +4,11 @@ The core business logic of ClockTime is separated from Bukkit. Developers lookin
 
 ## Packages
 
-### `io.github.beduality.clock_time.domain`
-
-Contains domain representations such as `FormattedTime` and `TimeFormatter` (computes Minecraft ticks 0-24000 to standard 12-hour values).
+Contains the `TimeFormatter` (maps Minecraft ticks 0-24000 to standard Java `java.time.LocalTime` representations).
 
 ```java
 TimeFormatter formatter = new TimeFormatter();
-FormattedTime time = formatter.formatTicks(4500); // returns 10:30 AM
+java.time.LocalTime time = formatter.formatTicks(4500); // returns 10:30
 ```
 
 ### `io.github.beduality.clock_time.application`

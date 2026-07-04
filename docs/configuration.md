@@ -12,5 +12,5 @@
   time-format: "locale"
   ```
 * **Translation / Localizations**: Messages are automatically localized based on the client's language preference using Java Resource Bundles (`messages.properties`). Supported locales are loaded automatically fallback to English if not found.
-  * If using `"12h"` format, the `clock_time.message.time.12h` localized template is used.
-  * If using `"24h"` format, the `clock_time.message.time.24h` localized template is used.
+  * The template key `clock_time.message.time` is used for all styles. It accepts a single `{0}` parameter representing the pre-formatted time.
+  * AM/PM symbols are fully localized natively according to the player's client language.
