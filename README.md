@@ -9,7 +9,6 @@ Detailed guides and specifications are available in the [docs](./docs/) director
 * 📥 **[Installation Guide](./docs/installation.md)**: Requirements, compilation, and setup.
 * ⚙️ **[Configuration](./docs/configuration.md)**: Settings and translation resources.
 * 🔑 **[Permissions](./docs/permissions.md)**: Group permission references.
-* 🧩 **[Placeholders](./docs/placeholders.md)**: Internal and external variables.
 * 🛠️ **[Developer API](./docs/api.md)**: Leveraging decoupled library components.
 * ❓ **[FAQ](./docs/faq.md)**: Frequently Asked Questions.
 
