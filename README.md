@@ -1,14 +1,13 @@
 # ClockTime Plugin
 
-**ClockTime** is a Minecraft plugin that enhances the in-game clock by providing a quick-access GUI. When players right-click with a clock in hand, they are presented with a minimal interface displaying the current in-game time in a **12-hour format**.
-
-![ClockTime in action](./public/demo.png)
+**ClockTime** is a Minecraft plugin that enhances the in-game clock by providing a quick-access time check. When players right-click with a clock in hand, they are sent a colorful chat message displaying the current in-game time in a **12-hour format**.
 
 ## Features
 
 - **12-Hour Time Format**: Displays the current in-game time as `HH:MM AM/PM`, calculated from Minecraft's internal day-night cycle.
-- **Quick Access**: Right-click with a clock to open the GUI and view the current time instantly.
-- **Minimal GUI**: A lightweight and intuitive interface that doesn't clutter the gameplay experience.
+- **Quick Access**: Right-click with a clock to view the time in chat instantly.
+- **Dimension Awareness**: Correctly handles dimensions like the Nether and The End where time has no meaning by warning the player that the clock is spinning wildly.
+- **Clean Chat Messages**: Lightweight, colorized text display that doesn't clutter the gameplay experience.
 
 ## Requirements
 
@@ -25,8 +24,8 @@ To build and run this plugin, you will need:
 1. **Clone the Repository**  
    Clone the project repository from GitHub:
    ```bash
-   git clone https://github.com/beduality/clock-time
-   cd clock-time
+    git clone https://github.com/beduality/clocktime
+    cd clocktime
    ```
 
 2. **Build the Plugin**  
@@ -54,7 +53,7 @@ To build and run this plugin, you will need:
 
 1. Hold a clock in your hand.
 2. Right-click while holding the clock.
-3. A GUI will open displaying the current in-game time in **12-hour format**.
+3. A chat message will display the current in-game time in **12-hour format**.
 
 ### Example:
 
@@ -75,4 +74,4 @@ No additional configuration is required! The plugin works out of the box.
 ## Contribution
 
 We welcome contributions!  
-Feel free to fork the project, submit pull requests, or report issues on our [GitHub repository](https://github.com/beduality/clock-time).
+Feel free to fork the project, submit pull requests, or report issues on our [GitHub repository](https://github.com/beduality/clocktime).

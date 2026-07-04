@@ -1,4 +1,10 @@
 {
     "java.configuration.updateBuildConfiguration": "automatic",
-    "java.compile.nullAnalysis.mode": "automatic"
+    "java.compile.nullAnalysis.mode": "automatic",
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.patterns": {
+        ".gitignore": ".gitattributes",
+        "gradle.properties": "gradlew, gradlew.bat",
+        "build.gradle": "settings.gradle"
+    }
 }

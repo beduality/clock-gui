@@ -1,6 +1,5 @@
 package io.github.beduality.clock_time;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -33,12 +32,20 @@ public class ClockTimePlugin extends JavaPlugin implements Listener {
             return;
         }
 
-        openClockTimeGui(event.getPlayer());
+        sendClockTimeMessage(event.getPlayer());
     }
 
-    private void openClockTimeGui(Player player) {
+    private void sendClockTimeMessage(Player player) {
         // Get the in-game time from the player's current world
         var world = player.getWorld();
+
+        // Handle dimensions where time does not make sense (Nether and End)
+        if (world.getEnvironment() == org.bukkit.World.Environment.NETHER || 
+            world.getEnvironment() == org.bukkit.World.Environment.THE_END) {
+            player.sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize("<red>The clock spins wildly... Time has no meaning here.</red>"));
+            return;
+        }
+
         var time = world.getTime();
 
         // Convert the in-game time to a 12-hour format
@@ -47,13 +54,8 @@ public class ClockTimePlugin extends JavaPlugin implements Listener {
         var twelveHour = hour % 12 == 0 ? 12 : hour % 12; // Convert 24-hour to 12-hour, with 0 as 12
         var period = hour < 12 ? "AM" : "PM";
 
-        // Display the formatted time as the GUI title
-        var title = String.format("Current Time: %02d:%02d %s", twelveHour, minute, period);
-
-        // Create an empty GUI with the time in the title
-        var gui = Bukkit.createInventory(null, 9, title);
-
-        // Open the GUI for the player
-        player.openInventory(gui);
+        // Display the formatted time as a colorful chat message
+        var message = String.format("<gold>Current Time:</gold> <aqua>%02d:%02d %s</aqua>", twelveHour, minute, period);
+        player.sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(message));
     }
 }
