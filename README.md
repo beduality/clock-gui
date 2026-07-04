@@ -93,5 +93,15 @@ No additional configuration is required! The plugin works out of the box.
 
 ## Contribution
 
-We welcome contributions!  
+We welcome contributions! Please read [CONTRIBUTING.md](./CONTRIBUTING.md) for details on our architectural guidelines and code standards.
+
 Feel free to fork the project, submit pull requests, or report issues on our [GitHub repository](https://github.com/beduality/clock-time).
+
+## Authors
+
+- **Luis Emidio**
+- **Block-Entity Duality Team**
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
