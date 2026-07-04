@@ -22,6 +22,9 @@
 - Italian (it)
 - Polish (pl)
 - Turkish (tr)
+- Traditional Chinese (zh_TW)
+- Ukrainian (uk)
+- Dutch (nl)
 
 ## Requirements
 
