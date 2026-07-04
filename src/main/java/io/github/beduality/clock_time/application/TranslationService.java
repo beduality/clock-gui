@@ -18,10 +18,10 @@ public class TranslationService {
     public String getMessage(String key, Locale locale, Object... args) {
         ResourceBundle bundle;
         try {
-            bundle = ResourceBundle.getBundle("messages", locale, classLoader);
+            bundle = ResourceBundle.getBundle("languages.messages", locale, classLoader);
         } catch (MissingResourceException e) {
             try {
-                bundle = ResourceBundle.getBundle("messages", Locale.ENGLISH, classLoader);
+                bundle = ResourceBundle.getBundle("languages.messages", Locale.ENGLISH, classLoader);
             } catch (MissingResourceException ex) {
                 return key;
             }
