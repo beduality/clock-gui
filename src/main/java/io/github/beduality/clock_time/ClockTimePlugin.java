@@ -71,7 +71,7 @@ public class ClockTimePlugin extends JavaPlugin implements Listener {
         // Handle dimensions where time does not make sense (Nether and End)
         if (world.getEnvironment() == org.bukkit.World.Environment.NETHER || 
             world.getEnvironment() == org.bukkit.World.Environment.THE_END) {
-            String pattern = bundle.getString("clocktime.message.wild-spin");
+            String pattern = bundle.getString("clock_time.message.wild-spin");
             player.sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(pattern));
             return;
         }
@@ -86,7 +86,7 @@ public class ClockTimePlugin extends JavaPlugin implements Listener {
         var period = hour < 12 ? "AM" : "PM";
 
         // Display the formatted time as a colorful chat message
-        String pattern = bundle.getString("clocktime.message.time");
+        String pattern = bundle.getString("clock_time.message.time");
         String formatted = MessageFormat.format(pattern, String.format("%02d", twelveHour), String.format("%02d", minute), period);
         player.sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(formatted));
     }
