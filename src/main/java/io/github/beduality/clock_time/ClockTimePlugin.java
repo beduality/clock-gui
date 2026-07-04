@@ -1,4 +1,4 @@
-package io.github.beduality.clockgui;
+package io.github.beduality.clock_time;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -8,17 +8,17 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class ClockGuiPlugin extends JavaPlugin implements Listener {
+public class ClockTimePlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
         getServer().getPluginManager().registerEvents(this, this);
-        getLogger().info("Clock-GUI Plugin Enabled");
+        getLogger().info("ClockTime Plugin Enabled");
     }
 
     @Override
     public void onDisable() {
-        getLogger().info("Clock-GUI Plugin Disabled");
+        getLogger().info("ClockTime Plugin Disabled");
     }
 
     @EventHandler
@@ -33,10 +33,10 @@ public class ClockGuiPlugin extends JavaPlugin implements Listener {
             return;
         }
 
-        openClockGui(event.getPlayer());
+        openClockTimeGui(event.getPlayer());
     }
 
-    private void openClockGui(Player player) {
+    private void openClockTimeGui(Player player) {
         // Get the in-game time from the player's current world
         var world = player.getWorld();
         var time = world.getTime();

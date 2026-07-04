@@ -1,8 +1,8 @@
-# Clock-GUI Plugin
+# ClockTime Plugin
 
-**Clock-GUI** is a Minecraft plugin that enhances the in-game clock by providing a quick-access GUI. When players right-click with a clock in hand, they are presented with a minimal interface displaying the current in-game time in a **12-hour format**.
+**ClockTime** is a Minecraft plugin that enhances the in-game clock by providing a quick-access GUI. When players right-click with a clock in hand, they are presented with a minimal interface displaying the current in-game time in a **12-hour format**.
 
-![Clock-GUI in action](./public/demo.png)
+![ClockTime in action](./public/demo.png)
 
 ## Features
 
@@ -25,8 +25,8 @@ To build and run this plugin, you will need:
 1. **Clone the Repository**  
    Clone the project repository from GitHub:
    ```bash
-   git clone https://github.com/beduality/clock-gui
-   cd clock-gui
+   git clone https://github.com/beduality/clock-time
+   cd clock-time
    ```
 
 2. **Build the Plugin**  
@@ -36,10 +36,10 @@ To build and run this plugin, you will need:
    ```
 
 3. **Locate the Built Plugin**  
-   The compiled plugin will be located at `build/libs/clockgui-1.0.0.jar`.
+   The compiled plugin will be located at `build/libs/ClockTime-1.0.0.jar`.
 
 4. **Add to Your Server**  
-   Move the `clockgui-1.0.0.jar` file into the `plugins` folder of your Minecraft server.
+   Move the `ClockTime-1.0.0.jar` file into the `plugins` folder of your Minecraft server.
 
 5. **Start the Server**  
    Restart your server if it's already running. The plugin will automatically enable itself.
@@ -47,7 +47,7 @@ To build and run this plugin, you will need:
 6. **Verify Installation**  
    Check your server logs for the message:  
    ```
-   [ClockGUI] Clock-GUI Plugin Enabled
+   [ClockTime] ClockTime Plugin Enabled
    ```
 
 ## Usage
@@ -75,4 +75,4 @@ No additional configuration is required! The plugin works out of the box.
 ## Contribution
 
 We welcome contributions!  
-Feel free to fork the project, submit pull requests, or report issues on our [GitHub repository](https://github.com/beduality/clock-gui).
+Feel free to fork the project, submit pull requests, or report issues on our [GitHub repository](https://github.com/beduality/clock-time).
