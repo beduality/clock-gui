@@ -1,7 +1,7 @@
 package io.github.beduality.clock_time.application;
 
-import io.github.beduality.clock_time.domain.FormattedTime;
 import org.junit.jupiter.api.Test;
+import java.time.LocalTime;
 import java.util.Locale;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,40 +18,32 @@ class TranslationServiceTest {
 
     @Test
     void testFormattingTranslation12h() {
-        FormattedTime time = new FormattedTime(9, 21, 45, "PM");
+        LocalTime time = LocalTime.of(21, 45);
         String message = service.getFormattedTimeMessage(time, Locale.ENGLISH, "12h");
         assertNotNull(message);
-        assertTrue(message.contains("09"));
-        assertTrue(message.contains("45"));
-        assertTrue(message.contains("PM"));
+        assertTrue(message.contains("09:45"));
+        assertTrue(message.toLowerCase().contains("pm"));
     }
 
     @Test
     void testFormattingTranslation24h() {
-        FormattedTime time = new FormattedTime(9, 21, 45, "PM");
+        LocalTime time = LocalTime.of(21, 45);
         String message = service.getFormattedTimeMessage(time, Locale.ENGLISH, "24h");
         assertNotNull(message);
-        assertTrue(message.contains("21"));
-        assertTrue(message.contains("45"));
-        assertFalse(message.contains("PM"));
-    }
-
-    @Test
-    void testPrefers12h() {
-        assertTrue(service.prefers12h(Locale.US));
-        assertFalse(service.prefers12h(Locale.GERMANY));
+        assertTrue(message.contains("21:45"));
+        assertFalse(message.toLowerCase().contains("pm"));
     }
 
     @Test
     void testLocaleAutoDetection() {
-        FormattedTime time = new FormattedTime(9, 21, 45, "PM");
+        LocalTime time = LocalTime.of(21, 45);
 
         String usMessage = service.getFormattedTimeMessage(time, Locale.US, "locale");
-        assertTrue(usMessage.contains("09"));
-        assertTrue(usMessage.contains("PM"));
+        assertTrue(usMessage.contains("9:45") || usMessage.contains("09:45"));
+        assertTrue(usMessage.toLowerCase().contains("pm"));
 
         String deMessage = service.getFormattedTimeMessage(time, Locale.GERMANY, "locale");
-        assertTrue(deMessage.contains("21"));
-        assertFalse(deMessage.contains("PM"));
+        assertTrue(deMessage.contains("21:45"));
+        assertFalse(deMessage.toLowerCase().contains("pm"));
     }
 }

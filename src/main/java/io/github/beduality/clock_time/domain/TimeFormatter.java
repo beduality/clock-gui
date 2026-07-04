@@ -1,12 +1,12 @@
 package io.github.beduality.clock_time.domain;
 
+import java.time.LocalTime;
+
 public class TimeFormatter {
-    public FormattedTime formatTicks(long ticks) {
-        long normalizedTicks = ((ticks % 24000) + 24000) % 24000;
-        int hour24 = (int) ((normalizedTicks / 1000 + 6) % 24);
-        int minute = (int) ((normalizedTicks % 1000) * 60 / 1000);
-        int hour12 = hour24 % 12 == 0 ? 12 : hour24 % 12;
-        String period = hour24 < 12 ? "AM" : "PM";
-        return new FormattedTime(hour12, hour24, minute, period);
+    public LocalTime formatTicks(long ticks) {
+        // Minecraft day starts at 6:00 AM (sunrise) = 6 hours * 3600 seconds = 21600 seconds.
+        // Map 24000 ticks to 86400 seconds (1 tick = 3.6 seconds).
+        long totalSeconds = (long) (((ticks % 24000) + 6000) % 24000 * 3.6);
+        return LocalTime.ofSecondOfDay(totalSeconds);
     }
 }

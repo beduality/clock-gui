@@ -1,7 +1,6 @@
 package io.github.beduality.clock_time.infrastructure;
 
 import io.github.beduality.clock_time.application.TranslationService;
-import io.github.beduality.clock_time.domain.FormattedTime;
 import io.github.beduality.clock_time.domain.TimeFormatter;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
@@ -11,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
+import java.time.LocalTime;
 import java.util.Locale;
 
 public class ClockInteractListener implements Listener {
@@ -72,10 +72,10 @@ public class ClockInteractListener implements Listener {
         long time = world.getTime();
 
         // Format the time using the domain formatter
-        FormattedTime formattedTime = timeFormatter.formatTicks(time);
+        LocalTime localTime = timeFormatter.formatTicks(time);
 
         // Display the formatted time as a colorful chat message
-        String message = translationService.getFormattedTimeMessage(formattedTime, locale, timeFormat);
+        String message = translationService.getFormattedTimeMessage(localTime, locale, timeFormat);
         player.sendMessage(MiniMessage.miniMessage().deserialize(message));
     }
 }
