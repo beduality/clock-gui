@@ -30,7 +30,7 @@ bukkit {
     main = "io.github.beduality.clock_time.ClockTimePlugin"
     description = "Adds a 12-hour display to Minecraft's clock with a quick-click chat message!"
     apiVersion = "1.20"
-    author = "Luis Emidio, Block-Entity Duality Team"
+    author = "Luis Emidio, Block-Entity Duality Team and contributors"
     website = "https://github.com/beduality/clock-time"
     permissions {
         register("clock_time.use") {

@@ -99,8 +99,7 @@ Feel free to fork the project, submit pull requests, or report issues on our [Gi
 
 ## Authors
 
-- **Luis Emidio**
-- **Block-Entity Duality Team**
+- Luis Emidio, Block-Entity Duality Team and contributors
 
 ## License
 
