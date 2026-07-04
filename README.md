@@ -36,10 +36,10 @@ To build and run this plugin, you will need:
    ```
 
 3. **Locate the Built Plugin**  
-   The compiled plugin will be located at `build/libs/ClockTime-1.0.0.jar`.
+   The compiled plugin will be located at `build/libs/ClockTime-0.1.0.jar`.
 
 4. **Add to Your Server**  
-   Move the `ClockTime-1.0.0.jar` file into the `plugins` folder of your Minecraft server.
+   Move the `ClockTime-0.1.0.jar` file into the `plugins` folder of your Minecraft server.
 
 5. **Start the Server**  
    Restart your server if it's already running. The plugin will automatically enable itself.
