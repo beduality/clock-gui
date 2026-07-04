@@ -14,7 +14,7 @@
 
 - English (US)
 - Spanish (es)
-- Portuguese (Brazil, pt_BR)
+- Portuguese (pt)
 - French (fr)
 - German (de)
 - Japanese (ja)
