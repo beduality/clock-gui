@@ -4,27 +4,53 @@ import java.text.MessageFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.ResourceBundle.Control;
 
 public class TranslationService {
     private final ClassLoader classLoader;
+    private final Locale defaultLocale;
+    private final Control control;
 
-    public TranslationService(ClassLoader classLoader) {
+    public TranslationService(ClassLoader classLoader, String fallbackLanguage) {
         this.classLoader = classLoader;
+        this.defaultLocale = new Locale(fallbackLanguage != null ? fallbackLanguage : "en");
+        
+        // Custom control that inserts our configured fallback locale before the ROOT fallback
+        this.control = new Control() {
+            @Override
+            public List<Locale> getCandidateLocales(String baseName, Locale locale) {
+                List<Locale> candidates = new ArrayList<>(super.getCandidateLocales(baseName, locale));
+                if (!candidates.contains(defaultLocale)) {
+                    int rootIndex = candidates.indexOf(Locale.ROOT);
+                    List<Locale> fallbackCandidates = super.getCandidateLocales(baseName, defaultLocale);
+                    if (rootIndex != -1) {
+                        // Insert fallback candidate locales before the ROOT (base) bundle
+                        for (int i = 0; i < fallbackCandidates.size(); i++) {
+                            Locale fb = fallbackCandidates.get(i);
+                            if (!candidates.contains(fb)) {
+                                candidates.add(rootIndex + i, fb);
+                            }
+                        }
+                    } else {
+                        candidates.addAll(fallbackCandidates);
+                    }
+                }
+                return candidates;
+            }
+        };
     }
 
     public String getMessage(String key, Locale locale, Object... args) {
         ResourceBundle bundle;
         try {
-            bundle = ResourceBundle.getBundle("languages.messages", locale, classLoader);
+            bundle = ResourceBundle.getBundle("languages.messages", locale, classLoader, control);
         } catch (MissingResourceException e) {
-            try {
-                bundle = ResourceBundle.getBundle("languages.messages", Locale.ENGLISH, classLoader);
-            } catch (MissingResourceException ex) {
-                return key;
-            }
+            return key;
         }
 
         try {

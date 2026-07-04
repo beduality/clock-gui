@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TranslationServiceTest {
 
-    private final TranslationService service = new TranslationService(getClass().getClassLoader());
+    private final TranslationService service = new TranslationService(getClass().getClassLoader(), "en");
 
     @Test
     void testEnglishTranslation() {
@@ -54,6 +54,17 @@ class TranslationServiceTest {
     }
 
     @Test
+    void testConfigurableFallbackLocale() {
+        // Instantiate service with "de" (German) fallback
+        TranslationService deFallbackService = new TranslationService(getClass().getClassLoader(), "de");
+
+        // Use a completely unknown locale (like xx_XX), should fallback to German
+        String message = deFallbackService.getMessage("clock_time.message.wild-spin", new Locale("xx", "XX"));
+        assertNotNull(message);
+        assertTrue(message.contains("Zeit") || message.contains("Uhr"));
+    }
+
+    @Test
     void testExternalOverride(@TempDir Path tempDir) throws Exception {
         // Create plugins/ClockTime/languages/messages.properties file
         File languagesDir = new File(tempDir.toFile(), "languages");
@@ -68,7 +79,7 @@ class TranslationServiceTest {
         URL[] urls = new URL[] { tempDir.toUri().toURL() };
         URLClassLoader customLoader = new URLClassLoader(urls, ClassLoader.getSystemClassLoader().getParent());
 
-        TranslationService overrideService = new TranslationService(customLoader);
+        TranslationService overrideService = new TranslationService(customLoader, "en");
         LocalTime time = LocalTime.of(12, 0);
         String message = overrideService.getFormattedTimeMessage(time, Locale.ENGLISH, "24h");
 

@@ -6,3 +6,7 @@
 #   "12h"    - Force 12-hour format for all players (e.g., 09:45 PM)
 #   "24h"    - Force 24-hour format for all players (e.g., 21:45)
 time-format: "locale"
+
+# The fallback language code to use if a player's client language is not supported.
+# Example: "en", "es", "pt", "de", etc.
+fallback-language: "en"

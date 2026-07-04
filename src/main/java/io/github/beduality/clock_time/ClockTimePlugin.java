@@ -18,18 +18,20 @@ public class ClockTimePlugin extends JavaPlugin {
         // Save default config if not present
         saveDefaultConfig();
 
-        // Extract default translation properties files to plugins/ClockTime/languages/
-        saveDefaultLanguages();
+        // Extract the main default translation properties file to plugins/ClockTime/languages/
+        // Users can copy others or create custom overrides if desired.
+        saveResource("languages/messages.properties", false);
 
         // Retrieve config values
         String timeFormat = getConfig().getString("time-format", "locale");
+        String fallbackLanguage = getConfig().getString("fallback-language", "en");
 
         // Set up the custom classloader pointing to the plugin's data folder
         ClassLoader classLoader = getClassLoaderWithExternalFolder();
 
         // Instantiate core components (Manual Dependency Injection)
         var timeFormatter = new TimeFormatter();
-        var translationService = new TranslationService(classLoader);
+        var translationService = new TranslationService(classLoader, fallbackLanguage);
 
         // Register listeners
         getServer().getPluginManager().registerEvents(
@@ -38,29 +40,6 @@ public class ClockTimePlugin extends JavaPlugin {
         );
 
         getLogger().info("ClockTime Plugin Enabled");
-    }
-
-    private void saveDefaultLanguages() {
-        String[] languages = {
-            "messages.properties",
-            "messages_de.properties",
-            "messages_es.properties",
-            "messages_fr.properties",
-            "messages_it.properties",
-            "messages_ja.properties",
-            "messages_ko.properties",
-            "messages_nl.properties",
-            "messages_pl.properties",
-            "messages_pt.properties",
-            "messages_ru.properties",
-            "messages_tr.properties",
-            "messages_uk.properties",
-            "messages_zh_CN.properties",
-            "messages_zh_TW.properties"
-        };
-        for (String lang : languages) {
-            saveResource("languages/" + lang, false);
-        }
     }
 
     private ClassLoader getClassLoaderWithExternalFolder() {
