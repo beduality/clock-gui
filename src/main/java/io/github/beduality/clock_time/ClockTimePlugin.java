@@ -27,7 +27,12 @@ public class ClockTimePlugin extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        // Check if the player is right-clicking with a clock
+        // Ignore cancelled interactions (e.g. protected regions)
+        if (event.useItemInHand() == org.bukkit.event.Event.Result.DENY) {
+            return;
+        }
+
+        // Check if the player is right-clicking with an item
         if (!event.getAction().name().contains("RIGHT_CLICK") || !event.hasItem()) {
             return;
         }
@@ -38,11 +43,17 @@ public class ClockTimePlugin extends JavaPlugin implements Listener {
         }
 
         // Check if the player is holding a clock
-        if (!event.hasItem() || event.getItem().getType() != Material.CLOCK) {
+        if (event.getItem().getType() != Material.CLOCK) {
             return;
         }
 
-        sendClockTimeMessage(event.getPlayer());
+        // Permission check
+        Player player = event.getPlayer();
+        if (!player.hasPermission("clock_time.use")) {
+            return;
+        }
+
+        sendClockTimeMessage(player);
     }
 
     private void sendClockTimeMessage(Player player) {

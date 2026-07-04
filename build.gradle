@@ -34,6 +34,12 @@ bukkit {
     apiVersion = "1.20"
     author = "Block-Entity Duality Team"
     website = "https://github.com/beduality/clock-time"
+    permissions {
+        register('clock_time.use') {
+            description = 'Allows the player to right-click a clock to check the time.'
+            setProperty('default', 'TRUE')
+        }
+    }
 }
 
 shadowJar {
