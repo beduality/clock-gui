@@ -27,6 +27,11 @@ public class ClockTimePlugin extends JavaPlugin implements Listener {
             return;
         }
 
+        // Prevent double execution from off-hand interact events
+        if (event.getHand() != org.bukkit.inventory.EquipmentSlot.HAND) {
+            return;
+        }
+
         // Check if the player is holding a clock
         if (!event.hasItem() || event.getItem().getType() != Material.CLOCK) {
             return;
