@@ -7,6 +7,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.text.MessageFormat;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+
 public class ClockTimePlugin extends JavaPlugin implements Listener {
 
     @Override
@@ -41,13 +46,22 @@ public class ClockTimePlugin extends JavaPlugin implements Listener {
     }
 
     private void sendClockTimeMessage(Player player) {
-        // Get the in-game time from the player's current world
         var world = player.getWorld();
+        Locale locale = player.locale();
+
+        // Load the bundle for the player's locale, fallback to English
+        ResourceBundle bundle;
+        try {
+            bundle = ResourceBundle.getBundle("messages", locale, this.getClass().getClassLoader());
+        } catch (MissingResourceException e) {
+            bundle = ResourceBundle.getBundle("messages", Locale.ENGLISH, this.getClass().getClassLoader());
+        }
 
         // Handle dimensions where time does not make sense (Nether and End)
         if (world.getEnvironment() == org.bukkit.World.Environment.NETHER || 
             world.getEnvironment() == org.bukkit.World.Environment.THE_END) {
-            player.sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize("<red>The clock spins wildly... Time has no meaning here.</red>"));
+            String pattern = bundle.getString("clocktime.message.wild-spin");
+            player.sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(pattern));
             return;
         }
 
@@ -60,7 +74,8 @@ public class ClockTimePlugin extends JavaPlugin implements Listener {
         var period = hour < 12 ? "AM" : "PM";
 
         // Display the formatted time as a colorful chat message
-        var message = String.format("<gold>Current Time:</gold> <aqua>%02d:%02d %s</aqua>", twelveHour, minute, period);
-        player.sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(message));
+        String pattern = bundle.getString("clocktime.message.time");
+        String formatted = MessageFormat.format(pattern, String.format("%02d", twelveHour), String.format("%02d", minute), period);
+        player.sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(formatted));
     }
 }
