@@ -65,6 +65,7 @@ public class ClockTimePlugin extends JavaPlugin implements Listener {
             return;
         }
 
+        // Get the in-game time from the player's current world
         var time = world.getTime();
 
         // Convert the in-game time to a 12-hour format

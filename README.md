@@ -7,7 +7,21 @@
 - **12-Hour Time Format**: Displays the current in-game time as `HH:MM AM/PM`, calculated from Minecraft's internal day-night cycle.
 - **Quick Access**: Right-click with a clock to view the time in chat instantly.
 - **Dimension Awareness**: Correctly handles dimensions like the Nether and The End where time has no meaning by warning the player that the clock is spinning wildly.
+- **Internationalization (i18n)**: Automatically translates time and error messages to the player's client language.
 - **Clean Chat Messages**: Lightweight, colorized text display that doesn't clutter the gameplay experience.
+
+### Supported Languages:
+
+- English (US)
+- Spanish (es)
+- Portuguese (Brazil, pt_BR)
+- French (fr)
+- German (de)
+- Japanese (ja)
+- Korean (ko)
+- Italian (it)
+- Polish (pl)
+- Turkish (tr)
 
 ## Requirements
 
@@ -24,8 +38,8 @@ To build and run this plugin, you will need:
 1. **Clone the Repository**  
    Clone the project repository from GitHub:
    ```bash
-    git clone https://github.com/beduality/clocktime
-    cd clocktime
+    git clone https://github.com/beduality/clock-time
+    cd clock-time
    ```
 
 2. **Build the Plugin**  
@@ -74,4 +88,4 @@ No additional configuration is required! The plugin works out of the box.
 ## Contribution
 
 We welcome contributions!  
-Feel free to fork the project, submit pull requests, or report issues on our [GitHub repository](https://github.com/beduality/clocktime).
+Feel free to fork the project, submit pull requests, or report issues on our [GitHub repository](https://github.com/beduality/clock-time).
