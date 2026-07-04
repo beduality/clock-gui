@@ -83,6 +83,10 @@ Current Time: 09:45 AM
 
 No additional configuration is required! The plugin works out of the box.
 
+## Permissions
+
+- `clock_time.use`: Allows the player to right-click a clock to check the time (default: `true`).
+
 ## Compatibility
 
 - **Minecraft Version**: 1.20 or higher
