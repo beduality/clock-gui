@@ -31,8 +31,7 @@
 To build and run this plugin, you will need:
 
 - Git
-- JDK (Java Development Kit) 21.0.4 or higher
-- Gradle 8.10.1 or higher
+- JDK (Java Development Kit) 21 or higher
 
 ## Installation Guide
 
@@ -48,7 +47,7 @@ To build and run this plugin, you will need:
 2. **Build the Plugin**  
    Run the following command to build the plugin:
    ```bash
-   gradle build
+   ./gradlew build
    ```
 
 3. **Locate the Built Plugin**  
@@ -90,7 +89,7 @@ No additional configuration is required! The plugin works out of the box.
 ## Compatibility
 
 - **Minecraft Version**: 1.20 or higher
-- **API**: Built using the Bukkit/Spigot API.
+- **API**: Built using the Paper API.
 
 ## Contribution
 
