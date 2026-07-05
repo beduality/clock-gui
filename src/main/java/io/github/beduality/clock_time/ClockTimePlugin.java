@@ -18,9 +18,9 @@ public class ClockTimePlugin extends JavaPlugin {
         // Save default config if not present
         saveDefaultConfig();
 
-        // Extract the main default translation properties file to plugins/ClockTime/languages/
-        // Users can copy others or create custom overrides if desired.
-        saveResource("languages/messages.properties", false);
+        // Extract all default translation properties files to plugins/ClockTime/languages/
+        // Administrators can edit these files directly to customize translations.
+        saveDefaultLanguages();
 
         // Retrieve config values
         String timeFormat = getConfig().getString("time-format", "locale");
@@ -51,6 +51,29 @@ public class ClockTimePlugin extends JavaPlugin {
         } catch (MalformedURLException e) {
             getLogger().log(Level.WARNING, "Failed to initialize external translation classloader, falling back to internal", e);
             return parent;
+        }
+    }
+
+    private void saveDefaultLanguages() {
+        String[] languages = {
+            "messages.properties",
+            "messages_de.properties",
+            "messages_es.properties",
+            "messages_fr.properties",
+            "messages_it.properties",
+            "messages_ja.properties",
+            "messages_ko.properties",
+            "messages_nl.properties",
+            "messages_pl.properties",
+            "messages_pt.properties",
+            "messages_ru.properties",
+            "messages_tr.properties",
+            "messages_uk.properties",
+            "messages_zh_CN.properties",
+            "messages_zh_TW.properties"
+        };
+        for (String lang : languages) {
+            saveResource("languages/" + lang, false);
         }
     }
 
