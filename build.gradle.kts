@@ -15,6 +15,7 @@ repositories {
 
 dependencies {
     compileOnly(libs.paper.api)
+    implementation(libs.configurate.yaml)
 
     testImplementation(libs.junit.jupiter.api)
     testRuntimeOnly(libs.junit.jupiter.engine)
@@ -49,6 +50,8 @@ tasks.shadowJar {
     archiveBaseName.set("ClockTime")
     archiveClassifier.set("")
     archiveVersion.set(project.version.toString())
+    relocate("org.spongepowered.configurate", "io.github.beduality.clock_time.libs.configurate")
+    relocate("io.leangen.geantyref", "io.github.beduality.clock_time.libs.geantyref")
 }
 
 val cleanPlugins by tasks.registering {

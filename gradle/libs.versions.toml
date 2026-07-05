@@ -1,12 +1,13 @@
 [versions]
 paper = "1.20.6-R0.1-SNAPSHOT"
-shadow = "8.1.1"
+shadow = "8.3.0"
 pluginYml = "0.6.0"
 junit = "5.10.2"
 mockbukkit = "3.93.2"
+configurate = "4.2.0"
 
 [plugins]
-shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
 pluginYml = { id = "net.minecrell.plugin-yml.bukkit", version.ref = "pluginYml" }
 
 [libraries]
@@ -14,4 +15,4 @@ paper-api = { group = "io.papermc.paper", name = "paper-api", version.ref = "pap
 junit-jupiter-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit" }
 junit-jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit" }
 mockbukkit = { group = "com.github.seeseemelk", name = "MockBukkit-v1.20", version.ref = "mockbukkit" }
-
+configurate-yaml = { group = "org.spongepowered", name = "configurate-yaml", version.ref = "configurate" }
