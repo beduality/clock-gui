@@ -11,11 +11,23 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.ResourceBundle.Control;
 
+/**
+ * Application service managing localization resources.
+ * Handles language resolution, resource bundle lookups, custom fallbacks,
+ * and time-based localizations. It is decoupled from the Paper/Bukkit API
+ * to support multi-platform reuse or unit testing.
+ */
 public class TranslationService {
     private final ClassLoader classLoader;
     private final Locale defaultLocale;
     private final Control control;
 
+    /**
+     * Constructs a new TranslationService.
+     *
+     * @param classLoader      the classloader utilized to locate and load resource bundles (e.g. languages/messages.properties)
+     * @param fallbackLanguage the default ISO 639-1 language code fallback if a requested locale is unavailable
+     */
     public TranslationService(ClassLoader classLoader, String fallbackLanguage) {
         this.classLoader = classLoader;
         this.defaultLocale = new Locale(fallbackLanguage != null ? fallbackLanguage : "en");
@@ -45,6 +57,14 @@ public class TranslationService {
         };
     }
 
+    /**
+     * Resolves a localized string value from resource bundles.
+     *
+     * @param key    the message translation key (e.g. "clock_time.message.time")
+     * @param locale the target {@link Locale} to translate the message into
+     * @param args   optional arguments for message format compilation ({0}, {1}, etc.)
+     * @return the localized string value, or the key itself if the resource bundle or key is missing
+     */
     public String getMessage(String key, Locale locale, Object... args) {
         ResourceBundle bundle;
         try {
@@ -64,16 +84,16 @@ public class TranslationService {
         }
     }
 
-    public String getFormattedTimeMessage(LocalTime time, Locale locale, String formatStyle) {
-        DateTimeFormatter formatter;
-        if ("12h".equalsIgnoreCase(formatStyle)) {
-            formatter = DateTimeFormatter.ofPattern("hh:mm a", locale);
-        } else if ("24h".equalsIgnoreCase(formatStyle)) {
-            formatter = DateTimeFormatter.ofPattern("HH:mm", locale);
-        } else {
-            // Auto-detect localized short style (handles 12h vs 24h & native AM/PM marker translations)
-            formatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(locale);
-        }
+    /**
+     * Formats a given {@link LocalTime} into a localized, styled message.
+     *
+     * @param time        the {@link LocalTime} object representation of the time
+     * @param locale      the {@link Locale} of the player client receiving the message
+     * @return the fully localized and formatted chat message string
+     */
+    public String getFormattedTimeMessage(LocalTime time, Locale locale) {
+        // Auto-detect localized short style (handles 12h vs 24h & native AM/PM marker translations)
+        DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(locale);
         String formattedTime = time.format(formatter);
         return getMessage("clock_time.message.time", locale, formattedTime);
     }

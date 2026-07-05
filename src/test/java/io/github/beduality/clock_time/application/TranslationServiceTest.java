@@ -23,32 +23,14 @@ class TranslationServiceTest {
     }
 
     @Test
-    void testFormattingTranslation12h() {
-        LocalTime time = LocalTime.of(21, 45);
-        String message = service.getFormattedTimeMessage(time, Locale.ENGLISH, "12h");
-        assertNotNull(message);
-        assertTrue(message.contains("09:45"));
-        assertTrue(message.toLowerCase().contains("pm"));
-    }
-
-    @Test
-    void testFormattingTranslation24h() {
-        LocalTime time = LocalTime.of(21, 45);
-        String message = service.getFormattedTimeMessage(time, Locale.ENGLISH, "24h");
-        assertNotNull(message);
-        assertTrue(message.contains("21:45"));
-        assertFalse(message.toLowerCase().contains("pm"));
-    }
-
-    @Test
     void testLocaleAutoDetection() {
         LocalTime time = LocalTime.of(21, 45);
 
-        String usMessage = service.getFormattedTimeMessage(time, Locale.US, "locale");
+        String usMessage = service.getFormattedTimeMessage(time, Locale.US);
         assertTrue(usMessage.contains("9:45") || usMessage.contains("09:45"));
         assertTrue(usMessage.toLowerCase().contains("pm"));
 
-        String deMessage = service.getFormattedTimeMessage(time, Locale.GERMANY, "locale");
+        String deMessage = service.getFormattedTimeMessage(time, Locale.GERMANY);
         assertTrue(deMessage.contains("21:45"));
         assertFalse(deMessage.toLowerCase().contains("pm"));
     }
@@ -81,7 +63,7 @@ class TranslationServiceTest {
 
         TranslationService overrideService = new TranslationService(customLoader, "en");
         LocalTime time = LocalTime.of(12, 0);
-        String message = overrideService.getFormattedTimeMessage(time, Locale.ENGLISH, "24h");
+        String message = overrideService.getFormattedTimeMessage(time, Locale.ENGLISH);
 
         // Verify that the external file override was loaded instead of the internal one
         assertTrue(message.contains("OVERRIDDEN"));

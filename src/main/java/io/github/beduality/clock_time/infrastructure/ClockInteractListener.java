@@ -13,18 +13,34 @@ import org.bukkit.inventory.EquipmentSlot;
 import java.time.LocalTime;
 import java.util.Locale;
 
+/**
+ * Infrastructure-level event listener for player interactions.
+ * Listens for right-clicks with clocks in-hand, validates permissions,
+ * and delegates formatting and translation to pure Java service layers.
+ */
 public class ClockInteractListener implements Listener {
 
     private final TimeFormatter timeFormatter;
     private final TranslationService translationService;
-    private final String timeFormat;
 
-    public ClockInteractListener(TimeFormatter timeFormatter, TranslationService translationService, String timeFormat) {
+    /**
+     * Constructs a new ClockInteractListener.
+     *
+     * @param timeFormatter      the domain service used to compute LocalTime from ticks
+     * @param translationService the application service used to resolve localized messages
+     */
+    public ClockInteractListener(TimeFormatter timeFormatter, TranslationService translationService) {
         this.timeFormatter = timeFormatter;
         this.translationService = translationService;
-        this.timeFormat = timeFormat;
     }
 
+    /**
+     * Handles the PlayerInteractEvent.
+     * Verifies that the player is right-clicking with a clock, has the appropriate permission,
+     * and is in a valid environment before showing the time.
+     *
+     * @param event the Paper interact event being processed
+     */
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         // Ignore cancelled interactions (e.g. protected regions)
@@ -75,7 +91,7 @@ public class ClockInteractListener implements Listener {
         LocalTime localTime = timeFormatter.formatTicks(time);
 
         // Display the formatted time as a colorful chat message
-        String message = translationService.getFormattedTimeMessage(localTime, locale, timeFormat);
+        String message = translationService.getFormattedTimeMessage(localTime, locale);
         player.sendMessage(MiniMessage.miniMessage().deserialize(message));
     }
 }

@@ -11,6 +11,11 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.logging.Level;
 
+/**
+ * Main entry point for the ClockTime Paper plugin.
+ * Handles the startup, configuration loading, resource bundle initialization,
+ * and service registrations.
+ */
 public class ClockTimePlugin extends JavaPlugin {
 
     @Override
@@ -23,7 +28,6 @@ public class ClockTimePlugin extends JavaPlugin {
         saveDefaultLanguages();
 
         // Retrieve config values
-        String timeFormat = getConfig().getString("time-format", "locale");
         String fallbackLanguage = getConfig().getString("fallback-language", "en");
 
         // Set up the custom classloader pointing to the plugin's data folder
@@ -35,7 +39,7 @@ public class ClockTimePlugin extends JavaPlugin {
 
         // Register listeners
         getServer().getPluginManager().registerEvents(
-            new ClockInteractListener(timeFormatter, translationService, timeFormat),
+            new ClockInteractListener(timeFormatter, translationService),
             this
         );
 

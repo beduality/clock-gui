@@ -1,6 +1,31 @@
 # ClockTime Plugin
 
-**ClockTime** is a Minecraft plugin that enhances the in-game clock by providing a quick-access time check in customizable formats (12-hour, 24-hour, or player client locale). Right-click with a clock in hand, and you are sent a localized message containing the current time.
+A lightweight, clean-architecture Minecraft plugin that enhances the in-game clock by providing quick-access, localized time displays in customizable formats.
+
+## Features
+
+- **Dynamic Localized Formatting**: Auto-detects and formats time using the player's client language locale, including native AM/PM translations.
+- **Custom Format Overrides**: Force 12-hour or 24-hour clocks globally for all players.
+- **Administrator Localization Overrides**: Customize translation files (`.properties`) dynamically in the data folder.
+- **Decoupled Engine**: Core calculations are separated from the Paper/Bukkit API for testing and reuse.
+
+## Requirements
+
+- **Minecraft Version**: 1.20+
+- **API**: Paper / Purpur API
+- **Java**: Java 21+
+
+## Installation
+
+1. Download the latest release `.jar` file.
+2. Place the file inside your server's `plugins/` directory.
+3. Start or restart the server.
+
+## Quick Start
+
+1. Hold a **Clock** in your hand.
+2. **Right-click** with the clock.
+3. The current in-game time will be displayed in your chat according to your language.
 
 ## Documentation
 
@@ -10,20 +35,12 @@ Detailed guides and specifications are available in the [docs](./docs/) director
 * ⚙️ **[Configuration](./docs/configuration.md)**: Settings and translation resources.
 * 🔑 **[Permissions](./docs/permissions.md)**: Group permission references.
 * 🛠️ **[Developer API](./docs/api.md)**: Leveraging decoupled library components.
+* 📐 **[Architecture](./docs/architecture.md)**: Design principles and module flow.
 
-## Compatibility
+## Support
 
-* **Minecraft Version**: 1.20 or higher
-* **API**: Paper API
-* **Java**: Java 21 or higher
-
-## Contribution
-
-We welcome contributions! Please read [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines on clean architecture and code standards.
-
-## Authors
-
-- Luis Emidio, Block-Entity Duality Team and contributors
+If you run into issues or have feature requests, please report them via:
+- [GitHub Issues](https://github.com/beduality/clock-time/issues)
 
 ## License
 
