@@ -28,6 +28,7 @@ This project adheres to **Clean Architecture** principles to separate business l
 5. **Code Style**:
    - Follow clean, descriptive naming conventions.
    - Do not use Lombok dependencies if not needed; prefer standard Java features (such as Records).
+   - Format your code using spotless: run `./gradlew spotlessApply` to automatically format all Java and Gradle files. Code style rules are checked on pull requests.
 
 ## Documentation
 
@@ -58,16 +59,29 @@ Output goes to `site/` (git-ignored).
 ```text
 docs/
 ├── index.md                          # Landing page
-├── getting-started/
-│   ├── installation.md               # Installation guide
-│   └── quick-start.md                # Quick start tutorial
-├── configuration/
-│   ├── settings.md                   # config.yml reference
-│   ├── translations.md               # Translation system guide
-│   └── permissions.md                # Permissions reference
+├── server-admins/
+│   ├── tutorials/
+│   │   ├── installation.md           # Installation guide
+│   │   └── quick-start.md            # Quick start tutorial
+│   ├── how-to-guides/
+│   │   ├── restrict-access.md        # How to manage player permissions
+│   │   ├── change-fallback-language.md # How to configure the fallback locale
+│   │   └── translations.md           # Translation system guide
+│   ├── explanation/
+│   │   └── language-resolution.md    # Detail on the locale resolution fallback system
+│   └── reference/
+│       ├── settings.md               # config.yml reference
+│       ├── permissions.md            # Permissions reference
+│       └── translations.md           # Locale and translation keys reference
 └── developers/
-    ├── api.md                        # Developer API reference
-    └── architecture.md               # Architecture overview
+    ├── how-to-guides/
+    │   ├── dependency-setup.md       # Project dependency configuration
+    │   ├── converting-ticks.md       # Minecraft ticks to LocalTime conversion usage
+    │   └── querying-translations.md  # Fetching translations programmatically
+    ├── reference/
+    │   └── api.md                    # Core Javadoc & mappings reference
+    └── explanation/
+        └── architecture.md           # Structural design detail
 mkdocs.yml                            # Site configuration & navigation
 pyproject.toml                        # Python dependencies (uv)
 ```

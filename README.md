@@ -14,7 +14,7 @@ Localized in-game time displays for Minecraft.
 
 - **Dynamic Localized Formatting**: Auto-detects and formats time using the player's client language locale.
 - **Administrator Localization Overrides**: Customize translation files (`.properties`) dynamically in the plugin's data folder.
-th
+- **Dimension-Aware Time Resolution**: Detects environment details (like Nether or The End) where standard time has no meaning and displays custom message behaviors accordingly.
 
 ## Requirements
 

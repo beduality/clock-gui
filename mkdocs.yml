@@ -74,15 +74,24 @@ nav:
   - Home: index.md
   - Server Administrators:
     - Tutorials:
-      - Installation: getting-started/installation.md
-      - Quick Start: getting-started/quick-start.md
+      - Installation: server-admins/tutorials/installation.md
+      - Quick Start: server-admins/tutorials/quick-start.md
     - How-To Guides:
-      - Customizing Translations: configuration/translations.md
+      - Restricting Clock Usage: server-admins/how-to-guides/restrict-access.md
+      - Changing the Fallback Language: server-admins/how-to-guides/change-fallback-language.md
+      - Customizing Translations: server-admins/how-to-guides/translations.md
     - Reference:
-      - Settings Reference: configuration/settings.md
-      - Permissions Reference: configuration/permissions.md
+      - Settings Reference: server-admins/reference/settings.md
+      - Permissions Reference: server-admins/reference/permissions.md
+      - Translations Reference: server-admins/reference/translations.md
+    - Explanation:
+      - Language Resolution: server-admins/explanation/language-resolution.md
   - Developers:
     - How-To Guides:
-      - API Integration: developers/api.md
+      - Project Dependency Setup: developers/how-to-guides/dependency-setup.md
+      - Converting Minecraft Ticks: developers/how-to-guides/converting-ticks.md
+      - Querying Translations: developers/how-to-guides/querying-translations.md
+    - Reference:
+      - API Reference: developers/reference/api.md
     - Explanation:
-      - Architecture: developers/architecture.md
+      - Architecture Overview: developers/explanation/architecture.md
