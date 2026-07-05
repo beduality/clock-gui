@@ -40,6 +40,7 @@ Detailed guides and specifications are available in the [docs](./docs/) director
 ## Support
 
 If you run into issues or have feature requests, please report them via:
+- [Discord Server](https://discord.gg/D5meCv2Wnd)
 - [GitHub Issues](https://github.com/beduality/clock-time/issues)
 
 ## License
