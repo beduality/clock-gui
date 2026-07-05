@@ -1,6 +1,6 @@
 # ClockTime Plugin
 
-A lightweight, clean-architecture Minecraft plugin that enhances the in-game clock by providing quick-access, localized time displays in customizable formats.
+Localized in-game time displays for Minecraft.
 
 ## Features
 
