@@ -27,7 +27,7 @@ public class ClockTimePlugin extends JavaPlugin {
     // Setup domain logic and listener
     var timeFormatter = new TimeFormatter();
     var localeTimeFormatter = new LocaleTimeFormatter();
-    var dimensionTimeResolver = new DimensionTimeResolver();
+    var dimensionTimeResolver = new DimensionTimeResolver(config.getWildSpinWorlds());
     var clockMessageService =
         new ClockMessageService(timeFormatter, localeTimeFormatter, dimensionTimeResolver);
 

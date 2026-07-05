@@ -12,6 +12,10 @@ fallback-language: "en"
 
 # Configuration version. Do not modify this value.
 config-version: 1
+
+# A list of custom world names or dimension keys (e.g. 'custom_world' or 'custom:space')
+# that should be treated as wild-spin dimensions.
+wild-spin-worlds: []
 ```
 
 ## Configuration Keys
@@ -36,3 +40,12 @@ The fallback translation bundle used when a player's client language does not ma
 
 Internal version schema tracker used to manage config format migrations. Modifying this key prevents configuration files from upgrading automatically.
 
+### `wild-spin-worlds`
+
+| Detail | Description |
+|---|---|
+| **Data Type** | List of Strings |
+| **Default Value** | `[]` |
+| **Editable** | Yes |
+
+A list of custom world names (e.g., `custom_nether`) or namespaced dimension keys (e.g., `custom:space`) that should be treated as wild-spin dimensions. When players use a clock in these dimensions, the clock will spin wildly and display the wild-spin translation message.

@@ -15,6 +15,11 @@ public class ClockTimePluginConfig {
   @Comment("Configuration version. Do not modify this value.")
   private int configVersion = 1;
 
+  @Setting("wild-spin-worlds")
+  @Comment(
+      "A list of custom world names or dimension keys (e.g. 'custom_world' or 'custom:space') that should be treated as wild-spin dimensions.")
+  private java.util.List<String> wildSpinWorlds = java.util.List.of();
+
   public String getFallbackLanguage() {
     return fallbackLanguage;
   }
@@ -25,5 +30,9 @@ public class ClockTimePluginConfig {
 
   public void setConfigVersion(int configVersion) {
     this.configVersion = configVersion;
+  }
+
+  public java.util.List<String> getWildSpinWorlds() {
+    return wildSpinWorlds;
   }
 }

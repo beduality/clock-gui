@@ -1,7 +1,9 @@
 package io.github.beduality.clock_time.domain.service;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -10,6 +12,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.TranslationRegistry;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -18,7 +21,8 @@ class ClockMessageServiceTest {
 
   private static final TimeFormatter timeFormatter = new TimeFormatter();
   private static final LocaleTimeFormatter localeTimeFormatter = new LocaleTimeFormatter();
-  private static final DimensionTimeResolver dimensionTimeResolver = new DimensionTimeResolver();
+  private static final DimensionTimeResolver dimensionTimeResolver =
+      new DimensionTimeResolver(List.of());
   private static ClockMessageService messageService;
 
   @BeforeAll
@@ -45,8 +49,13 @@ class ClockMessageServiceTest {
 
   @Test
   void testGetClockMessageNormalOverworldUS() {
+    World world = mock(World.class);
+    when(world.getEnvironment()).thenReturn(World.Environment.NORMAL);
+    when(world.getName()).thenReturn("world");
+    when(world.getKey()).thenReturn(NamespacedKey.minecraft("overworld"));
+
     // Ticks = 0 (Sunrise, 6:00 AM)
-    Component component = messageService.getClockMessage(World.Environment.NORMAL, 0, Locale.US);
+    Component component = messageService.getClockMessage(world, 0, Locale.US);
     String plainText = PlainTextComponentSerializer.plainText().serialize(component);
 
     // Assert expected translation and short time formatting for US locale
@@ -61,9 +70,13 @@ class ClockMessageServiceTest {
 
   @Test
   void testGetClockMessageNormalOverworldGerman() {
+    World world = mock(World.class);
+    when(world.getEnvironment()).thenReturn(World.Environment.NORMAL);
+    when(world.getName()).thenReturn("world");
+    when(world.getKey()).thenReturn(NamespacedKey.minecraft("overworld"));
+
     // Ticks = 6000 (Noon, 12:00)
-    Component component =
-        messageService.getClockMessage(World.Environment.NORMAL, 6000, Locale.GERMANY);
+    Component component = messageService.getClockMessage(world, 6000, Locale.GERMANY);
     String plainText = PlainTextComponentSerializer.plainText().serialize(component);
 
     // Assert German translation and time format
@@ -72,9 +85,13 @@ class ClockMessageServiceTest {
 
   @Test
   void testGetClockMessageNormalOverworldSpanish() {
+    World world = mock(World.class);
+    when(world.getEnvironment()).thenReturn(World.Environment.NORMAL);
+    when(world.getName()).thenReturn("world");
+    when(world.getKey()).thenReturn(NamespacedKey.minecraft("overworld"));
+
     // Ticks = 18000 (Midnight, 0:00 or 12:00 AM)
-    Component component =
-        messageService.getClockMessage(World.Environment.NORMAL, 18000, new Locale("es"));
+    Component component = messageService.getClockMessage(world, 18000, new Locale("es"));
     String plainText = PlainTextComponentSerializer.plainText().serialize(component);
 
     // Assert Spanish translation
@@ -83,8 +100,12 @@ class ClockMessageServiceTest {
 
   @Test
   void testGetClockMessageNetherWildSpin() {
-    Component component =
-        messageService.getClockMessage(World.Environment.NETHER, 12345, Locale.US);
+    World world = mock(World.class);
+    when(world.getEnvironment()).thenReturn(World.Environment.NETHER);
+    when(world.getName()).thenReturn("world_nether");
+    when(world.getKey()).thenReturn(NamespacedKey.minecraft("the_nether"));
+
+    Component component = messageService.getClockMessage(world, 12345, Locale.US);
     String plainText = PlainTextComponentSerializer.plainText().serialize(component);
 
     assertEquals("The clock spins wildly... Time has no meaning here.", plainText);
@@ -92,8 +113,12 @@ class ClockMessageServiceTest {
 
   @Test
   void testGetClockMessageEndWildSpin() {
-    Component component =
-        messageService.getClockMessage(World.Environment.THE_END, 500, new Locale("de"));
+    World world = mock(World.class);
+    when(world.getEnvironment()).thenReturn(World.Environment.THE_END);
+    when(world.getName()).thenReturn("world_the_end");
+    when(world.getKey()).thenReturn(NamespacedKey.minecraft("the_end"));
+
+    Component component = messageService.getClockMessage(world, 500, new Locale("de"));
     String plainText = PlainTextComponentSerializer.plainText().serialize(component);
 
     assertEquals("Die Uhr dreht sich wild... Zeit hat hier keine Bedeutung.", plainText);

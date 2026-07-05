@@ -83,12 +83,14 @@ nav:
       - Restrict clock usage: server-admins/how-to-guides/restrict-access.md
       - Change the fallback language: server-admins/how-to-guides/change-fallback-language.md
       - Customize translation messages: server-admins/how-to-guides/translations.md
+      - Configure custom dimensions: server-admins/how-to-guides/configure-custom-dimensions.md
     - Reference:
       - Settings Reference: server-admins/reference/settings.md
       - Permissions Reference: server-admins/reference/permissions.md
       - Translations Reference: server-admins/reference/translations.md
     - Explanation:
       - Language Resolution: server-admins/explanation/language-resolution.md
+      - Dimension Awareness: server-admins/explanation/dimension-awareness.md
   - Players:
       - Play with ClockTime: players/play.md
   - Developers:

@@ -36,13 +36,13 @@ public class ClockMessageService {
   /*
    * Generates the clock message Component for the player.
    *
-   * @param environment the player's world environment
+   * @param world the player's world
    * @param worldTime the world time in ticks
    * @param locale the player's locale
    * @return the localized message component
    */
-  public Component getClockMessage(World.Environment environment, long worldTime, Locale locale) {
-    if (dimensionTimeResolver.isWildSpinDimension(environment)) {
+  public Component getClockMessage(World world, long worldTime, Locale locale) {
+    if (dimensionTimeResolver.isWildSpinDimension(world)) {
       String format = translate("clock_time.message.wild-spin", locale);
       return MiniMessage.miniMessage().deserialize(format);
     }

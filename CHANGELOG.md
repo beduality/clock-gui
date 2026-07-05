@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Dynamic translation scanning and locale registration
   - Why: Enable server administrators to dynamically add translations for any arbitrary language (e.g., `messages_sv.properties`) without modifications to the plugin code.
+- Configuration for custom wild-spin dimensions (`wild-spin-worlds`)
+  - Why: Allow server administrators to define custom/modded dimensions that should exhibit wild clock spin behavior (like Nether/End) instead of normal time display.
 
 ## [0.1.0] - 2026-07-05
 

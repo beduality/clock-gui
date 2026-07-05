@@ -23,11 +23,17 @@ Minecraft sends the player's client language code (e.g., `en_us`, `pt_br`, `zh_t
 
 ### 2. Custom Translations Check
 
-The plugin checks the `plugins/ClockTime/languages/` directory for a matching custom properties file (such as `messages_pt_BR.properties` or `messages_pt.properties`). If a file exists, it uses those definitions to allow administrators to override messages.
+On server startup, ClockTime dynamically scans the `plugins/ClockTime/languages/` directory for any properties files following the `messages_<locale>.properties` pattern (e.g., `messages_sv.properties` or `messages_pt_BR.properties`). Any detected locales are dynamically registered to the translation registry.
+
+When a player checks the time, the plugin resolves their language code from this registered set. If a matching custom properties file was registered at startup, those customized definitions are loaded.
+
+!!! note "Restart Required for New Translation Files"
+
+    Because the translation registration scan occurs during plugin initialization (on startup), any newly added translation files will not be recognized until the server is restarted or the plugin is reloaded.
 
 ### 3. Bundled Translations Check
 
-If no custom properties file exists in the directory, the plugin checks its internal resource bundles for the detected locale.
+If no custom properties file exists for the detected locale, the plugin checks its internal resource bundles for the corresponding bundled language (e.g., German, Spanish, Japanese, etc.).
 
 ### 4. Configured Fallback
 

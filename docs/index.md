@@ -14,11 +14,11 @@ A lightweight Minecraft plugin that enhances the in-game clock with localized, c
 
     [:octicons-arrow-right-24: Quick start](server-admins/tutorials/installation.md)
 
--   :material-translate:{ .lg .middle } __16 Languages Built-in__
+-   :material-translate:{ .lg .middle } __Dynamic Translations__
 
     ---
 
-    Ships with English, Spanish, Portuguese, German, French, Italian, Japanese, Korean, Chinese, and more.
+    Ships with 16+ built-in languages, and scans the `languages/` folder for any custom translation files (`messages_*.properties`) added by administrators.
 
     [:octicons-arrow-right-24: Translations](server-admins/how-to-guides/translations.md)
 
@@ -26,15 +26,15 @@ A lightweight Minecraft plugin that enhances the in-game clock with localized, c
 
     ---
 
-    Drop the JAR into `plugins/` and go. Every setting has a sensible default.
+    Drop the JAR into `plugins/` and go. Easily configure fallback options or register custom wild-spin worlds.
 
     [:octicons-arrow-right-24: Configuration](server-admins/reference/settings.md)
 
--   :material-compass-off-outline:{ .lg .middle } __Nether & End Aware__
+-   :material-compass-off-outline:{ .lg .middle } __Dimension Aware__
 
     ---
 
-    Detects dimensions where time doesn't exist and shows a special message instead of broken values.
+    Detects Nether, End, or custom configured dimensions where time doesn't exist and shows a special message instead of broken values.
 
     [:octicons-arrow-right-24: Quick start](server-admins/tutorials/installation.md)
 
@@ -72,9 +72,9 @@ A lightweight Minecraft plugin that enhances the in-game clock with localized, c
 
         <span style="color: #ffaa00;">現在の時刻:</span> <span style="color: #55ffff;">午後2:30</span>
 
-!!! note "Nether & End"
+!!! note "Nether, End & Custom Dimensions"
 
-    In dimensions where time doesn't exist, the clock shows a special message:
+    In dimensions where time doesn't exist (Nether, The End, or custom dimensions configured in `config.yml`), the clock shows a special message:
 
     <span style="color: #ff5555;">The clock spins wildly... Time has no meaning here.</span>
 

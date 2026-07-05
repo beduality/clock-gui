@@ -13,8 +13,9 @@ Localized in-game time displays for Minecraft.
 ## Features
 
 - **Dynamic Localized Formatting**: Auto-detects and formats time using the player's client language locale.
-- **Administrator Localization Overrides**: Customize translation files (`.properties`) dynamically in the plugin's data folder.
-- **Dimension-Aware Time Resolution**: Detects environment details (like Nether or The End) where standard time has no meaning and displays custom message behaviors accordingly.
+- **Extensible Translations**: Scans the `languages/` subfolder dynamically to load any custom translation file (e.g. `messages_sv.properties`), allowing seamless expansion to new languages.
+- **Dimension-Aware Time Resolution**: Detects environments where standard time has no meaning (like Nether or The End) and displays custom message behaviors.
+- **Custom Dimension Configuration**: Define custom or modded worlds/dimensions in `config.yml` that should also exhibit wild-spin clock behavior.
 
 ## Requirements
 

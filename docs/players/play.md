@@ -17,10 +17,11 @@ ClockTime automatically reads your Minecraft client's language settings to custo
 
 ## Dimension-Aware Time
 
-In dimensions where standard day and night cycles do not exist, the clock displays a custom status instead of a standard time:
+In dimensions where standard day and night cycles do not exist (or in custom dimensions configured by the server administrator), the clock displays a custom status message instead of a standard time:
 
 | Dimension | Clock Readout |
 | :--- | :--- |
-| **Overworld** | Current formatted time (e.g., `2:15 PM`) |
-| **The Nether** | Hourglass icon (`⌛`) |
-| **The End** | Hourglass icon (`⌛`) |
+| **Overworld** (or normal time dimensions) | Current formatted time (e.g., `2:15 PM`) |
+| **The Nether** | Wild-spin message (e.g., `The clock spins wildly... Time has no meaning here.`) |
+| **The End** | Wild-spin message (e.g., `The clock spins wildly... Time has no meaning here.`) |
+| **Custom Configured Dimensions** | Wild-spin message (e.g., `The clock spins wildly... Time has no meaning here.`) |

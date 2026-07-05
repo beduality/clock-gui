@@ -66,7 +66,7 @@ public class ClockInteractListener implements Listener {
     long time = world.getTime();
 
     net.kyori.adventure.text.Component messageComponent =
-        clockMessageService.getClockMessage(world.getEnvironment(), time, locale);
+        clockMessageService.getClockMessage(world, time, locale);
 
     player.sendMessage(messageComponent);
   }
