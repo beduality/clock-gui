@@ -1,5 +1,6 @@
 plugins {
     java
+    `maven-publish`
     alias(libs.plugins.shadow)
     alias(libs.plugins.pluginYml)
     alias(libs.plugins.spotless)
@@ -133,4 +134,22 @@ tasks.modrinth {
 
 tasks.named("publishPluginPublicationToHangar") {
     onlyIf { !isDryRun }
+}
+
+val sourcesJar by tasks.registering(Jar::class) {
+    archiveClassifier.set("sources")
+    from(sourceSets.main.get().allSource)
+}
+
+publishing {
+    publications {
+        register<MavenPublication>("mavenJava") {
+            groupId = "com.github.beduality"
+            artifactId = "clock-time"
+            version = project.version.toString()
+
+            artifact(tasks.shadowJar)
+            artifact(sourcesJar)
+        }
+    }
 }
