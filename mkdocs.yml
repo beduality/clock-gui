@@ -75,12 +75,12 @@ nav:
   - Quick Start:
     - Introduction: index.md
     - Install ClockTime: server-admins/tutorials/installation.md
-    - Play with ClockTime: players/guide.md
+    - Play with ClockTime: players/play.md
   - Players:
-      - Player Guide: players/guide.md
+      - Play with ClockTime: players/play.md
   - Server Administrators:
     - Tutorials:
-      - Install and run ClockTime: server-admins/tutorials/installation.md
+      - Install ClockTime: server-admins/tutorials/installation.md
     - How-To Guides:
       - Restrict clock usage: server-admins/how-to-guides/restrict-access.md
       - Change the fallback language: server-admins/how-to-guides/change-fallback-language.md
