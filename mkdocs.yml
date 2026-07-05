@@ -72,9 +72,10 @@ extra:
       link: https://discord.gg/D5meCv2Wnd
 
 nav:
-  - Home: index.md
-  - How to Install ClockTime: server-admins/tutorials/installation.md
-  - How to Play ClockTime: players/guide.md
+  - Quick Start:
+    - Introduction: index.md
+    - Install ClockTime: server-admins/tutorials/installation.md
+    - Play with ClockTime: players/guide.md
   - Players:
       - Player Guide: players/guide.md
   - Server Administrators:
