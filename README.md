@@ -1,5 +1,7 @@
 # ClockTime Plugin
 
+[Docs](https://beduality.github.io/clock-time/) | [MIT License](./LICENSE)
+
 Localized in-game time displays for Minecraft.
 
 ## Features
@@ -27,16 +29,8 @@ Localized in-game time displays for Minecraft.
 2. **Right-click** with the clock.
 3. The current in-game time will be displayed in your chat according to your language.
 
-## Documentation
-
-Full documentation is available at **[beduality.github.io/clock-time](https://beduality.github.io/clock-time/)**.
-
 ## Support
 
 If you run into issues or have feature requests, please report them via:
 - [Discord Server](https://discord.gg/D5meCv2Wnd)
 - [GitHub Issues](https://github.com/beduality/clock-time/issues)
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
