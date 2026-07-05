@@ -74,6 +74,8 @@ extra:
 
 nav:
   - Home: index.md
+  - Players:
+      - Player Guide: players/guide.md
   - Server Administrators:
     - Tutorials:
       - Install and run ClockTime: server-admins/tutorials/installation.md
