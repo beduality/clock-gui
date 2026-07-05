@@ -22,15 +22,25 @@ public class ConfigLoader {
    */
   public ClockTimePluginConfig loadAndMigrate() {
     File configFile = new File(plugin.getDataFolder(), "config.yml");
-    if (!configFile.exists()) {
-      plugin.saveDefaultConfig();
-    }
 
     var loader =
         YamlConfigurationLoader.builder()
             .file(configFile)
             .defaultOptions(options -> options.shouldCopyDefaults(true))
             .build();
+
+    if (!configFile.exists()) {
+      try {
+        if (!plugin.getDataFolder().exists()) {
+          plugin.getDataFolder().mkdirs();
+        }
+        var node = loader.createNode();
+        node.set(ClockTimePluginConfig.class, new ClockTimePluginConfig());
+        loader.save(node);
+      } catch (Exception e) {
+        plugin.getLogger().log(Level.SEVERE, "Failed to generate default configuration file", e);
+      }
+    }
 
     try {
       var node = loader.load();
