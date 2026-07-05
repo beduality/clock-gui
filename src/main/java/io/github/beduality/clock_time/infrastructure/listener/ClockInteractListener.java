@@ -1,8 +1,6 @@
 package io.github.beduality.clock_time.infrastructure.listener;
 
-import io.github.beduality.clock_time.domain.service.TimeFormatter;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.translation.GlobalTranslator;
+import io.github.beduality.clock_time.domain.service.ClockMessageService;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,7 +8,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
-import java.time.LocalTime;
 import java.util.Locale;
 
 /**
@@ -20,15 +17,15 @@ import java.util.Locale;
  */
 public class ClockInteractListener implements Listener {
 
-    private final TimeFormatter timeFormatter;
+    private final ClockMessageService clockMessageService;
 
     /**
      * Constructs a new ClockInteractListener.
      *
-     * @param timeFormatter the domain service used to compute LocalTime from ticks
+     * @param clockMessageService the service used to resolve and format clock messages
      */
-    public ClockInteractListener(TimeFormatter timeFormatter) {
-        this.timeFormatter = timeFormatter;
+    public ClockInteractListener(ClockMessageService clockMessageService) {
+        this.clockMessageService = clockMessageService;
     }
 
     /**
@@ -68,32 +65,14 @@ public class ClockInteractListener implements Listener {
     private void sendClockTimeMessage(Player player) {
         var world = player.getWorld();
         Locale locale = player.locale();
-
-        // Handle dimensions where time does not spin normally
-        if (world.getEnvironment() == org.bukkit.World.Environment.NETHER || 
-            world.getEnvironment() == org.bukkit.World.Environment.THE_END) {
-            String message = translate("clock_time.message.wild-spin", locale);
-            player.sendMessage(MiniMessage.miniMessage().deserialize(message));
-            return;
-        }
-
         long time = world.getTime();
-        LocalTime localTime = timeFormatter.formatTicks(time);
 
-        java.time.format.DateTimeFormatter dtf = java.time.format.DateTimeFormatter
-                .ofLocalizedTime(java.time.format.FormatStyle.SHORT)
-                .withLocale(locale);
-        String formattedTime = localTime.format(dtf);
+        net.kyori.adventure.text.Component messageComponent = clockMessageService.getClockMessage(
+                world.getEnvironment(),
+                time,
+                locale
+        );
 
-        String message = translate("clock_time.message.time", locale, formattedTime);
-        player.sendMessage(MiniMessage.miniMessage().deserialize(message));
-    }
-
-    private String translate(String key, Locale locale, Object... args) {
-        var format = GlobalTranslator.translator().translate(key, locale);
-        if (format == null) {
-            format = GlobalTranslator.translator().translate(key, Locale.ROOT);
-        }
-        return format != null ? format.format(args) : key;
+        player.sendMessage(messageComponent);
     }
 }

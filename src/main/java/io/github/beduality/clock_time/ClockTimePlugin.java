@@ -1,5 +1,8 @@
 package io.github.beduality.clock_time;
 
+import io.github.beduality.clock_time.domain.service.ClockMessageService;
+import io.github.beduality.clock_time.domain.service.DimensionTimeResolver;
+import io.github.beduality.clock_time.domain.service.LocaleTimeFormatter;
 import io.github.beduality.clock_time.domain.service.TimeFormatter;
 import io.github.beduality.clock_time.infrastructure.config.PluginConfig;
 import io.github.beduality.clock_time.infrastructure.listener.ClockInteractListener;
@@ -23,9 +26,12 @@ public class ClockTimePlugin extends JavaPlugin {
 
         // Setup domain logic and listener
         var timeFormatter = new TimeFormatter();
+        var localeTimeFormatter = new LocaleTimeFormatter();
+        var dimensionTimeResolver = new DimensionTimeResolver();
+        var clockMessageService = new ClockMessageService(timeFormatter, localeTimeFormatter, dimensionTimeResolver);
 
         getServer().getPluginManager().registerEvents(
-            new ClockInteractListener(timeFormatter),
+            new ClockInteractListener(clockMessageService),
             this
         );
 
