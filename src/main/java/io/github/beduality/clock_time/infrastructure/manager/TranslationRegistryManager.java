@@ -35,29 +35,35 @@ public class TranslationRegistryManager {
 
     TranslationRegistry registry = TranslationRegistry.create(Key.key("clocktime", "main"));
 
-    Locale defaultLocale = new Locale(fallbackLanguage != null ? fallbackLanguage : "en");
+    Locale defaultLocale = parseLocale(fallbackLanguage != null ? fallbackLanguage : "en");
     registry.defaultLocale(defaultLocale);
 
-    Locale[] locales = {
-      Locale.ROOT,
-      Locale.ENGLISH,
-      Locale.GERMAN,
-      new Locale("es"),
-      new Locale("fr"),
-      Locale.ITALIAN,
-      Locale.JAPANESE,
-      Locale.KOREAN,
-      new Locale("nl"),
-      new Locale("pl"),
-      new Locale("pt"),
-      new Locale("ru"),
-      new Locale("tr"),
-      new Locale("uk"),
-      Locale.SIMPLIFIED_CHINESE,
-      Locale.TRADITIONAL_CHINESE
-    };
+    java.util.Set<Locale> localesToLoad = new java.util.HashSet<>();
+    localesToLoad.add(Locale.ROOT);
+    localesToLoad.add(Locale.ENGLISH);
+    localesToLoad.add(defaultLocale);
 
-    for (Locale locale : locales) {
+    File languagesFolder = new File(plugin.getDataFolder(), "languages");
+    if (languagesFolder.exists() && languagesFolder.isDirectory()) {
+      File[] files =
+          languagesFolder.listFiles(
+              (dir, name) -> name.startsWith("messages") && name.endsWith(".properties"));
+      if (files != null) {
+        for (File file : files) {
+          String filename = file.getName();
+          if (filename.equals("messages.properties")) {
+            localesToLoad.add(Locale.ROOT);
+          } else if (filename.startsWith("messages_") && filename.endsWith(".properties")) {
+            String suffix =
+                filename.substring(
+                    "messages_".length(), filename.length() - ".properties".length());
+            localesToLoad.add(parseLocale(suffix));
+          }
+        }
+      }
+    }
+
+    for (Locale locale : localesToLoad) {
       try {
         ResourceBundle bundle = ResourceBundle.getBundle("languages.messages", locale, classLoader);
         registry.registerAll(locale, bundle, true);
@@ -67,6 +73,21 @@ public class TranslationRegistryManager {
     }
 
     GlobalTranslator.translator().addSource(registry);
+  }
+
+  private Locale parseLocale(String localeStr) {
+    if (localeStr == null || localeStr.isEmpty() || localeStr.equalsIgnoreCase("root")) {
+      return Locale.ROOT;
+    }
+    String[] parts = localeStr.split("_");
+    if (parts.length == 1) {
+      return Locale.of(parts[0]);
+    } else if (parts.length == 2) {
+      return Locale.of(parts[0], parts[1]);
+    } else if (parts.length >= 3) {
+      return Locale.of(parts[0], parts[1], parts[2]);
+    }
+    return Locale.of(localeStr);
   }
 
   private ClassLoader getClassLoaderWithExternalFolder() {
