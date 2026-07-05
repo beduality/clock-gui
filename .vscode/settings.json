@@ -14,5 +14,6 @@
         "**/.venv": true,
         "**/.gradle": true,
         "**/site": true,
+        "**/gradle": true
     }
 }
