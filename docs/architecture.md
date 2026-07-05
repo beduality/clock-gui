@@ -10,6 +10,8 @@ This project strictly adheres to **Clean Architecture** principles to separate c
 graph TD
     subgraph Infrastructure [Infrastructure Layer]
         ClockTimePlugin[ClockTimePlugin]
+        ConfigLoader[ConfigLoader]
+        TranslationRegistryManager[TranslationRegistryManager]
         ClockInteractListener[ClockInteractListener]
         PluginConfig[PluginConfig]
     end
@@ -22,8 +24,11 @@ graph TD
         GlobalTranslator[Adventure GlobalTranslator]
     end
 
-    ClockTimePlugin --> |Registers| GlobalTranslator
+    ClockTimePlugin --> |Uses| ConfigLoader
+    ClockTimePlugin --> |Uses| TranslationRegistryManager
     ClockTimePlugin --> |Instantiates & Injects| ClockInteractListener
+    ConfigLoader --> |Loads| PluginConfig
+    TranslationRegistryManager --> |Registers| GlobalTranslator
     ClockInteractListener --> |Uses| TimeFormatter
     ClockInteractListener --> |Queries| GlobalTranslator
 ```
@@ -40,8 +45,10 @@ graph TD
 * **Role**: Integrates the plugin with the Minecraft server platform (Paper/Bukkit) and third-party libraries (SpongePowered Configurate).
 * **Dependencies**: Paper API, Domain layer, Configurate.
 * **Key Components**:
-  * `ClockTimePlugin`: Plugin lifecycle manager and Composition Root. Sets up the configuration using Configurate and registers translations to Adventure's `GlobalTranslator`.
+  * `ClockTimePlugin`: Plugin lifecycle manager and Composition Root. Delegates config loading and translation registration to dedicated managers.
   * `PluginConfig`: Maps YAML settings to a typed config class.
+  * `ConfigLoader`: Manages YamlConfigurationLoader initialization, loading, validation, and version-based configuration transformations.
+  * `TranslationRegistryManager`: Handles properties asset extraction from JAR, custom ClassLoader generation, and registers locales to Adventure's `GlobalTranslator`.
   * `ClockInteractListener`: Event listener handling player click actions, permission validation, and querying Adventure for localized translations.
 
 ---
