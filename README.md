@@ -12,10 +12,9 @@ Localized in-game time displays for Minecraft.
 
 ## Features
 
-- **Dynamic Localized Formatting**: Auto-detects and formats time using the player's client language locale, including native AM/PM translations.
-- **Custom Format Overrides**: Force 12-hour or 24-hour clocks globally for all players.
-- **Administrator Localization Overrides**: Customize translation files (`.properties`) dynamically in the data folder.
-- **Decoupled Engine**: Core calculations are separated from the Paper/Bukkit API for testing and reuse.
+- **Dynamic Localized Formatting**: Auto-detects and formats time using the player's client language locale.
+- **Administrator Localization Overrides**: Customize translation files (`.properties`) dynamically in the plugin's data folder.
+th
 
 ## Requirements
 
