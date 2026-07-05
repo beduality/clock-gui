@@ -55,25 +55,17 @@ public class ClockTimePlugin extends JavaPlugin {
     }
 
     private void saveDefaultLanguages() {
-        String[] languages = {
-            "messages.properties",
-            "messages_de.properties",
-            "messages_es.properties",
-            "messages_fr.properties",
-            "messages_it.properties",
-            "messages_ja.properties",
-            "messages_ko.properties",
-            "messages_nl.properties",
-            "messages_pl.properties",
-            "messages_pt.properties",
-            "messages_ru.properties",
-            "messages_tr.properties",
-            "messages_uk.properties",
-            "messages_zh_CN.properties",
-            "messages_zh_TW.properties"
-        };
-        for (String lang : languages) {
-            saveResource("languages/" + lang, false);
+        try (java.util.jar.JarFile jar = new java.util.jar.JarFile(getFile())) {
+            java.util.Enumeration<java.util.jar.JarEntry> entries = jar.entries();
+            while (entries.hasMoreElements()) {
+                java.util.jar.JarEntry entry = entries.nextElement();
+                String name = entry.getName();
+                if (name.startsWith("languages/") && name.endsWith(".properties")) {
+                    saveResource(name, false);
+                }
+            }
+        } catch (Exception e) {
+            getLogger().log(Level.WARNING, "Failed to dynamically extract default languages", e);
         }
     }
 
