@@ -124,3 +124,8 @@ modrinth {
     loaders.set(listOf("paper", "folia"))
     changelog.set(System.getenv("RELEASE_CHANGELOG") ?: "No changelog provided.")
 }
+
+val isDryRun = System.getenv("MODRINTH_DRY_RUN")?.toBoolean() == true
+tasks.modrinth {
+    onlyIf { !isDryRun }
+}

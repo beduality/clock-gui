@@ -9,3 +9,5 @@ bin
 # MkDocs
 site/
 .venv/
+
+.env
