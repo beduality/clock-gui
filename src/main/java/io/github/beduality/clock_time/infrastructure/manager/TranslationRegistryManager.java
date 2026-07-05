@@ -13,7 +13,7 @@ import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.TranslationRegistry;
 import org.bukkit.plugin.java.JavaPlugin;
 
-/** Handles translation registry bindings and resource bundle loading. */
+/* Handles translation registry bindings and resource bundle loading. */
 public class TranslationRegistryManager {
 
   private final JavaPlugin plugin;
@@ -24,7 +24,7 @@ public class TranslationRegistryManager {
     this.jarFile = jarFile;
   }
 
-  /**
+  /*
    * Extracts files, loads bundles, and binds translation keys to Adventure GlobalTranslator.
    *
    * @param fallbackLanguage fallback ISO 639-1 language code

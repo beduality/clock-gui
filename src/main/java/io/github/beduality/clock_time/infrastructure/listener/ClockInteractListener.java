@@ -9,7 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
-/**
+/*
  * Infrastructure-level event listener for player interactions. Listens for right-clicks with clocks
  * in-hand, validates permissions, and delegates formatting and translation to pure Java service
  * layers.
@@ -18,7 +18,7 @@ public class ClockInteractListener implements Listener {
 
   private final ClockMessageService clockMessageService;
 
-  /**
+  /*
    * Constructs a new ClockInteractListener.
    *
    * @param clockMessageService the service used to resolve and format clock messages
@@ -27,7 +27,7 @@ public class ClockInteractListener implements Listener {
     this.clockMessageService = clockMessageService;
   }
 
-  /**
+  /*
    * Handles the PlayerInteractEvent. Verifies that the player is right-clicking with a clock, has
    * the appropriate permission, and is in a valid environment before showing the time.
    *

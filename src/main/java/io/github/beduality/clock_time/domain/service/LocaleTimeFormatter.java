@@ -5,10 +5,10 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Locale;
 
-/** Domain service responsible for formatting a LocalTime based on a specific client locale. */
+/* Domain service responsible for formatting a LocalTime based on a specific client locale. */
 public class LocaleTimeFormatter {
 
-  /**
+  /*
    * Formats the given LocalTime using the localized short time format for the specified locale.
    *
    * @param localTime the time to format

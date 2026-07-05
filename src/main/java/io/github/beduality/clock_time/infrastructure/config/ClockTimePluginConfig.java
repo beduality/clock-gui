@@ -4,9 +4,8 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
 import org.spongepowered.configurate.objectmapping.meta.Setting;
 
-/** Maps the ClockTime configuration schema using Configurate. */
 @ConfigSerializable
-public class PluginConfig {
+public class ClockTimePluginConfig {
 
   @Setting("fallback-language")
   @Comment("The fallback language code to use if a player's client language is not supported.")

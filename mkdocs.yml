@@ -72,13 +72,17 @@ extra:
 
 nav:
   - Home: index.md
-  - Getting Started:
-    - Installation: getting-started/installation.md
-    - Quick Start: getting-started/quick-start.md
-  - Configuration:
-    - Settings: configuration/settings.md
-    - Translations: configuration/translations.md
-    - Permissions: configuration/permissions.md
+  - Server Administrators:
+    - Tutorials:
+      - Installation: getting-started/installation.md
+      - Quick Start: getting-started/quick-start.md
+    - How-To Guides:
+      - Customizing Translations: configuration/translations.md
+    - Reference:
+      - Settings Reference: configuration/settings.md
+      - Permissions Reference: configuration/permissions.md
   - Developers:
-    - API Reference: developers/api.md
-    - Architecture: developers/architecture.md
+    - How-To Guides:
+      - API Integration: developers/api.md
+    - Explanation:
+      - Architecture: developers/architecture.md

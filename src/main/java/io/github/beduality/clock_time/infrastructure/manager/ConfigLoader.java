@@ -1,12 +1,12 @@
 package io.github.beduality.clock_time.infrastructure.manager;
 
-import io.github.beduality.clock_time.infrastructure.config.PluginConfig;
+import io.github.beduality.clock_time.infrastructure.config.ClockTimePluginConfig;
 import java.io.File;
 import java.util.logging.Level;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
-/** Handles loading, validation, and migration of the plugin configuration. */
+/* Handles loading, validation, and migration of the plugin configuration. */
 public class ConfigLoader {
 
   private final JavaPlugin plugin;
@@ -15,12 +15,12 @@ public class ConfigLoader {
     this.plugin = plugin;
   }
 
-  /**
+  /*
    * Loads the config file and performs migration updates if required.
    *
-   * @return the loaded and possibly migrated PluginConfig
+   * @return the loaded and possibly migrated ClockTimePluginConfig
    */
-  public PluginConfig loadAndMigrate() {
+  public ClockTimePluginConfig loadAndMigrate() {
     File configFile = new File(plugin.getDataFolder(), "config.yml");
     if (!configFile.exists()) {
       plugin.saveDefaultConfig();
@@ -34,9 +34,9 @@ public class ConfigLoader {
 
     try {
       var node = loader.load();
-      PluginConfig config = node.get(PluginConfig.class);
+      ClockTimePluginConfig config = node.get(ClockTimePluginConfig.class);
       if (config == null) {
-        config = new PluginConfig();
+        config = new ClockTimePluginConfig();
       }
 
       int targetVersion = 1;
@@ -49,13 +49,13 @@ public class ConfigLoader {
                     + " to "
                     + targetVersion);
         config.setConfigVersion(targetVersion);
-        node.set(PluginConfig.class, config);
+        node.set(ClockTimePluginConfig.class, config);
         loader.save(node);
       }
       return config;
     } catch (Exception e) {
       plugin.getLogger().log(Level.SEVERE, "Failed to load or migrate configuration", e);
-      return new PluginConfig();
+      return new ClockTimePluginConfig();
     }
   }
 }

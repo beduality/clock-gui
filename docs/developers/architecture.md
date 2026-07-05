@@ -11,7 +11,7 @@ graph TD
         Config["ConfigLoader"]
         Translations["TranslationRegistryManager"]
         Listener["ClockInteractListener"]
-        PluginConfig["PluginConfig"]
+        ClockTimePluginConfig["ClockTimePluginConfig"]
     end
 
     subgraph domain["Domain Layer (Pure Java)"]
@@ -25,7 +25,7 @@ graph TD
     Plugin --> Config
     Plugin --> Translations
     Plugin --> Listener
-    Config --> PluginConfig
+    Config --> ClockTimePluginConfig
     Translations --> Adventure
     Listener --> Formatter
     Listener --> Adventure
@@ -53,7 +53,7 @@ Bridges the domain layer with Paper API, Configurate, and Kyori Adventure.
 | `ConfigLoader` | Loads, validates, and migrates `config.yml` using Configurate |
 | `TranslationRegistryManager` | Extracts `.properties` files from the JAR, creates a custom ClassLoader, and registers translations with Adventure's `GlobalTranslator` |
 | `ClockInteractListener` | Handles right-click events, validates permissions, and sends localized chat messages |
-| `PluginConfig` | Typed configuration mapping via Configurate's `@ConfigSerializable` |
+| `ClockTimePluginConfig` | Typed configuration mapping via Configurate's `@ConfigSerializable` |
 
 ## Request Flow
 

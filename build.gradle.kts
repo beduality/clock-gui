@@ -81,3 +81,11 @@ tasks.register<Copy>("buildmv") {
     from(layout.buildDirectory.dir("libs"))
     into("../server/data/plugins")
 }
+
+tasks.javadoc {
+    exclude("**/infrastructure/**")
+    exclude("**/ClockTimePlugin.java")
+    exclude("**/ClockMessageService.java")
+    exclude("**/DimensionTimeResolver.java")
+    exclude("**/LocaleTimeFormatter.java")
+}

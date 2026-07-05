@@ -4,8 +4,7 @@ import java.time.LocalTime;
 
 /**
  * Core domain service for time conversion. Translates abstract Minecraft world tick values into
- * standard Java {@link LocalTime} objects. This class is completely decoupled from Minecraft/Bukkit
- * APIs, making it highly testable.
+ * standard Java {@link LocalTime} objects.
  */
 public class TimeFormatter {
 

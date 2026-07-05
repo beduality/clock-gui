@@ -7,7 +7,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.translation.GlobalTranslator;
 import org.bukkit.World;
 
-/**
+/*
  * Domain service that coordinates time resolving, formatting, and translations to build the final
  * adventure message Component to be sent to players.
  */
@@ -17,7 +17,7 @@ public class ClockMessageService {
   private final LocaleTimeFormatter localeTimeFormatter;
   private final DimensionTimeResolver dimensionTimeResolver;
 
-  /**
+  /*
    * Constructs a ClockMessageService.
    *
    * @param timeFormatter the tick-to-time formatter
@@ -33,7 +33,7 @@ public class ClockMessageService {
     this.dimensionTimeResolver = dimensionTimeResolver;
   }
 
-  /**
+  /*
    * Generates the clock message Component for the player.
    *
    * @param environment the player's world environment
