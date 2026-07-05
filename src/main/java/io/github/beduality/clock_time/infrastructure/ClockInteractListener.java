@@ -43,12 +43,10 @@ public class ClockInteractListener implements Listener {
      */
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        // Ignore cancelled interactions (e.g. protected regions)
         if (event.useItemInHand() == org.bukkit.event.Event.Result.DENY) {
             return;
         }
 
-        // Check if the player is right-clicking with an item
         if (!event.getAction().name().contains("RIGHT_CLICK") || !event.hasItem()) {
             return;
         }
@@ -58,12 +56,10 @@ public class ClockInteractListener implements Listener {
             return;
         }
 
-        // Check if the player is holding a clock
         if (event.getItem().getType() != Material.CLOCK) {
             return;
         }
 
-        // Permission check
         Player player = event.getPlayer();
         if (!player.hasPermission("clock_time.use")) {
             return;
@@ -76,7 +72,7 @@ public class ClockInteractListener implements Listener {
         var world = player.getWorld();
         Locale locale = player.locale();
 
-        // Handle dimensions where time does not make sense (Nether and End)
+        // Handle dimensions where time does not spin normally
         if (world.getEnvironment() == org.bukkit.World.Environment.NETHER || 
             world.getEnvironment() == org.bukkit.World.Environment.THE_END) {
             String pattern = translationService.getMessage("clock_time.message.wild-spin", locale);
@@ -84,13 +80,8 @@ public class ClockInteractListener implements Listener {
             return;
         }
 
-        // Get the in-game time from the player's current world
         long time = world.getTime();
-
-        // Format the time using the domain formatter
         LocalTime localTime = timeFormatter.formatTicks(time);
-
-        // Display the formatted time as a colorful chat message
         String message = translationService.getFormattedTimeMessage(localTime, locale);
         player.sendMessage(MiniMessage.miniMessage().deserialize(message));
     }

@@ -20,17 +20,13 @@ public class ClockTimePlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        // Save default config if not present
         saveDefaultConfig();
-
-        // Migrate config if necessary
         migrateConfig();
 
         // Extract all default translation properties files to plugins/ClockTime/languages/
         // Administrators can edit these files directly to customize translations.
         saveDefaultLanguages();
 
-        // Retrieve config values
         String fallbackLanguage = getConfig().getString("fallback-language", "en");
 
         // Set up the custom classloader pointing to the plugin's data folder
@@ -40,7 +36,6 @@ public class ClockTimePlugin extends JavaPlugin {
         var timeFormatter = new TimeFormatter();
         var translationService = new TranslationService(classLoader, fallbackLanguage);
 
-        // Register listeners
         getServer().getPluginManager().registerEvents(
             new ClockInteractListener(timeFormatter, translationService),
             this
