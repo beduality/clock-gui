@@ -1,4 +1,4 @@
-# Permissions
+# Permissions Reference
 
 ClockTime uses a single permission node to control access to the clock feature.
 

@@ -1,6 +1,11 @@
-# How to Change the Fallback Language
+# Change the fallback language
 
-This guide explains how to change the language that is used when a player's Minecraft client language is not supported by the plugin.
+Use this guide to change the default language used when a player's client language is not supported by the plugin.
+
+## Preconditions
+
+- A Minecraft server with ClockTime installed.
+- Access to the server file system to edit configuration files.
 
 ## Changing the Fallback Language
 
@@ -14,3 +19,12 @@ This guide explains how to change the language that is used when a player's Mine
 
 4. Save the file.
 5. Restart your Minecraft server to apply the changes.
+
+## Verification
+
+To verify that the fallback language has changed:
+
+1. Connect to your Minecraft server.
+2. Set your Minecraft client language to a language not supported by the plugin (e.g., Tagalog or a custom test locale).
+3. Right-click a clock in your main hand.
+4. Verify that the time message in chat is displayed in your configured fallback language.

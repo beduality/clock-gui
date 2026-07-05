@@ -12,7 +12,7 @@ A lightweight Minecraft plugin that enhances the in-game clock with localized, c
 
     Automatically formats time using each player's client language — including native AM/PM symbols.
 
-    [:octicons-arrow-right-24: Quick start](getting-started/quick-start.md)
+    [:octicons-arrow-right-24: Quick start](server-admins/tutorials/installation.md)
 
 -   :material-translate:{ .lg .middle } __16 Languages Built-in__
 
@@ -20,7 +20,7 @@ A lightweight Minecraft plugin that enhances the in-game clock with localized, c
 
     Ships with English, Spanish, Portuguese, German, French, Italian, Japanese, Korean, Chinese, and more.
 
-    [:octicons-arrow-right-24: Translations](configuration/translations.md)
+    [:octicons-arrow-right-24: Translations](server-admins/how-to-guides/translations.md)
 
 -   :material-cog-outline:{ .lg .middle } __Zero Configuration__
 
@@ -28,7 +28,7 @@ A lightweight Minecraft plugin that enhances the in-game clock with localized, c
 
     Drop the JAR into `plugins/` and go. Every setting has a sensible default.
 
-    [:octicons-arrow-right-24: Configuration](configuration/settings.md)
+    [:octicons-arrow-right-24: Configuration](server-admins/reference/settings.md)
 
 -   :material-compass-off-outline:{ .lg .middle } __Nether & End Aware__
 
@@ -36,7 +36,7 @@ A lightweight Minecraft plugin that enhances the in-game clock with localized, c
 
     Detects dimensions where time doesn't exist and shows a special message instead of broken values.
 
-    [:octicons-arrow-right-24: Quick start](getting-started/quick-start.md)
+    [:octicons-arrow-right-24: Quick start](server-admins/tutorials/installation.md)
 
 </div>
 

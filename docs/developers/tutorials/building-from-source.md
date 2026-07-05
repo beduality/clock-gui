@@ -1,6 +1,6 @@
-# Building from Source
+# Build the plugin from source
 
-If you prefer to compile the plugin yourself or customize the source code, follow this guide to build the ClockTime plugin.
+If you prefer to compile the plugin yourself or customize the source code, follow this tutorial to build the ClockTime plugin.
 
 ## Prerequisites
 
@@ -24,7 +24,3 @@ The compiled JAR will be located at:
 ```
 build/libs/ClockTime-<version>.jar
 ```
-
-!!! tip
-
-    Use `./gradlew buildmv` if you have a local test server at `../server/data/plugins` — it will build, clean old JARs, and copy the new one automatically.

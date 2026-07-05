@@ -1,6 +1,11 @@
-# How to Customize Translations
+# Customize translation messages
 
-This guide explains how to edit existing translation messages or add new language translations.
+Use this guide to edit existing translation messages or add new language translations.
+
+## Preconditions
+
+- A Minecraft server with ClockTime installed.
+- Access to the server's filesystem under `plugins/ClockTime/languages/`.
 
 !!! tip "MiniMessage Formatting"
 
@@ -10,7 +15,7 @@ This guide explains how to edit existing translation messages or add new languag
 
 1. Go to `plugins/ClockTime/languages/` inside your server's plugins directory.
 2. Open the file matching your desired language (e.g., `messages.properties` for English or `messages_es.properties` for Spanish).
-3. Modify the translation messages. You can use standard [MiniMessage formatting](https://docs.advntr.dev/minimessage/format.html) (e.g. `<gold>` or `<aqua>`):
+3. Modify the translation messages. You can use standard [MiniMessage formatting](https://docs.advntr.dev/minimessage/format.html):
 
     ```properties
     clock_time.message.time=<gold>Current Time:</gold> <aqua>{0}</aqua>
@@ -38,4 +43,11 @@ To add support for a custom language not bundled by default (e.g., Swedish):
 4. Save the file.
 5. Restart the server.
 
-Any player whose Minecraft client is set to Swedish (`sv`) will now receive these translations.
+## Verification
+
+To verify that your custom or edited translation is active:
+
+1. Log into the server.
+2. Change your Minecraft client language to match the edited or added locale (e.g., Swedish).
+3. Right-click a clock in your main hand.
+4. Verify that the time message displayed in chat matches your custom text and formatting.

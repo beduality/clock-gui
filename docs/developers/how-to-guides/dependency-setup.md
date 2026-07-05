@@ -1,6 +1,11 @@
-# How to Configure Project Dependencies
+# Configure project dependencies
 
-This guide explains how to add ClockTime as a project dependency to build plugins that integrate with ClockTime.
+Use this guide to add ClockTime as a project dependency to build plugins that integrate with ClockTime.
+
+## Preconditions
+
+- A Java/Kotlin development project using Gradle (Kotlin or Groovy DSL) or Maven.
+- The project configured to compile against Minecraft/Paper APIs.
 
 ## Build Configuration
 
@@ -127,3 +132,10 @@ depend: [ClockTime]
         depend = listOf("ClockTime")
     }
     ```
+
+## Verification
+
+To verify that ClockTime is correctly configured as a project dependency:
+
+1. Run your build tool compile task (e.g., `./gradlew build` or `mvn clean compile`).
+2. Verify that the build succeeds without dependency resolution errors or compiler class-not-found errors.

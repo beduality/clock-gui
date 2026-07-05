@@ -76,12 +76,11 @@ nav:
   - Home: index.md
   - Server Administrators:
     - Tutorials:
-      - Installation: server-admins/tutorials/installation.md
-      - Quick Start: server-admins/tutorials/quick-start.md
+      - Install and run ClockTime: server-admins/tutorials/installation.md
     - How-To Guides:
-      - Restricting Clock Usage: server-admins/how-to-guides/restrict-access.md
-      - Changing the Fallback Language: server-admins/how-to-guides/change-fallback-language.md
-      - Customizing Translations: server-admins/how-to-guides/translations.md
+      - Restrict clock usage: server-admins/how-to-guides/restrict-access.md
+      - Change the fallback language: server-admins/how-to-guides/change-fallback-language.md
+      - Customize translation messages: server-admins/how-to-guides/translations.md
     - Reference:
       - Settings Reference: server-admins/reference/settings.md
       - Permissions Reference: server-admins/reference/permissions.md
@@ -90,11 +89,11 @@ nav:
       - Language Resolution: server-admins/explanation/language-resolution.md
   - Developers:
     - Tutorials:
-      - Building from Source: developers/tutorials/building-from-source.md
+      - Build the plugin from source: developers/tutorials/building-from-source.md
     - How-To Guides:
-      - Project Dependency Setup: developers/how-to-guides/dependency-setup.md
-      - Converting Minecraft Ticks: developers/how-to-guides/converting-ticks.md
-      - Querying Translations: developers/how-to-guides/querying-translations.md
+      - Configure project dependencies: developers/how-to-guides/dependency-setup.md
+      - Convert Minecraft ticks to LocalTime: developers/how-to-guides/converting-ticks.md
+      - Querying translation messages programmatically: developers/how-to-guides/querying-translations.md
     - Reference:
       - API Reference: developers/reference/api.md
     - Explanation:

@@ -1,4 +1,4 @@
-# Settings
+# Settings Reference
 
 ClockTime is configured through `plugins/ClockTime/config.yml`. The file is generated automatically on first startup.
 

@@ -1,6 +1,11 @@
-# How to Query ClockTime Translations
+# Query translation messages programmatically
 
-This guide explains how to query registered translations from ClockTime programmatically using Kyori Adventure APIs.
+Use this guide to query registered translations from ClockTime programmatically using Kyori Adventure APIs.
+
+## Preconditions
+
+- ClockTime configured as a project dependency.
+- Kyori Adventure API libraries present on your development project classpath.
 
 ## Querying Translations
 
@@ -30,3 +35,11 @@ public class TranslationHook {
 !!! note
 
     Ensure ClockTime is fully loaded before querying. Make sure your plugin declares `depend: [ClockTime]` in `plugin.yml` to guarantee correct loading order.
+
+## Verification
+
+To verify that translation querying is working correctly:
+
+1. Deploy your plugin to a server with ClockTime enabled.
+2. Trigger the method in your plugin with a specific player locale (e.g., `Locale.US` or `Locale.GERMANY`).
+3. Verify that the returned string matches the expected translation defined in ClockTime's language files (e.g., German translations if `Locale.GERMANY` is queried).
