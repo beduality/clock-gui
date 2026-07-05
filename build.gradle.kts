@@ -62,7 +62,11 @@ tasks.withType<Test> {
 }
 
 tasks.jar {
-    archiveClassifier.set("plain")
+    enabled = false
+}
+
+tasks.assemble {
+    dependsOn(tasks.shadowJar)
 }
 
 tasks.shadowJar {
