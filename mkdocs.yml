@@ -76,8 +76,6 @@ nav:
     - Introduction: index.md
     - Install ClockTime: server-admins/tutorials/installation.md
     - Play with ClockTime: players/play.md
-  - Players:
-      - Play with ClockTime: players/play.md
   - Server Administrators:
     - Tutorials:
       - Install ClockTime: server-admins/tutorials/installation.md
@@ -91,6 +89,8 @@ nav:
       - Translations Reference: server-admins/reference/translations.md
     - Explanation:
       - Language Resolution: server-admins/explanation/language-resolution.md
+  - Players:
+      - Play with ClockTime: players/play.md
   - Developers:
     - Tutorials:
       - Build the plugin from source: developers/tutorials/building-from-source.md
