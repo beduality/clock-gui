@@ -1,4 +1,4 @@
-package io.github.beduality.clock_time.domain;
+package io.github.beduality.clock_time.domain.service;
 
 import org.junit.jupiter.api.Test;
 import java.time.LocalTime;

@@ -8,7 +8,7 @@ The core business logic of ClockTime is completely decoupled from the Bukkit/Pap
 
 ### `TimeFormatter`
 
-Located in package `io.github.beduality.clock_time.domain`.
+Located in package `io.github.beduality.clock_time.domain.service`.
 
 Converts Minecraft ticks (0-24000) into a standard Java `java.time.LocalTime`.
 

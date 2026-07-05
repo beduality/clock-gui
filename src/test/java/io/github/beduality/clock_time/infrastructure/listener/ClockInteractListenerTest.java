@@ -1,4 +1,4 @@
-package io.github.beduality.clock_time.infrastructure;
+package io.github.beduality.clock_time.infrastructure.listener;
 
 import io.github.beduality.clock_time.ClockTimePlugin;
 import be.seeseemelk.mockbukkit.MockBukkit;

@@ -33,7 +33,7 @@ graph TD
     ClockInteractListener --> |Queries| GlobalTranslator
 ```
 
-### 1. Domain Layer (`io.github.beduality.clock_time.domain`)
+### 1. Domain Layer (`io.github.beduality.clock_time.domain.service`)
 
 * **Role**: Houses pure business rules and calculations.
 * **Dependencies**: None. Pure Java library.

@@ -1,6 +1,6 @@
-package io.github.beduality.clock_time.infrastructure;
+package io.github.beduality.clock_time.infrastructure.listener;
 
-import io.github.beduality.clock_time.domain.TimeFormatter;
+import io.github.beduality.clock_time.domain.service.TimeFormatter;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.translation.GlobalTranslator;
 import org.bukkit.Material;
