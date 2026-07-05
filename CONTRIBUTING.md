@@ -20,10 +20,12 @@ This project adheres to **Clean Architecture** principles to separate business l
 
 1. **Java Version**: Ensure you are using JDK 21 or higher.
 2. **Build Tool**: Use the Gradle wrapper `./gradlew` rather than a global Gradle installation.
-3. **Testing**:
+3. **Building**:
+   - Run `./gradlew build` to compile the code and package the plugin JAR (found in `build/libs/`).
+4. **Testing**:
    - Write JUnit 5 tests for any new domain or application logic.
    - Run tests using `./gradlew test`. All tests must pass before submitting a pull request.
-4. **Code Style**:
+5. **Code Style**:
    - Follow clean, descriptive naming conventions.
    - Do not use Lombok dependencies if not needed; prefer standard Java features (such as Records).
 
