@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.shadow)
     alias(libs.plugins.pluginYml)
     alias(libs.plugins.spotless)
+    alias(libs.plugins.hangar)
+    alias(libs.plugins.minotaur)
 }
 
 spotless {
@@ -88,4 +90,37 @@ tasks.javadoc {
     exclude("**/ClockMessageService.java")
     exclude("**/DimensionTimeResolver.java")
     exclude("**/LocaleTimeFormatter.java")
+}
+
+hangarPublish {
+    publications.register("plugin") {
+        version.set(project.version.toString())
+        id.set("clock-time")
+        val isPreRelease = project.version.toString().contains("-")
+        channel.set(if (isPreRelease) "Beta" else "Release")
+        changelog.set(System.getenv("RELEASE_CHANGELOG") ?: "No changelog provided.")
+        apiKey.set(providers.environmentVariable("HANGAR_API_TOKEN"))
+
+        platforms {
+            paper {
+                jar.set(tasks.shadowJar.flatMap { it.archiveFile })
+                platformVersions.set(listOf("1.20.5", "1.20.6", "1.21", "1.21.1", "1.21.2", "1.21.3", "1.21.4"))
+            }
+        }
+    }
+}
+
+modrinth {
+    token.set(providers.environmentVariable("MODRINTH_TOKEN"))
+    projectId.set(System.getenv("MODRINTH_PROJECT_ID") ?: "clock-time")
+    versionNumber.set(project.version.toString())
+    versionName.set("ClockTime ${project.version}")
+
+    val isPreRelease = project.version.toString().contains("-")
+    versionType.set(if (isPreRelease) "beta" else "release")
+
+    uploadFile.set(tasks.shadowJar)
+    gameVersions.set(listOf("1.20.5", "1.20.6", "1.21", "1.21.1", "1.21.2", "1.21.3", "1.21.4"))
+    loaders.set(listOf("paper", "folia"))
+    changelog.set(System.getenv("RELEASE_CHANGELOG") ?: "No changelog provided.")
 }

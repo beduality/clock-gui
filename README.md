@@ -1,6 +1,6 @@
 # ClockTime Plugin
 
-[Docs](https://beduality.github.io/clock-time/) | [Javadoc](https://beduality.github.io/clock-time/apidocs/) | [MIT License](./LICENSE)
+[Docs](https://beduality.github.io/clock-time/) | [Javadoc](https://beduality.github.io/clock-time/apidocs/) | [Hangar](https://hangar.papermc.io/beduality/clock-time) | [Modrinth](https://modrinth.com/plugin/clock-time) | [MIT License](./LICENSE)
 
 Localized in-game time displays for Minecraft.
 
@@ -24,7 +24,8 @@ Localized in-game time displays for Minecraft.
 
 ## Installation
 
-1. Download the latest release `.jar` file.
+1. Download the latest release `.jar` file from [Hangar](https://hangar.papermc.io/beduality/clock-time), [Modrinth](https://modrinth.com/plugin/clock-time), or the [GitHub Releases](https://github.com/beduality/clock-time/releases) page.
+
 2. Place the file inside your server's `plugins/` directory.
 3. Start or restart the server.
 

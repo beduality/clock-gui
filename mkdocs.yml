@@ -89,6 +89,8 @@ nav:
     - Explanation:
       - Language Resolution: server-admins/explanation/language-resolution.md
   - Developers:
+    - Tutorials:
+      - Building from Source: developers/tutorials/building-from-source.md
     - How-To Guides:
       - Project Dependency Setup: developers/how-to-guides/dependency-setup.md
       - Converting Minecraft Ticks: developers/how-to-guides/converting-ticks.md

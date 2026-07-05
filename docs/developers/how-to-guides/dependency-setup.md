@@ -4,9 +4,9 @@ This guide explains how to add ClockTime as a project dependency to build plugin
 
 ## Build Configuration
 
-ClockTime releases are hosted on JitPack. Add the repository and dependency coordinate to your project configuration.
+ClockTime releases are hosted on JitPack and Modrinth Maven. Add the repository and dependency coordinate to your project configuration.
 
-=== "Gradle (Kotlin)"
+=== "Gradle (Kotlin) - JitPack"
 
     ```kotlin
     repositories {
@@ -15,11 +15,24 @@ ClockTime releases are hosted on JitPack. Add the repository and dependency coor
     }
 
     dependencies {
-        compileOnly("com.github.beduality:clock-time:v1.0.0") // Replace with latest release tag
+        compileOnly("com.github.beduality:clock-time:v0.1.0") // Replace with latest version
     }
     ```
 
-=== "Gradle (Groovy)"
+=== "Gradle (Kotlin) - Modrinth"
+
+    ```kotlin
+    repositories {
+        mavenCentral()
+        maven("https://api.modrinth.com/maven")
+    }
+
+    dependencies {
+        compileOnly("maven.modrinth:clock-time:0.1.0") // Replace with latest version
+    }
+    ```
+
+=== "Gradle (Groovy) - JitPack"
 
     ```groovy
     repositories {
@@ -28,11 +41,24 @@ ClockTime releases are hosted on JitPack. Add the repository and dependency coor
     }
 
     dependencies {
-        compileOnly 'com.github.beduality:clock-time:v1.0.0' // Replace with latest release tag
+        compileOnly 'com.github.beduality:clock-time:v0.1.0' // Replace with latest version
     }
     ```
 
-=== "Maven"
+=== "Gradle (Groovy) - Modrinth"
+
+    ```groovy
+    repositories {
+        mavenCentral()
+        maven { url 'https://api.modrinth.com/maven' }
+    }
+
+    dependencies {
+        compileOnly 'maven.modrinth:clock-time:0.1.0' // Replace with latest version
+    }
+    ```
+
+=== "Maven - JitPack"
 
     ```xml
     <repositories>
@@ -42,12 +68,34 @@ ClockTime releases are hosted on JitPack. Add the repository and dependency coor
         </repository>
     </repositories>
 
-    <dependency>
-        <groupId>com.github.beduality</groupId>
-        <artifactId>clock-time</artifactId>
-        <version>v1.0.0</version> <!-- Replace with latest release tag -->
-        <scope>provided</scope>
-    </dependency>
+    <dependencies>
+        <dependency>
+            <groupId>com.github.beduality</groupId>
+            <artifactId>clock-time</artifactId>
+            <version>v0.1.0</version> <!-- Replace with latest version -->
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+    ```
+
+=== "Maven - Modrinth"
+
+    ```xml
+    <repositories>
+        <repository>
+            <id>modrinth-repo</id>
+            <url>https://api.modrinth.com/maven</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>maven.modrinth</groupId>
+            <artifactId>clock-time</artifactId>
+            <version>0.1.0</version> <!-- Replace with latest version -->
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
     ```
 
 ---
