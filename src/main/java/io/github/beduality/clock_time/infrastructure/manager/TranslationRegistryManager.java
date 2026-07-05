@@ -81,7 +81,10 @@ public class TranslationRegistryManager {
                 java.util.jar.JarEntry entry = entries.nextElement();
                 String name = entry.getName();
                 if (name.startsWith("languages/") && name.endsWith(".properties")) {
-                    plugin.saveResource(name, false);
+                    File outFile = new File(plugin.getDataFolder(), name);
+                    if (!outFile.exists()) {
+                        plugin.saveResource(name, false);
+                    }
                 }
             }
         } catch (Exception e) {
