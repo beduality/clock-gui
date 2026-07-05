@@ -102,3 +102,51 @@ Documentation is automatically deployed to GitHub Pages on every push to `main` 
 2. Commit your changes with clear, descriptive commit messages.
 3. Push to your fork and submit a Pull Request targeting `main`.
 4. Ensure the build and tests pass successfully on your branch.
+
+## Release Process
+
+We follow a manual tagging and automated publication workflow for releases.
+
+### 1. Update Version Numbers
+
+Update the version string to the new release version in the following files:
+*   [gradle.properties](file:///home/luis/GitHub/beduality/clock-time/gradle.properties): `version = X.Y.Z`
+*   [pyproject.toml](file:///home/luis/GitHub/beduality/clock-time/pyproject.toml): `version = "X.Y.Z"`
+
+### 2. Update Changelog
+
+Document the new release's features, fixes, and changes in [CHANGELOG.md](file:///home/luis/GitHub/beduality/clock-time/CHANGELOG.md) under a new version heading (following the [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format):
+
+```markdown
+## [X.Y.Z] - YYYY-MM-DD
+
+### Added
+- New feature description.
+```
+
+### 3. Dry-Run Verification (Optional)
+
+Before pushing the release, you can dry-run the distribution tasks locally:
+
+*   **Dry-run Hangar & Modrinth**:
+    ```bash
+    DRY_RUN=true JAVA_HOME=/usr/lib/jvm/java-21-openjdk ./gradlew publishPluginPublicationToHangar modrinth --no-daemon
+    ```
+
+### 4. Create and Push the Tag
+
+Commit your changes, tag the commit, and push it:
+
+```bash
+git add gradle.properties pyproject.toml CHANGELOG.md
+git commit -m "bump: release version X.Y.Z"
+git tag vX.Y.Z
+git push origin main --tags
+```
+
+The GitHub Actions release workflow will automatically:
+
+1. Parse the latest section of `CHANGELOG.md` for release notes.
+2. Build and verify the project using JDK 21.
+3. Create a GitHub Release page with the compiled shadow JAR and release notes.
+4. Publish the release to Hangar and Modrinth.

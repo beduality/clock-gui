@@ -1,9 +1,7 @@
 # TODO
 
-- Changelog
-- GH Release
-- Hangar & modrinth distribution
+- Improve tutorials
 
-- Update admin tutorials
-- Check developers docs
 - Host ClockTime releases on JitPack (or update docs)
+- Automate release process
+- Improve Hangar & Modrinth pages
