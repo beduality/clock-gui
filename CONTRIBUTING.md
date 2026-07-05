@@ -110,12 +110,12 @@ We follow a manual tagging and automated publication workflow for releases.
 ### 1. Update Version Numbers
 
 Update the version string to the new release version in the following files:
-*   [gradle.properties](file:///home/luis/GitHub/beduality/clock-time/gradle.properties): `version = X.Y.Z`
-*   [pyproject.toml](file:///home/luis/GitHub/beduality/clock-time/pyproject.toml): `version = "X.Y.Z"`
+*   [gradle.properties](./gradle.properties): `version = X.Y.Z`
+*   [pyproject.toml](./pyproject.toml): `version = "X.Y.Z"`
 
 ### 2. Update Changelog
 
-Document the new release's features, fixes, and changes in [CHANGELOG.md](file:///home/luis/GitHub/beduality/clock-time/CHANGELOG.md) under a new version heading (following the [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format):
+Document the new release's features, fixes, and changes in [CHANGELOG.md](./CHANGELOG.md) under a new version heading (following the [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format):
 
 ```markdown
 ## [X.Y.Z] - YYYY-MM-DD
