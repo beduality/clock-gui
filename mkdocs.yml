@@ -73,6 +73,8 @@ extra:
 
 nav:
   - Home: index.md
+  - How to Install ClockTime: server-admins/tutorials/installation.md
+  - How to Play ClockTime: players/guide.md
   - Players:
       - Player Guide: players/guide.md
   - Server Administrators:
