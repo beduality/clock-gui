@@ -2,5 +2,6 @@
 
 - Automate release process
 - Improve Hangar & Modrinth pages
+- Version docs
 
-- Improve vscode settings for thsi Java project
+- Improve vscode settings for this Java project
