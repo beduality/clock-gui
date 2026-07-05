@@ -1,6 +1,6 @@
 # Architecture
 
-This project strictly adheres to **Clean Architecture** principles to separate core business/translation logic from the Minecraft server API (Paper API). This makes components highly testable, modular, and maintainable.
+This project strictly adheres to **Clean Architecture** principles to separate core business/time formatting logic from the Minecraft server API (Paper API). This makes components highly testable, modular, and maintainable.
 
 ---
 
@@ -11,17 +11,21 @@ graph TD
     subgraph Infrastructure [Infrastructure Layer]
         ClockTimePlugin[ClockTimePlugin]
         ClockInteractListener[ClockInteractListener]
+        PluginConfig[PluginConfig]
     end
 
     subgraph PureJava [Pure Java Layers]
-        TranslationService[TranslationService]
         TimeFormatter[TimeFormatter]
     end
 
+    subgraph Platform [Platform Services]
+        GlobalTranslator[Adventure GlobalTranslator]
+    end
+
+    ClockTimePlugin --> |Registers| GlobalTranslator
     ClockTimePlugin --> |Instantiates & Injects| ClockInteractListener
-    ClockInteractListener --> |Uses| TranslationService
     ClockInteractListener --> |Uses| TimeFormatter
-    TranslationService --> |Uses| TimeFormatter
+    ClockInteractListener --> |Queries| GlobalTranslator
 ```
 
 ### 1. Domain Layer (`io.github.beduality.clock_time.domain`)
@@ -31,20 +35,14 @@ graph TD
 * **Key Components**:
   * `TimeFormatter`: Translates abstract Minecraft ticks (0-24000) to standard `java.time.LocalTime` objects.
 
-### 2. Application Layer (`io.github.beduality.clock_time.application`)
+### 2. Infrastructure Layer (`io.github.beduality.clock_time.infrastructure` / plugin root)
 
-* **Role**: Implements application-specific logic like localization, message compilation, and configuration coordination.
-* **Dependencies**: Domain layer, Java standard library (e.g. `java.util.ResourceBundle`). Does not depend on the Bukkit API.
+* **Role**: Integrates the plugin with the Minecraft server platform (Paper/Bukkit) and third-party libraries (SpongePowered Configurate).
+* **Dependencies**: Paper API, Domain layer, Configurate.
 * **Key Components**:
-  * `TranslationService`: Resolves messages using resources loaded via a ClassLoader, handling client locales and custom fallback rules.
-
-### 3. Infrastructure Layer (`io.github.beduality.clock_time.infrastructure` / plugin root)
-
-* **Role**: Integrates the plugin with the Minecraft server platform (Paper/Bukkit).
-* **Dependencies**: Paper API, Domain layer, Application layer.
-* **Key Components**:
-  * `ClockTimePlugin`: Plugin lifecycle manager. Configures services and constructs dependencies via manual dependency injection.
-  * `ClockInteractListener`: Event listener handling player click actions, permission validation, and Minecraft world state inspections.
+  * `ClockTimePlugin`: Plugin lifecycle manager and Composition Root. Sets up the configuration using Configurate and registers translations to Adventure's `GlobalTranslator`.
+  * `PluginConfig`: Maps YAML settings to a typed config class.
+  * `ClockInteractListener`: Event listener handling player click actions, permission validation, and querying Adventure for localized translations.
 
 ---
 
@@ -57,7 +55,7 @@ sequenceDiagram
     actor Player
     participant Listener as ClockInteractListener
     participant Formatter as TimeFormatter
-    participant Translator as TranslationService
+    participant Translator as Adventure GlobalTranslator
 
     Player->>Listener: Right-click with Clock
     activate Listener
@@ -65,14 +63,14 @@ sequenceDiagram
     Note over Listener: Get World Environment & Ticks
     Listener->>Formatter: formatTicks(ticks)
     Formatter-->>Listener: Return LocalTime
-    Listener->>Translator: getFormattedTimeMessage(time, locale)
+    Listener->>Translator: translate(key, locale)
     activate Translator
-    Note over Translator: Load locale-specific properties file
-    Note over Translator: Format time via native DateTimeFormatter
-    Translator-->>Listener: Return localized formatted string
+    Note over Translator: Resolves text via registered TranslationRegistry
+    Translator-->>Listener: Return localized pattern format
     deactivate Translator
-    Note over Listener: MiniMessage deserializes formatting tags
+    Note over Listener: Format pattern with time & deserialize tags
     Listener->>Player: Send message (chat time display)
     deactivate Listener
 ```
+
 

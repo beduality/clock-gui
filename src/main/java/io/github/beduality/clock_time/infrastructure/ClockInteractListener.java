@@ -1,8 +1,8 @@
 package io.github.beduality.clock_time.infrastructure;
 
-import io.github.beduality.clock_time.application.TranslationService;
 import io.github.beduality.clock_time.domain.TimeFormatter;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.translation.GlobalTranslator;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,17 +21,14 @@ import java.util.Locale;
 public class ClockInteractListener implements Listener {
 
     private final TimeFormatter timeFormatter;
-    private final TranslationService translationService;
 
     /**
      * Constructs a new ClockInteractListener.
      *
-     * @param timeFormatter      the domain service used to compute LocalTime from ticks
-     * @param translationService the application service used to resolve localized messages
+     * @param timeFormatter the domain service used to compute LocalTime from ticks
      */
-    public ClockInteractListener(TimeFormatter timeFormatter, TranslationService translationService) {
+    public ClockInteractListener(TimeFormatter timeFormatter) {
         this.timeFormatter = timeFormatter;
-        this.translationService = translationService;
     }
 
     /**
@@ -75,14 +72,28 @@ public class ClockInteractListener implements Listener {
         // Handle dimensions where time does not spin normally
         if (world.getEnvironment() == org.bukkit.World.Environment.NETHER || 
             world.getEnvironment() == org.bukkit.World.Environment.THE_END) {
-            String pattern = translationService.getMessage("clock_time.message.wild-spin", locale);
-            player.sendMessage(MiniMessage.miniMessage().deserialize(pattern));
+            String message = translate("clock_time.message.wild-spin", locale);
+            player.sendMessage(MiniMessage.miniMessage().deserialize(message));
             return;
         }
 
         long time = world.getTime();
         LocalTime localTime = timeFormatter.formatTicks(time);
-        String message = translationService.getFormattedTimeMessage(localTime, locale);
+
+        java.time.format.DateTimeFormatter dtf = java.time.format.DateTimeFormatter
+                .ofLocalizedTime(java.time.format.FormatStyle.SHORT)
+                .withLocale(locale);
+        String formattedTime = localTime.format(dtf);
+
+        String message = translate("clock_time.message.time", locale, formattedTime);
         player.sendMessage(MiniMessage.miniMessage().deserialize(message));
+    }
+
+    private String translate(String key, Locale locale, Object... args) {
+        var format = GlobalTranslator.translator().translate(key, locale);
+        if (format == null) {
+            format = GlobalTranslator.translator().translate(key, Locale.ROOT);
+        }
+        return format != null ? format.format(args) : key;
     }
 }

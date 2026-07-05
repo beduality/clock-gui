@@ -1,9 +1,11 @@
 package io.github.beduality.clock_time;
 
-import io.github.beduality.clock_time.application.TranslationService;
 import io.github.beduality.clock_time.domain.TimeFormatter;
 import io.github.beduality.clock_time.infrastructure.ClockInteractListener;
 import io.github.beduality.clock_time.infrastructure.PluginConfig;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.translation.GlobalTranslator;
+import net.kyori.adventure.translation.TranslationRegistry;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
@@ -11,6 +13,9 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 
 /**
@@ -52,17 +57,42 @@ public class ClockTimePlugin extends JavaPlugin {
         }
 
         saveDefaultLanguages();
-        ClassLoader classLoader = getClassLoaderWithExternalFolder();
+        setupTranslations(config.getFallbackLanguage());
 
         var timeFormatter = new TimeFormatter();
-        var translationService = new TranslationService(classLoader, config.getFallbackLanguage());
 
         getServer().getPluginManager().registerEvents(
-            new ClockInteractListener(timeFormatter, translationService),
+            new ClockInteractListener(timeFormatter),
             this
         );
 
         getLogger().info("ClockTime Plugin Enabled");
+    }
+
+    private void setupTranslations(String fallbackLanguage) {
+        ClassLoader classLoader = getClassLoaderWithExternalFolder();
+        TranslationRegistry registry = TranslationRegistry.create(Key.key("clocktime", "main"));
+        
+        Locale defaultLocale = new Locale(fallbackLanguage != null ? fallbackLanguage : "en");
+        registry.defaultLocale(defaultLocale);
+
+        Locale[] locales = {
+            Locale.ROOT, Locale.ENGLISH, Locale.GERMAN, new Locale("es"), new Locale("fr"),
+            Locale.ITALIAN, Locale.JAPANESE, Locale.KOREAN, new Locale("nl"), new Locale("pl"),
+            new Locale("pt"), new Locale("ru"), new Locale("tr"), new Locale("uk"),
+            Locale.SIMPLIFIED_CHINESE, Locale.TRADITIONAL_CHINESE
+        };
+
+        for (Locale locale : locales) {
+            try {
+                ResourceBundle bundle = ResourceBundle.getBundle("languages.messages", locale, classLoader);
+                registry.registerAll(locale, bundle, true);
+            } catch (MissingResourceException e) {
+                // Ignore missing bundles
+            }
+        }
+
+        GlobalTranslator.translator().addSource(registry);
     }
 
     private ClassLoader getClassLoaderWithExternalFolder() {
