@@ -46,10 +46,10 @@ graph TD
 * **Dependencies**: Paper API, Domain layer, Configurate.
 * **Key Components**:
   * `ClockTimePlugin`: Plugin lifecycle manager and Composition Root. Delegates config loading and translation registration to dedicated managers.
-  * `PluginConfig`: Maps YAML settings to a typed config class.
-  * `ConfigLoader`: Manages YamlConfigurationLoader initialization, loading, validation, and version-based configuration transformations.
-  * `TranslationRegistryManager`: Handles properties asset extraction from JAR, custom ClassLoader generation, and registers locales to Adventure's `GlobalTranslator`.
-  * `ClockInteractListener`: Event listener handling player click actions, permission validation, and querying Adventure for localized translations.
+  * `PluginConfig` (under `infrastructure.config`): Maps YAML settings to a typed config class.
+  * `ConfigLoader` (under `infrastructure.manager`): Manages YamlConfigurationLoader initialization, loading, validation, and version-based configuration transformations.
+  * `TranslationRegistryManager` (under `infrastructure.manager`): Handles properties asset extraction from JAR, custom ClassLoader generation, and registers locales to Adventure's `GlobalTranslator`.
+  * `ClockInteractListener` (under `infrastructure.listener`): Event listener handling player click actions, permission validation, and querying Adventure for localized translations.
 
 ---
 

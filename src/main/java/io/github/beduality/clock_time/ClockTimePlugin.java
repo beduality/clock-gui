@@ -1,10 +1,10 @@
 package io.github.beduality.clock_time;
 
 import io.github.beduality.clock_time.domain.service.TimeFormatter;
-import io.github.beduality.clock_time.infrastructure.config.ConfigLoader;
 import io.github.beduality.clock_time.infrastructure.config.PluginConfig;
 import io.github.beduality.clock_time.infrastructure.listener.ClockInteractListener;
-import io.github.beduality.clock_time.infrastructure.translation.TranslationRegistryManager;
+import io.github.beduality.clock_time.infrastructure.manager.ConfigLoader;
+import io.github.beduality.clock_time.infrastructure.manager.TranslationRegistryManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**

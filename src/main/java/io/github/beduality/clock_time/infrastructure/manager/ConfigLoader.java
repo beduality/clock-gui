@@ -1,5 +1,6 @@
-package io.github.beduality.clock_time.infrastructure.config;
+package io.github.beduality.clock_time.infrastructure.manager;
 
+import io.github.beduality.clock_time.infrastructure.config.PluginConfig;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 

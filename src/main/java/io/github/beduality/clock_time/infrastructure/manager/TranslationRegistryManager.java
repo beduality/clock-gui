@@ -1,4 +1,4 @@
-package io.github.beduality.clock_time.infrastructure.translation;
+package io.github.beduality.clock_time.infrastructure.manager;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.translation.GlobalTranslator;
