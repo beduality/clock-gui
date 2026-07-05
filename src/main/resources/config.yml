@@ -7,3 +7,5 @@
 # If set to another code, players with unsupported languages will get that translation instead.
 fallback-language: "en"
 
+# Configuration version. Do not modify this value.
+config-version: 1

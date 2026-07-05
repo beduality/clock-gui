@@ -23,6 +23,9 @@ public class ClockTimePlugin extends JavaPlugin {
         // Save default config if not present
         saveDefaultConfig();
 
+        // Migrate config if necessary
+        migrateConfig();
+
         // Extract all default translation properties files to plugins/ClockTime/languages/
         // Administrators can edit these files directly to customize translations.
         saveDefaultLanguages();
@@ -44,6 +47,16 @@ public class ClockTimePlugin extends JavaPlugin {
         );
 
         getLogger().info("ClockTime Plugin Enabled");
+    }
+
+    private void migrateConfig() {
+        int currentVersion = getConfig().getInt("config-version", 0);
+        int targetVersion = 1;
+        if (currentVersion < targetVersion) {
+            getLogger().info("Migrating configuration from version " + currentVersion + " to " + targetVersion);
+            getConfig().set("config-version", targetVersion);
+            saveConfig();
+        }
     }
 
     private ClassLoader getClassLoaderWithExternalFolder() {

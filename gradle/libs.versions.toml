@@ -3,6 +3,7 @@ paper = "1.20.6-R0.1-SNAPSHOT"
 shadow = "8.1.1"
 pluginYml = "0.6.0"
 junit = "5.10.2"
+mockbukkit = "3.93.2"
 
 [plugins]
 shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }
@@ -12,3 +13,5 @@ pluginYml = { id = "net.minecrell.plugin-yml.bukkit", version.ref = "pluginYml" 
 paper-api = { group = "io.papermc.paper", name = "paper-api", version.ref = "paper" }
 junit-jupiter-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit" }
 junit-jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit" }
+mockbukkit = { group = "com.github.seeseemelk", name = "MockBukkit-v1.20", version.ref = "mockbukkit" }
+
