@@ -61,6 +61,10 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
+tasks.jar {
+    archiveClassifier.set("plain")
+}
+
 tasks.shadowJar {
     archiveBaseName.set("ClockTime")
     archiveClassifier.set("")
