@@ -4,6 +4,12 @@
 
 Localized in-game time displays for Minecraft.
 
+<p align="center">
+  <img src="./docs/assets/images/clocktime-demo-day.png" alt="Day Demo" width="32%" />
+  <img src="./docs/assets/images/clocktime-demo-night.png" alt="Night Demo" width="32%" />
+  <img src="./docs/assets/images/clocktime-demo-nether.png" alt="Nether Demo" width="32%" />
+</p>
+
 ## Features
 
 - **Dynamic Localized Formatting**: Auto-detects and formats time using the player's client language locale, including native AM/PM translations.
