@@ -6,6 +6,7 @@
         ".gitignore": ".gitattributes",
         "gradle.properties": "gradlew, gradlew.bat",
         "build.gradle.kts": "settings.gradle",
-        "README.md": "CONTRIBUTING.md, CHANGELOG.md, LICENSE"
+        "README.md": "CONTRIBUTING.md, CHANGELOG.md, LICENSE",
+        "pyproject.toml": "uv.lock, .python-version"
     }
 }

@@ -29,13 +29,7 @@ A lightweight, clean-architecture Minecraft plugin that enhances the in-game clo
 
 ## Documentation
 
-Detailed guides and specifications are available in the [docs](./docs/) directory:
-
-* 📥 **[Installation Guide](./docs/installation.md)**: Requirements, compilation, and setup.
-* ⚙️ **[Configuration](./docs/configuration.md)**: Settings and translation resources.
-* 🔑 **[Permissions](./docs/permissions.md)**: Group permission references.
-* 🛠️ **[Developer API](./docs/api.md)**: Leveraging decoupled library components.
-* 📐 **[Architecture](./docs/architecture.md)**: Design principles and module flow.
+Full documentation is available at **[beduality.github.io/clock-time](https://beduality.github.io/clock-time/)**.
 
 ## Support
 

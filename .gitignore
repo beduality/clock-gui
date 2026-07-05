@@ -5,3 +5,7 @@
 build
 
 bin
+
+# MkDocs
+site/
+.venv/

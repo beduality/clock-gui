@@ -27,6 +27,59 @@ This project adheres to **Clean Architecture** principles to separate business l
    - Follow clean, descriptive naming conventions.
    - Do not use Lombok dependencies if not needed; prefer standard Java features (such as Records).
 
+## Documentation
+
+The documentation site is built with [MkDocs](https://www.mkdocs.org/) and the [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) theme. Python dependencies are managed with [uv](https://docs.astral.sh/uv/).
+
+### Prerequisites
+
+- [uv](https://docs.astral.sh/uv/getting-started/installation/) installed.
+
+### Local Preview
+
+```bash
+uv run mkdocs serve
+```
+
+This starts a dev server at `http://localhost:8000` with live reload.
+
+### Build
+
+```bash
+uv run mkdocs build
+```
+
+Output goes to `site/` (git-ignored).
+
+### Structure
+
+```text
+docs/
+├── index.md                          # Landing page
+├── getting-started/
+│   ├── installation.md               # Installation guide
+│   └── quick-start.md                # Quick start tutorial
+├── configuration/
+│   ├── settings.md                   # config.yml reference
+│   ├── translations.md               # Translation system guide
+│   └── permissions.md                # Permissions reference
+└── developers/
+    ├── api.md                        # Developer API reference
+    └── architecture.md               # Architecture overview
+mkdocs.yml                            # Site configuration & navigation
+pyproject.toml                        # Python dependencies (uv)
+```
+
+### Adding a Page
+
+1. Create a `.md` file under `docs/`.
+2. Add the page to the `nav` section in `mkdocs.yml`.
+3. Preview with `uv run mkdocs serve`.
+
+### Deployment
+
+Documentation is automatically deployed to GitHub Pages on every push to `main` via the `.github/workflows/deploy-docs.yml` workflow. No manual deployment is needed.
+
 ## Submitting Pull Requests
 
 1. Fork the repository and create your branch from `main`.
