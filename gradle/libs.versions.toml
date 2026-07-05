@@ -5,10 +5,12 @@ pluginYml = "0.6.0"
 junit = "5.10.2"
 mockbukkit = "3.93.2"
 configurate = "4.2.0"
+spotless = "6.25.0"
 
 [plugins]
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
 pluginYml = { id = "net.minecrell.plugin-yml.bukkit", version.ref = "pluginYml" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 
 [libraries]
 paper-api = { group = "io.papermc.paper", name = "paper-api", version.ref = "paper" }

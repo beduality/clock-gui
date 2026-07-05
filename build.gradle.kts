@@ -2,6 +2,18 @@ plugins {
     java
     alias(libs.plugins.shadow)
     alias(libs.plugins.pluginYml)
+    alias(libs.plugins.spotless)
+}
+
+spotless {
+    java {
+        googleJavaFormat("1.22.0")
+        target("src/*/java/**/*.java")
+    }
+    kotlinGradle {
+        target("*.gradle.kts")
+        ktlint()
+    }
 }
 
 group = "io.github.beduality"
@@ -30,7 +42,7 @@ bukkit {
     name = "ClockTime"
     version = project.version.toString()
     main = "io.github.beduality.clock_time.ClockTimePlugin"
-    description = "Adds a customizable time display (12-hour, 24-hour, or client locale) to Minecraft's clock with a quick-click chat message!"
+    description = "Adds a quick-click chat message to clocks with the current in-game time in the player's locale."
     apiVersion = "1.20"
     author = "Luis Emidio, Block-Entity Duality Team and contributors"
     website = "https://github.com/beduality/clock-time"
@@ -56,9 +68,11 @@ tasks.shadowJar {
 
 val cleanPlugins by tasks.registering {
     doLast {
-        delete(fileTree("../server/data/plugins") {
-            include("ClockTime*.jar")
-        })
+        delete(
+            fileTree("../server/data/plugins") {
+                include("ClockTime*.jar")
+            },
+        )
     }
 }
 

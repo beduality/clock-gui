@@ -2,6 +2,70 @@
 
 ClockTime's core logic is fully decoupled from the Bukkit API. Developers can reuse the time conversion engine or hook into the translation system through standard Kyori Adventure APIs.
 
+You can view the complete [Javadoc API Reference](../../apidocs/index.html).
+
+## Dependency Configuration
+
+To use ClockTime in your own project, add the JitPack repository and the dependency declaration to your build file.
+
+=== "Gradle (Kotlin)"
+
+    ```kotlin
+    repositories {
+        mavenCentral()
+        maven("https://jitpack.io")
+    }
+
+    dependencies {
+        compileOnly("com.github.beduality:clock-time:v1.0.0") // Replace with latest tag
+    }
+    ```
+
+=== "Gradle (Groovy)"
+
+    ```groovy
+    repositories {
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+    }
+
+    dependencies {
+        compileOnly 'com.github.beduality:clock-time:v1.0.0' // Replace with latest tag
+    }
+    ```
+
+=== "Maven"
+
+    ```xml
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
+    <dependency>
+        <groupId>com.github.beduality</groupId>
+        <artifactId>clock-time</artifactId>
+        <version>v1.0.0</version> <!-- Replace with latest tag -->
+        <scope>provided</scope>
+    </dependency>
+    ```
+
+## Plugin Dependency Configuration
+
+To ensure your plugin loads after ClockTime, declare it as a dependency in your `plugin.yml`:
+
+```yaml
+name: MyPlugin
+version: 1.0.0
+main: com.example.MyPlugin
+# Require ClockTime to be installed and loaded first
+depend: [ClockTime]
+# OR if ClockTime is optional
+# softdepend: [ClockTime]
+```
+
 ## TimeFormatter
 
 The domain service that converts Minecraft ticks to Java `LocalTime` objects.

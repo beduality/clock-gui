@@ -11,35 +11,35 @@ import io.github.beduality.clock_time.infrastructure.manager.TranslationRegistry
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
- * Main entry point for the ClockTime Paper plugin.
- * Acts as the Composition Root bootstrapping dependency injections.
+ * Main entry point for the ClockTime Paper plugin. Acts as the Composition Root bootstrapping
+ * dependency injections.
  */
 public class ClockTimePlugin extends JavaPlugin {
 
-    @Override
-    public void onEnable() {
-        // Load and migrate configuration
-        PluginConfig config = new ConfigLoader(this).loadAndMigrate();
+  @Override
+  public void onEnable() {
+    // Load and migrate configuration
+    PluginConfig config = new ConfigLoader(this).loadAndMigrate();
 
-        // Register translations to Adventure GlobalTranslator
-        new TranslationRegistryManager(this, getFile()).setup(config.getFallbackLanguage());
+    // Register translations to Adventure GlobalTranslator
+    new TranslationRegistryManager(this, getFile()).setup(config.getFallbackLanguage());
 
-        // Setup domain logic and listener
-        var timeFormatter = new TimeFormatter();
-        var localeTimeFormatter = new LocaleTimeFormatter();
-        var dimensionTimeResolver = new DimensionTimeResolver();
-        var clockMessageService = new ClockMessageService(timeFormatter, localeTimeFormatter, dimensionTimeResolver);
+    // Setup domain logic and listener
+    var timeFormatter = new TimeFormatter();
+    var localeTimeFormatter = new LocaleTimeFormatter();
+    var dimensionTimeResolver = new DimensionTimeResolver();
+    var clockMessageService =
+        new ClockMessageService(timeFormatter, localeTimeFormatter, dimensionTimeResolver);
 
-        getServer().getPluginManager().registerEvents(
-            new ClockInteractListener(clockMessageService),
-            this
-        );
+    getServer()
+        .getPluginManager()
+        .registerEvents(new ClockInteractListener(clockMessageService), this);
 
-        getLogger().info("ClockTime Plugin Enabled");
-    }
+    getLogger().info("ClockTime Plugin Enabled");
+  }
 
-    @Override
-    public void onDisable() {
-        getLogger().info("ClockTime Plugin Disabled");
-    }
+  @Override
+  public void onDisable() {
+    getLogger().info("ClockTime Plugin Disabled");
+  }
 }

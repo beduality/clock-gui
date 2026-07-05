@@ -5,6 +5,9 @@ on:
     branches: [main]
     paths:
       - docs/**
+      - src/**
+      - build.gradle.kts
+      - gradle/libs.versions.toml
       - mkdocs.yml
       - pyproject.toml
       - uv.lock
@@ -31,6 +34,19 @@ jobs:
 
       - uses: actions/configure-pages@v5
 
+      - name: Set up JDK 21
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+
+      - name: Make Gradle Wrapper executable
+        run: chmod +x gradlew
+
+      - name: Generate Javadoc
+        run: ./gradlew javadoc --no-daemon
+
       - uses: astral-sh/setup-uv@v6
         with:
           enable-cache: true
@@ -38,6 +54,9 @@ jobs:
       - run: uv sync --locked
 
       - run: uv run mkdocs build
+
+      - name: Copy Javadoc to docs site
+        run: cp -r build/docs/javadoc site/apidocs
 
       - uses: actions/upload-pages-artifact@v4
         with:

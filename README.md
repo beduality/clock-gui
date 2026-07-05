@@ -1,6 +1,6 @@
 # ClockTime Plugin
 
-[Docs](https://beduality.github.io/clock-time/) | [MIT License](./LICENSE)
+[Docs](https://beduality.github.io/clock-time/) | [Javadoc](https://beduality.github.io/clock-time/apidocs/) | [MIT License](./LICENSE)
 
 Localized in-game time displays for Minecraft.
 
