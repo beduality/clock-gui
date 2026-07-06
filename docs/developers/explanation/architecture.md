@@ -1,21 +1,26 @@
 # Architecture
 
-ClockTime follows **Clean Architecture** principles to separate business logic from platform-specific code.
+ClockTime follows **Clean Architecture** principles to separate business logic from platform-specific code. With the multi-module project structure, the codebase is strictly separated into platform-agnostic domain logic and platform-specific infrastructure adapters.
 
-## Layer Overview
+## Layer & Module Overview
 
 ```mermaid
 graph TD
-    subgraph infra["Infrastructure Layer (Paper API)"]
+    subgraph paper["clock-time-paper (Infrastructure)"]
         Plugin["ClockTimePlugin"]
         Config["ConfigLoader"]
         Translations["TranslationRegistryManager"]
         Listener["ClockInteractListener"]
         ClockTimePluginConfig["ClockTimePluginConfig"]
+        PaperWorldInfo["PaperWorldInfo (Adapter)"]
     end
 
-    subgraph domain["Domain Layer (Pure Java)"]
+    subgraph common["clock-time-common (Domain)"]
+        WorldInfo["WorldInfo (Interface)"]
+        ClockMessage["ClockMessageService"]
+        Resolver["DimensionTimeResolver"]
         Formatter["TimeFormatter"]
+        LocaleFormatter["LocaleTimeFormatter"]
     end
 
     subgraph platform["Platform Services"]
@@ -27,33 +32,42 @@ graph TD
     Plugin --> Listener
     Config --> ClockTimePluginConfig
     Translations --> Adventure
-    Listener --> Formatter
-    Listener --> Adventure
+    Listener --> ClockMessage
+    Listener --> PaperWorldInfo
+    PaperWorldInfo --> WorldInfo
+    ClockMessage --> Resolver
+    ClockMessage --> Formatter
+    ClockMessage --> LocaleFormatter
 ```
 
-### Domain Layer
+### Domain Module (`clock-time-common` under `modules/clock-time-common`)
 
-**Package:** `io.github.beduality.clock_time.domain.service`
+**Package:** `io.github.beduality.clock_time.domain.*`
 
-Pure Java with zero external dependencies. Contains the core tick-to-time conversion logic.
+Pure Java with zero platform dependencies (depends only on standard Java APIs and Kyori Adventure). Contains the core tick-to-time conversion logic, dimension resolvers, localized message builder service, and standard translation bundles.
+
+| Package / Class | Responsibility |
+|---|---|
+| `domain.model.WorldInfo` | Platform-agnostic interface representing world name, dimension key, and environment type |
+| `domain.service.TimeFormatter` | Converts Minecraft ticks (0–24000) to `java.time.LocalTime` |
+| `domain.service.LocaleTimeFormatter` | Formats `LocalTime` using localized short time patterns |
+| `domain.service.DimensionTimeResolver` | Determines if a world/dimension has custom configurations or wild-spinning time (e.g. Nether/End) |
+| `domain.service.ClockMessageService` | Coordinates formatting and translation to build the final Adventure component |
+
+### Paper Module (`clock-time-paper` under `modules/clock-time-paper`)
+
+**Package:** `io.github.beduality.clock_time.infrastructure.*` and root package `io.github.beduality.clock_time`
+
+Bridges the domain module with the Paper API, Configurate-Yaml, and Kyori Adventure.
 
 | Class | Responsibility |
 |---|---|
-| `TimeFormatter` | Converts Minecraft ticks (0–24000) to `java.time.LocalTime` |
-
-### Infrastructure Layer
-
-**Package:** `io.github.beduality.clock_time.infrastructure.*`
-
-Bridges the domain layer with Paper API, Configurate, and Kyori Adventure.
-
-| Class | Responsibility |
-|---|---|
-| `ClockTimePlugin` | Plugin entry point and composition root |
-| `ConfigLoader` | Loads, validates, and migrates `config.yml` using Configurate |
-| `TranslationRegistryManager` | Extracts `.properties` files from the JAR, creates a custom ClassLoader, and registers translations with Adventure's `GlobalTranslator` |
-| `ClockInteractListener` | Handles right-click events, validates permissions, and sends localized chat messages |
-| `ClockTimePluginConfig` | Typed configuration mapping via Configurate's `@ConfigSerializable` |
+| `ClockTimePlugin` | Plugin entry point and composition root bootstrapping dependencies |
+| `infrastructure.adapter.PaperWorldInfo` | Adapter wrapping Bukkit's `World` to implement the domain `WorldInfo` interface |
+| `infrastructure.manager.ConfigLoader` | Loads, validates, and migrates `config.yml` using Configurate |
+| `infrastructure.manager.TranslationRegistryManager` | Extracts `.properties` files from JAR, loads bundles, and binds translation keys to Adventure's `GlobalTranslator` |
+| `infrastructure.listener.ClockInteractListener` | Handles right-click events, validates permissions, and delegates time messages using `PaperWorldInfo` |
+| `infrastructure.config.ClockTimePluginConfig` | Typed configuration mapping via Configurate's `@ConfigSerializable` |
 
 ## Request Flow
 
@@ -61,38 +75,46 @@ Bridges the domain layer with Paper API, Configurate, and Kyori Adventure.
 sequenceDiagram
     actor Player
     participant Listener as ClockInteractListener
+    participant Adapter as PaperWorldInfo
+    participant MsgService as ClockMessageService
     participant Formatter as TimeFormatter
     participant Translator as GlobalTranslator
 
     Player->>Listener: Right-click with Clock
     activate Listener
     Listener->>Listener: Validate item, hand, permission
-    Listener->>Listener: Check world environment
-
+    Listener->>Adapter: Wrap World in PaperWorldInfo
+    Listener->>MsgService: getClockMessage(worldInfo, ticks, locale)
+    activate MsgService
+    
     alt Overworld
-        Listener->>Formatter: formatTicks(worldTime)
-        Formatter-->>Listener: LocalTime
-        Listener->>Translator: translate("clock_time.message.time", locale)
-        Translator-->>Listener: Localized pattern
-        Listener->>Player: Send formatted time message
+        MsgService->>Formatter: formatTicks(ticks)
+        Formatter-->>MsgService: LocalTime
+        MsgService->>Translator: translate("clock_time.message.time", locale)
+        Translator-->>MsgService: Localized pattern
+        MsgService-->>Listener: Component (time formatted)
     else Nether / End
-        Listener->>Translator: translate("clock_time.message.wild-spin", locale)
-        Translator-->>Listener: Localized message
-        Listener->>Player: Send wild-spin message
+        MsgService->>Translator: translate("clock_time.message.wild-spin", locale)
+        Translator-->>MsgService: Localized message
+        MsgService-->>Listener: Component (wild-spin)
     end
+    deactivate MsgService
+
+    Listener->>Player: Send message Component
     deactivate Listener
 ```
 
 ## Design Decisions
 
-**Why decouple `TimeFormatter`?**
+**Why restructure as a multi-module project?**
 
-:   The tick-to-time math is pure arithmetic with no Bukkit dependencies. Keeping it in a separate domain layer makes it unit-testable without mocking any server APIs.
+:   By splitting the codebase into a core module (`clock-time-common` under `modules/clock-time-common`) containing only pure Java domain code and an infrastructure module (`clock-time-paper` under `modules/clock-time-paper`), the codebase is prepared to support other platform targets (like Fabric, NeoForge, etc.) in the future without duplicating business logic, properties, or formatter math.
 
-**Why use Adventure's `GlobalTranslator`?**
+**Why decouple `org.bukkit.World` using `WorldInfo`?**
 
-:   Paper natively supports Adventure components. By registering translations globally, any plugin or component can resolve ClockTime messages without direct coupling.
+:   Direct references to `org.bukkit.World` in the domain layer would leak Bukkit dependencies, preventing the reuse of domain services in Fabric/NeoForge. Abstracting world dimensions behind the `WorldInfo` interface allows each modding/plugin platform to provide its own lightweight adapter class.
 
-**Why extract `.properties` to the data folder?**
+**Why always load default translations from the classpath?**
 
-:   This allows server administrators to edit translations without touching the JAR. The custom `URLClassLoader` ensures the external files take priority over bundled resources.
+:   While production servers extract language properties to files for custom editing, test/development environments (like MockBukkit) run without fully packed JAR archives where zip extraction fails. Adding all default supported locales to `localesToLoad` dynamically ensures the plugin loads fallback properties directly from the classpath/resource bundles.
+

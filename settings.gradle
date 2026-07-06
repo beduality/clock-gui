@@ -6,3 +6,9 @@
  */
 
 rootProject.name = 'ClockTime'
+
+include 'clock-time-common'
+include 'clock-time-paper'
+
+project(':clock-time-common').projectDir = file('modules/clock-time-common')
+project(':clock-time-paper').projectDir = file('modules/clock-time-paper')
