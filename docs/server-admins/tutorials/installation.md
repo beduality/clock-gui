@@ -5,25 +5,37 @@ Follow this tutorial to install the ClockTime plugin on your Minecraft server an
 ## Requirements
 
 - **Java**: Version 21 or higher
-- **Server**: Paper 1.20+, Purpur, or any compatible fork
+- **Platform**: Paper 1.20+, Purpur, or Fabric Loader (with Fabric API)
 
-## Download the Plugin
+## Download the Mod/Plugin
 
-Download the latest version of the plugin (`.jar` file) from one of the following official sources:
+Download the latest version `.jar` file from one of the following official sources:
 
-- [Hangar](https://hangar.papermc.io/beduality/clock-time)
-- [Modrinth](https://modrinth.com/plugin/clock-time)
-- [GitHub Releases](https://github.com/beduality/clock-time/releases)
+- [Hangar](https://hangar.papermc.io/beduality/clock-time) (Paper only)
+- [Modrinth](https://modrinth.com/plugin/clock-time) (Paper & Fabric)
+- [GitHub Releases](https://github.com/beduality/clock-time/releases) (Paper & Fabric)
 
 ## Install and Run
 
-1. Place the downloaded `.jar` file into your server's `plugins/` directory.
-2. Start or restart the server.
-3. Verify that the plugin has loaded successfully by checking the server logs:
+=== "Paper / Purpur"
 
-   ```log
-   [ClockTime] ClockTime Plugin Enabled
-   ```
+    1. Place the downloaded Paper `.jar` file into your server's `plugins/` directory.
+    2. Start or restart the server.
+    3. Verify that the plugin has loaded successfully by checking the server logs:
+
+       ```log
+       [ClockTime] ClockTime Plugin Enabled
+       ```
+
+=== "Fabric"
+
+    1. Place the downloaded Fabric `.jar` file into your `mods/` directory along with the correct [Fabric API](https://modrinth.com/mod/fabric-api) version.
+    2. Start or restart the server/client.
+    3. Verify that the mod has loaded successfully by checking the logs:
+
+       ```log
+       [Render thread/INFO]: ClockTime Fabric Mod Initialized
+       ```
 
 ## Verify In-Game
 

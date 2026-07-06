@@ -44,4 +44,6 @@ jobs:
         with:
           name: Release ${{ github.ref_name }}
           body: ${{ steps.changelog.outputs.latestBody }}
-          files: build/libs/ClockTime*.jar
+          files: |
+            modules/clock-time-paper/build/libs/ClockTime-*.jar
+            modules/clock-time-fabric/build/libs/clock-time-fabric-*.jar
