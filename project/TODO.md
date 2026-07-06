@@ -4,3 +4,8 @@
 - Version docs
 
 - Improve vscode settings for this Java project
+
+- Port to NeoForge
+  - Create the `clock-time-neoforge` infrastructure layer module.
+  - Listen to server-side player interaction events in NeoForge.
+  - Implement a `WorldInfo` adapter and config loader for NeoForge.

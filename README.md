@@ -18,16 +18,22 @@ Localized in-game time displays for Minecraft.
 - **Custom Dimension Configuration**: Define custom or modded worlds/dimensions in `config.yml` that should also exhibit wild-spin clock behavior.
 
 ## Requirements
-
+ 
 - **Minecraft Version**: 1.20+
-- **API**: Paper / Purpur API
+- **Platform**: Paper / Purpur API, or Fabric Loader (with Fabric API)
 - **Java**: Java 21+
-
+ 
 ## Installation
-
-1. Download the latest release `.jar` file from [Hangar](https://hangar.papermc.io/beduality/clock-time), [Modrinth](https://modrinth.com/plugin/clock-time), or the [GitHub Releases](https://github.com/beduality/clock-time/releases) page.
+ 
+### Paper / Purpur
+1. Download the latest release Paper `.jar` file from [Hangar](https://hangar.papermc.io/beduality/clock-time), [Modrinth](https://modrinth.com/plugin/clock-time), or the [GitHub Releases](https://github.com/beduality/clock-time/releases) page.
 2. Place the file inside your server's `plugins/` directory.
 3. Start or restart the server.
+
+### Fabric
+1. Download the latest release Fabric `.jar` file from [Modrinth](https://modrinth.com/plugin/clock-time) or the [GitHub Releases](https://github.com/beduality/clock-time/releases) page.
+2. Place the file inside your server's `mods/` directory along with the correct [Fabric API](https://modrinth.com/mod/fabric-api) version.
+3. Start or restart the server/client.
 
 ## Quick Start
 

@@ -26,7 +26,7 @@ A lightweight Minecraft plugin that enhances the in-game clock with localized, c
 
     ---
 
-    Drop the JAR into `plugins/` and go. Easily configure fallback options or register custom wild-spin worlds.
+    Drop the JAR into `plugins/` or `mods/` and go. Easily configure fallback options or register custom wild-spin worlds.
 
     [:octicons-arrow-right-24: Configuration](server-admins/reference/settings.md)
 

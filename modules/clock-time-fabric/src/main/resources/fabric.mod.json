@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "clock-time",
+  "version": "${version}",
+  "name": "ClockTime",
+  "description": "Adds a quick-click message to clocks with the current in-game time.",
+  "authors": [
+    "Luis Emidio",
+    "Block-Entity Duality Team"
+  ],
+  "contact": {
+    "homepage": "https://github.com/beduality/clock-time",
+    "sources": "https://github.com/beduality/clock-time"
+  },
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "io.github.beduality.clock_time.ClockTimeFabric"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.15.11",
+    "minecraft": "~1.20.6",
+    "java": ">=21"
+  }
+}
