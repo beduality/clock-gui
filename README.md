@@ -1,48 +1,30 @@
-# ClockTime Plugin
+# ClockTime
 
 [Docs](https://beduality.github.io/clock-time/) | [Javadoc](https://beduality.github.io/clock-time/apidocs/) | [Hangar](https://hangar.papermc.io/beduality/clock-time) | [Modrinth](https://modrinth.com/plugin/clock-time) | [MIT License](./LICENSE)
 
-Localized in-game time displays for Minecraft.
+ClockTime is a multi-platform Minecraft plugin and mod written in Java, designed to bring localized, client-side formatted in-game time displays to players. Built on clean architecture principles, the repository separates platform-agnostic domain logic from specific loader platform implementations.
 
-<p align="center">
-  <img src="./docs/assets/images/clocktime-demo-day.png" alt="Day Demo" width="32%" />
-  <img src="./docs/assets/images/clocktime-demo-night.png" alt="Night Demo" width="32%" />
-  <img src="./docs/assets/images/clocktime-demo-nether.png" alt="Nether Demo" width="32%" />
-</p>
+---
 
-## Features
+## Repository Structure
 
-- **Dynamic Localized Formatting**: Auto-detects and formats time using the player's client language locale.
-- **Extensible Translations**: Scans the `languages/` subfolder dynamically to load any custom translation file (e.g. `messages_sv.properties`), allowing seamless expansion to new languages.
-- **Dimension-Aware Time Resolution**: Detects environments where standard time has no meaning (like Nether or The End) and displays custom message behaviors.
-- **Custom Dimension Configuration**: Define custom or modded worlds/dimensions in `config.yml` that should also exhibit wild-spin clock behavior.
+The codebase is organized as a multi-project Gradle build under the `modules/` directory:
 
-## Requirements
- 
-- **Minecraft Version**: 1.20+
-- **Platform**: Paper / Purpur API, or Fabric Loader (with Fabric API)
-- **Java**: Java 21+
- 
-## Installation
- 
-### Paper / Purpur
-1. Download the latest release Paper `.jar` file from [Hangar](https://hangar.papermc.io/beduality/clock-time), [Modrinth](https://modrinth.com/plugin/clock-time), or the [GitHub Releases](https://github.com/beduality/clock-time/releases) page.
-2. Place the file inside your server's `plugins/` directory.
-3. Start or restart the server.
+- **[clock-time-common](file:///home/luis/GitHub/beduality/clock-time/modules/clock-time-common)**: Pure Java domain layer containing tick-to-time math, dimension resolvers, and core translation properties files. No platform-specific dependencies.
+- **[clock-time-paper](file:///home/luis/GitHub/beduality/clock-time/modules/clock-time-paper)**: Paper/Spigot adapter handling configuration, event handling, command registration, and Bukkit integrations.
+- **[clock-time-fabric](file:///home/luis/GitHub/beduality/clock-time/modules/clock-time-fabric)**: Fabric loader adapter implementing events and environment integrations.
 
-### Fabric
-1. Download the latest release Fabric `.jar` file from [Modrinth](https://modrinth.com/plugin/clock-time) or the [GitHub Releases](https://github.com/beduality/clock-time/releases) page.
-2. Place the file inside your server's `mods/` directory along with the correct [Fabric API](https://modrinth.com/mod/fabric-api) version.
-3. Start or restart the server/client.
+Detailed architectural analysis can be found in the [Architecture Explanation](https://beduality.github.io/clock-time/developers/explanation/architecture/).
 
-## Quick Start
+---
 
-1. Hold a **Clock** in your hand.
-2. **Right-click** with the clock.
-3. The current in-game time will be displayed in your chat according to your language.
+## Developer & Contributor Resources
 
-## Support
+To avoid redundant information, please refer directly to the canonical files and documentation pages:
 
-If you run into issues or have feature requests, please report them via:
-- [Discord Server](https://discord.gg/D5meCv2Wnd)
-- [GitHub Issues](https://github.com/beduality/clock-time/issues)
+- **Code Style & Development Workflow**: See [CONTRIBUTING.md](file:///home/luis/GitHub/beduality/clock-time/CONTRIBUTING.md) for guidelines on JDK versions, build/test commands (`./gradlew build`), code formatting (Spotless), and pulling request workflows.
+- **Local Documentation Setup**: Instructions on running the documentation server using `uv` and `mkdocs` are located in [CONTRIBUTING.md](file:///home/luis/GitHub/beduality/clock-time/CONTRIBUTING.md#documentation).
+- **Dependency Integration**: Learn how to declare ClockTime as a Gradle or Maven dependency in the [Dependency Configuration Guide](https://beduality.github.io/clock-time/developers/how-to-guides/dependency-setup/).
+- **API Reference**: Look up Javadocs and programmatical queries in the [API reference](https://beduality.github.io/clock-time/developers/reference/api/).
+- **Release Guidelines**: Version numbers bump, changelog rules, and release tags publishing are detailed in [CONTRIBUTING.md](file:///home/luis/GitHub/beduality/clock-time/CONTRIBUTING.md#release-process).
+- **Licensing**: This project is licensed under the MIT License; see [LICENSE](file:///home/luis/GitHub/beduality/clock-time/LICENSE).
