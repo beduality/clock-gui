@@ -5,7 +5,7 @@ on:
     branches: [main]
     paths:
       - docs/**
-      - src/**
+      - modules/**
       - build.gradle.kts
       - gradle/libs.versions.toml
       - mkdocs.yml
@@ -56,7 +56,7 @@ jobs:
       - run: uv run mkdocs build
 
       - name: Copy Javadoc to docs site
-        run: cp -r build/docs/javadoc site/apidocs
+        run: cp -r modules/clock-time-common/build/docs/javadoc site/apidocs
 
       - uses: actions/upload-pages-artifact@v4
         with:
