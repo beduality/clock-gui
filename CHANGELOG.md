@@ -11,23 +11,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 #### Players
 
-- Ported to the Fabric platform (supporting Minecraft 1.20.6)
+- **[Fabric]** Ported to the Fabric platform (supporting Minecraft 1.20.6)
   - Why: Expand platform availability to Fabric servers and single-player/client environments.
-
+ 
 #### Server Administrators
-
-- Dynamic translation scanning and locale registration
+ 
+- **[Paper]** Dynamic translation scanning and locale registration
   - Why: Enable server administrators to dynamically add translations for any arbitrary language (e.g., `messages_sv.properties`) without modifications to the plugin code.
-- Configuration for custom wild-spin dimensions (`wild-spin-worlds`)
+- **[Paper]** Configuration for custom wild-spin dimensions (`wild-spin-worlds`)
   - Why: Allow server administrators to define custom/modded dimensions that should exhibit wild clock spin behavior (like Nether/End) instead of normal time display.
-
+ 
 #### Developers
-
-- Multi-module Gradle build restructure
+ 
+- **[Common]** Multi-module Gradle build restructure
   - Why: Cleanly isolate platform-agnostic domain logic (`clock-time-common`) from platform-specific infrastructure (`clock-time-paper`, `clock-time-fabric`) under a tidy `modules/` subdirectory structure to support multiple targets without code duplication.
-- Compile-time dimension abstraction (`WorldInfo`)
+- **[Common]** Compile-time dimension abstraction (`WorldInfo`)
   - Why: Abstract Minecraft's dimension state away from Bukkit API classes to enable cross-platform compatibility.
-- Translation registry classpath fallback resilience
+- **[Common]** Translation registry classpath fallback resilience
   - Why: Enable default language properties to load from resource classpath bundles when JAR-file zip extraction fails or is skipped (e.g. in MockBukkit test and dev environments).
 
 ## [0.1.0] - 2026-07-05
