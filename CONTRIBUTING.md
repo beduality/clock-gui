@@ -117,15 +117,18 @@ Update the version string to the new release version in the following files:
 *   [pyproject.toml](./pyproject.toml): `version = "X.Y.Z"`
 
 ### 2. Update Changelog
-
+ 
 Document the new release's features, fixes, and changes in [CHANGELOG.md](./CHANGELOG.md) under a new version heading (following the [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format):
-
+ 
 ```markdown
 ## [X.Y.Z] - YYYY-MM-DD
-
+ 
 ### Added
 - New feature description.
 ```
+
+> [!IMPORTANT]
+> The GitHub release parser reads the first header block it finds. **Do not include an empty `## [Unreleased]` header in `CHANGELOG.md` when releasing.** Only add that header when you actually start writing new unreleased features post-release.
 
 ### 3. Dry-Run Verification (Optional)
 
