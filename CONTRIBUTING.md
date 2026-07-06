@@ -142,7 +142,7 @@ Commit your changes, tag the commit, and push it:
 
 ```bash
 git add gradle.properties pyproject.toml CHANGELOG.md
-git commit -m "bump: release version X.Y.Z"
+git commit -m "chore: release version X.Y.Z"
 git tag vX.Y.Z
 git push origin main --tags
 ```
