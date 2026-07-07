@@ -1,33 +1,48 @@
 # Settings Reference
 
-ClockTime is configured through `plugins/ClockTime/config.yml`. The file is generated automatically on first startup.
+On **Paper/Spigot**, ClockTime is configured through `plugins/ClockTime/config.yml`. On **Fabric**, it is configured through `config/clock-time.json`. Both files are generated automatically on first startup.
 
 ## Default Configuration
 
-```yaml title="config.yml"
-# The fallback language code to use if a player's client language
-# is not supported.
-# Options: "en", "es", "pt", "de", etc.
-fallback-language: "en"
+=== "Paper/Spigot (config.yml)"
 
-# Configuration version. Do not modify this value.
-config-version: 2
+    ```yaml
+    # The fallback language code to use if a player's client language
+    # is not supported.
+    # Options: "en", "es", "pt", "de", etc.
+    fallback-language: "en"
 
-# A list of custom world names or dimension keys (e.g. 'custom_world' or 'custom:space')
-# that should be treated as wild-spin dimensions.
-wild-spin-worlds: []
+    # Configuration version. Do not modify this value.
+    config-version: 2
 
-# Settings for clocks placed in item frames
-item-frame-clocks:
-  # Enable dynamic time updates for clocks placed in item frames
-  enabled: true
-  # How often to update the clock time (in ticks, 20 ticks = 1 second)
-  update-interval: 16
-```
+    # A list of custom world names or dimension keys (e.g. 'custom_world' or 'custom:space')
+    # that should be treated as wild-spin dimensions.
+    wild-spin-worlds: []
+
+    # Settings for clocks placed in item frames
+    item-frame-clocks:
+      # Enable dynamic time updates for clocks placed in item frames
+      enabled: true
+      # How often to update the clock time (in ticks, 20 ticks = 1 second)
+      update-interval: 16
+    ```
+
+=== "Fabric (clock-time.json)"
+
+    ```json
+    {
+      "fallbackLanguage": "en",
+      "wildSpinWorlds": [],
+      "itemFrameClocks": {
+        "enabled": true,
+        "updateInterval": 16
+      }
+    }
+    ```
 
 ## Configuration Keys
 
-### `fallback-language`
+### `fallback-language` (Fabric: `fallbackLanguage`)
 
 | Detail | Description |
 |---|---|
@@ -45,9 +60,9 @@ The fallback translation bundle used when a player's client language does not ma
 | **Default Value** | `2` |
 | **Editable** | No |
 
-Internal version schema tracker used to manage config format migrations. Modifying this key prevents configuration files from upgrading automatically.
+Internal version schema tracker used to manage config format migrations. Modifying this key prevents configuration files from upgrading automatically. (Note: Fabric config files do not use config-version).
 
-### `wild-spin-worlds`
+### `wild-spin-worlds` (Fabric: `wildSpinWorlds`)
 
 | Detail | Description |
 |---|---|
@@ -57,11 +72,11 @@ Internal version schema tracker used to manage config format migrations. Modifyi
 
 A list of custom world names (e.g., `custom_nether`) or namespaced dimension keys (e.g., `custom:space`) that should be treated as wild-spin dimensions. When players use a clock in these dimensions, the clock will spin wildly and display the wild-spin translation message.
 
-### `item-frame-clocks`
+### `item-frame-clocks` (Fabric: `itemFrameClocks`)
 
 Settings group managing realtime clock displays inside item frames.
 
-#### `item-frame-clocks.enabled`
+#### `item-frame-clocks.enabled` (Fabric: `itemFrameClocks.enabled`)
 
 | Detail | Description |
 |---|---|
@@ -71,7 +86,7 @@ Settings group managing realtime clock displays inside item frames.
 
 Enable or disable dynamic updates for clocks placed in item frames. When enabled, a clock's display name updates to show the in-game time.
 
-#### `item-frame-clocks.update-interval`
+#### `item-frame-clocks.update-interval` (Fabric: `itemFrameClocks.updateInterval`)
 
 | Detail | Description |
 |---|---|
@@ -79,4 +94,4 @@ Enable or disable dynamic updates for clocks placed in item frames. When enabled
 | **Default Value** | `16` |
 | **Editable** | Yes |
 
-How often the plugin updates item frame clocks, in ticks (e.g. `20` ticks = 1 second). Higher values reduce CPU overhead.
+How often the plugin/mod updates item frame clocks, in ticks (e.g. `16` ticks = ~1 second). Higher values reduce CPU overhead.
