@@ -103,6 +103,29 @@ public class ClockInteractListener implements Listener {
           ItemStack itemToPlace = event.getItem().clone();
           itemToPlace.setAmount(1);
 
+          long time = clickedBlock.getWorld().getTime();
+          Locale playerLocale = Locale.forLanguageTag(player.getLocale().replace('_', '-'));
+          Component timeName =
+              clockMessageService.getFormattedTimeOnly(
+                  new PaperWorldInfo(clickedBlock.getWorld()),
+                  time,
+                  playerLocale,
+                  config.getItemFrameClocks().getWildSpinSymbol());
+
+          org.bukkit.inventory.meta.ItemMeta meta = itemToPlace.getItemMeta();
+          if (meta != null) {
+            org.bukkit.NamespacedKey key =
+                new org.bukkit.NamespacedKey("clock-time", "original-name");
+            if (!meta.getPersistentDataContainer()
+                .has(key, org.bukkit.persistence.PersistentDataType.STRING)) {
+              String originalName = meta.hasDisplayName() ? meta.getDisplayName() : "";
+              meta.getPersistentDataContainer()
+                  .set(key, org.bukkit.persistence.PersistentDataType.STRING, originalName);
+            }
+            meta.displayName(timeName);
+            itemToPlace.setItemMeta(meta);
+          }
+
           Block targetBlock = clickedBlock.getRelative(face);
           ItemFrame frame =
               targetBlock

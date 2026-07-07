@@ -63,6 +63,51 @@ public class FabricClockInteractListener {
             frame.setInvisible(true);
             ItemStack itemToPlace = stack.copy();
             itemToPlace.setCount(1);
+
+            long time = world.getTime();
+            ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
+            String langStr = serverPlayer.getClientOptions().language();
+            Locale playerLocale = parseLocale(langStr);
+            Component timeComponent =
+                clockMessageService.getFormattedTimeOnly(
+                    new FabricWorldInfo((ServerWorld) world),
+                    time,
+                    playerLocale,
+                    config.itemFrameClocks.wildSpinSymbol);
+
+            Text text = null;
+            try {
+              String json = GsonComponentSerializer.gson().serialize(timeComponent);
+              text = Text.Serialization.fromJson(json, world.getRegistryManager());
+            } catch (Exception e) {
+              // Ignored
+            }
+
+            if (text != null) {
+              net.minecraft.component.type.NbtComponent nbtComponent =
+                  itemToPlace.get(net.minecraft.component.DataComponentTypes.CUSTOM_DATA);
+              boolean alreadyHasOriginal =
+                  nbtComponent != null
+                      && nbtComponent.getNbt().contains("clock_time:original_name");
+
+              if (!alreadyHasOriginal) {
+                Text originalCustomName =
+                    itemToPlace.get(net.minecraft.component.DataComponentTypes.CUSTOM_NAME);
+                String originalNameStr = "";
+                if (originalCustomName != null) {
+                  originalNameStr =
+                      Text.Serialization.toJsonString(
+                          originalCustomName, world.getRegistryManager());
+                }
+                final String finalOriginalName = originalNameStr;
+                net.minecraft.component.type.NbtComponent.set(
+                    net.minecraft.component.DataComponentTypes.CUSTOM_DATA,
+                    itemToPlace,
+                    nbt -> nbt.putString("clock_time:original_name", finalOriginalName));
+              }
+              itemToPlace.set(net.minecraft.component.DataComponentTypes.CUSTOM_NAME, text);
+            }
+
             frame.setHeldItemStack(itemToPlace, true);
 
             if (frame.canStayAttached()) {
