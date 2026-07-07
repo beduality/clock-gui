@@ -13,7 +13,7 @@ public class ClockTimePluginConfig {
 
   @Setting("config-version")
   @Comment("Configuration version. Do not modify this value.")
-  private int configVersion = 3;
+  private int configVersion = 2;
 
   @Setting("wild-spin-worlds")
   @Comment(
