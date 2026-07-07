@@ -129,4 +129,3 @@ Admins can configure player permissions using standard permission managers (e.g.
 | `clock_time.use` | Allows right-clicking a clock in hand to display the time in chat. | `true` |
 | `clock_time.place` | Allows placing clocks directly on block surfaces (wall clocks). | `true` |
 | `clock_time.break` | Allows breaking wall clocks to retrieve the clock item. | `true` |
-

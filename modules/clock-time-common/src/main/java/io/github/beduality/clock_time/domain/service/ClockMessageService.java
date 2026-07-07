@@ -54,6 +54,30 @@ public class ClockMessageService {
     return MiniMessage.miniMessage().deserialize(format);
   }
 
+  /**
+   * Generates just the formatted time string (or wild spin symbol) for the item frame display name.
+   *
+   * @param world the world representation
+   * @param worldTime the world time in ticks
+   * @param locale the locale
+   * @param wildSpinSymbol the configurable wild spin symbol
+   * @return the time only component
+   */
+  public Component getFormattedTimeOnly(
+      WorldInfo world, long worldTime, Locale locale, String wildSpinSymbol) {
+    if (dimensionTimeResolver.isWildSpinDimension(world)) {
+      String format = translate("clock_time.item.wild-spin", locale);
+      if (format.equals("clock_time.item.wild-spin")) {
+        return Component.text(wildSpinSymbol != null ? wildSpinSymbol : "🌀");
+      }
+      return MiniMessage.miniMessage().deserialize(format);
+    }
+
+    LocalTime localTime = timeFormatter.formatTicks(worldTime);
+    String formattedTime = localeTimeFormatter.format(localTime, locale);
+    return Component.text(formattedTime);
+  }
+
   private String translate(String key, Locale locale, Object... args) {
     if (locale == null) {
       locale = Locale.ROOT;

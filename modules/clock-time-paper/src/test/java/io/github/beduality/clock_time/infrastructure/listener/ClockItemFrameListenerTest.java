@@ -154,10 +154,11 @@ class ClockItemFrameListenerTest {
     ClockMessageService mockMessageService = mock(ClockMessageService.class);
     net.kyori.adventure.text.Component expectedComponent =
         net.kyori.adventure.text.Component.text("12:00 PM");
-    when(mockMessageService.getClockMessage(any(), anyLong(), any())).thenReturn(expectedComponent);
+    when(mockMessageService.getFormattedTimeOnly(any(), anyLong(), any(), any()))
+        .thenReturn(expectedComponent);
 
     ClockItemFrameUpdater updater =
-        new ClockItemFrameUpdater(registry, mockMessageService, "en", 16);
+        new ClockItemFrameUpdater(registry, mockMessageService, "en", 16, "🌀");
     updater.tick(new PaperWorldInfo(world));
 
     verify(frame)

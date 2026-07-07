@@ -38,26 +38,27 @@ public class ClockTimePlugin extends JavaPlugin {
     var clockMessageService =
         new ClockMessageService(timeFormatter, localeTimeFormatter, dimensionTimeResolver);
 
-    getServer()
-        .getPluginManager()
-        .registerEvents(new ClockInteractListener(this, config, clockMessageService), this);
+    ClockItemFrameRegistry registry = null;
+    ClockItemFrameUpdater updater = null;
 
     if (config.getItemFrameClocks().isEnabled()) {
       clockItemFrameRegistry = new ClockItemFrameRegistry();
+      registry = clockItemFrameRegistry;
       var itemFrameListener = new ClockItemFrameListener(this, clockItemFrameRegistry);
       getServer().getPluginManager().registerEvents(itemFrameListener, this);
 
-      var updater =
+      var up =
           new ClockItemFrameUpdater(
               clockItemFrameRegistry,
               clockMessageService,
               config.getFallbackLanguage(),
-              config.getItemFrameClocks().getUpdateInterval());
+              config.getItemFrameClocks().getUpdateInterval(),
+              config.getItemFrameClocks().getWildSpinSymbol());
+      updater = up;
 
       itemFrameListener.setOnRegisterCallback(
           frame -> {
-            updater.updateFrame(
-                new PaperItemFrameAdapter(frame), new PaperWorldInfo(frame.getWorld()));
+            up.updateFrame(new PaperItemFrameAdapter(frame), new PaperWorldInfo(frame.getWorld()));
           });
       itemFrameListener.registerAlreadyLoadedFrames();
 
@@ -67,12 +68,17 @@ public class ClockTimePlugin extends JavaPlugin {
               this,
               () -> {
                 for (org.bukkit.World world : getServer().getWorlds()) {
-                  updater.tick(new PaperWorldInfo(world));
+                  up.tick(new PaperWorldInfo(world));
                 }
               },
               0L,
               1L);
     }
+
+    getServer()
+        .getPluginManager()
+        .registerEvents(
+            new ClockInteractListener(this, config, clockMessageService, registry, updater), this);
 
     getLogger().info("ClockTime Plugin Enabled");
   }

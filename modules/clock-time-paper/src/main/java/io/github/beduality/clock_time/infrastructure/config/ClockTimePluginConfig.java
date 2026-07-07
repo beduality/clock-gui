@@ -60,12 +60,20 @@ public class ClockTimePluginConfig {
     @Comment("How often to update the clock time (in ticks, 20 ticks = 1 second)")
     private int updateInterval = 16;
 
+    @Setting("wild-spin-symbol")
+    @Comment("The symbol to display in item frame clocks when in a wild-spin dimension")
+    private String wildSpinSymbol = "🌀";
+
     public boolean isEnabled() {
       return enabled;
     }
 
     public int getUpdateInterval() {
       return updateInterval;
+    }
+
+    public String getWildSpinSymbol() {
+      return wildSpinSymbol;
     }
   }
 

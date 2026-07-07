@@ -16,17 +16,20 @@ public class ClockItemFrameUpdater {
   private final ClockMessageService messageService;
   private final Locale fallbackLocale;
   private final int updateInterval;
+  private final String wildSpinSymbol;
   private final Map<UUID, Long> lastMinutes = new ConcurrentHashMap<>();
 
   public ClockItemFrameUpdater(
       ClockItemFrameRegistry registry,
       ClockMessageService messageService,
       String fallbackLanguage,
-      int updateInterval) {
+      int updateInterval,
+      String wildSpinSymbol) {
     this.registry = registry;
     this.messageService = messageService;
     this.fallbackLocale = parseLocale(fallbackLanguage);
     this.updateInterval = updateInterval;
+    this.wildSpinSymbol = wildSpinSymbol;
   }
 
   /** Performs a tick check and updates all tracked frames belonging to the given world. */
@@ -65,7 +68,8 @@ public class ClockItemFrameUpdater {
     }
 
     long time = worldInfo.getTime();
-    Component timeComponent = messageService.getClockMessage(worldInfo, time, fallbackLocale);
+    Component timeComponent =
+        messageService.getFormattedTimeOnly(worldInfo, time, fallbackLocale, wildSpinSymbol);
     frame.setClockCustomName(timeComponent);
     lastMinutes.put(frame.getUniqueId(), (time * 60) / 1000);
   }

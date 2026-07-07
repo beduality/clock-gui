@@ -48,7 +48,8 @@ public class ClockTimeFabric implements ModInitializer {
               registry,
               clockMessageService,
               config.fallbackLanguage,
-              config.itemFrameClocks.updateInterval);
+              config.itemFrameClocks.updateInterval,
+              config.itemFrameClocks.wildSpinSymbol);
 
       listener.setOnRegisterCallback(
           frame -> {

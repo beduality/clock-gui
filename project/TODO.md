@@ -1,6 +1,7 @@
 # TODO
 
 - Add support to client-side item frame localization via NMS
+- Flag to disable localization
 - Add feature flags in the config
 - Idea: time display via item name?
 - Idea: time display via bar? etc?

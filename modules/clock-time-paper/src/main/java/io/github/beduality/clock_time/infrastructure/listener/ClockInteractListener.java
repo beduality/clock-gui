@@ -1,7 +1,10 @@
 package io.github.beduality.clock_time.infrastructure.listener;
 
 import io.github.beduality.clock_time.ClockTimePlugin;
+import io.github.beduality.clock_time.domain.manager.ClockItemFrameRegistry;
+import io.github.beduality.clock_time.domain.manager.ClockItemFrameUpdater;
 import io.github.beduality.clock_time.domain.service.ClockMessageService;
+import io.github.beduality.clock_time.infrastructure.adapter.PaperItemFrameAdapter;
 import io.github.beduality.clock_time.infrastructure.adapter.PaperWorldInfo;
 import io.github.beduality.clock_time.infrastructure.config.ClockTimePluginConfig;
 import java.util.Locale;
@@ -27,6 +30,8 @@ public class ClockInteractListener implements Listener {
   private final ClockTimePlugin plugin;
   private final ClockTimePluginConfig config;
   private final ClockMessageService clockMessageService;
+  private final ClockItemFrameRegistry registry;
+  private final ClockItemFrameUpdater updater;
 
   /*
    * Constructs a new ClockInteractListener.
@@ -34,14 +39,20 @@ public class ClockInteractListener implements Listener {
    * @param plugin the plugin instance
    * @param config the configuration instance
    * @param clockMessageService the service used to resolve and format clock messages
+   * @param registry the clock registry
+   * @param updater the clock updater
    */
   public ClockInteractListener(
       ClockTimePlugin plugin,
       ClockTimePluginConfig config,
-      ClockMessageService clockMessageService) {
+      ClockMessageService clockMessageService,
+      ClockItemFrameRegistry registry,
+      ClockItemFrameUpdater updater) {
     this.plugin = plugin;
     this.config = config;
     this.clockMessageService = clockMessageService;
+    this.registry = registry;
+    this.updater = updater;
   }
 
   /*
@@ -104,6 +115,12 @@ public class ClockInteractListener implements Listener {
                         f.setVisible(false);
                         f.setItem(itemToPlace, false);
                       });
+
+          if (registry != null && updater != null) {
+            var adapter = new PaperItemFrameAdapter(frame);
+            registry.register(adapter);
+            updater.updateFrame(adapter, new PaperWorldInfo(frame.getWorld()));
+          }
 
           if (player.getGameMode() != org.bukkit.GameMode.CREATIVE) {
             event.getItem().setAmount(event.getItem().getAmount() - 1);
