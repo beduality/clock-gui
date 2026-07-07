@@ -25,6 +25,11 @@ On **Paper/Spigot**, ClockTime is configured through `plugins/ClockTime/config.y
       enabled: true
       # How often to update the clock time (in ticks, 20 ticks = 1 second)
       update-interval: 16
+
+    # Settings for placing clocks directly on surfaces (wall/floor/ceiling clocks)
+    wall-clocks:
+      # Allow placing clocks directly on walls/floors/ceilings as invisible frames
+      enabled: true
     ```
 
 === "Fabric (clock-time.json)"
@@ -36,6 +41,9 @@ On **Paper/Spigot**, ClockTime is configured through `plugins/ClockTime/config.y
       "itemFrameClocks": {
         "enabled": true,
         "updateInterval": 16
+      },
+      "wallClocks": {
+        "enabled": true
       }
     }
     ```
@@ -95,3 +103,30 @@ Enable or disable dynamic updates for clocks placed in item frames. When enabled
 | **Editable** | Yes |
 
 How often the plugin/mod updates item frame clocks, in ticks (e.g. `16` ticks = ~1 second). Higher values reduce CPU overhead.
+
+### `wall-clocks` (Fabric: `wallClocks`)
+
+Settings group managing direct placement of clocks on block faces (walls/floors/ceilings) via invisible item frames.
+
+#### `wall-clocks.enabled` (Fabric: `wallClocks.enabled`)
+
+| Detail | Description |
+|---|---|
+| **Data Type** | Boolean |
+| **Default Value** | `true` |
+| **Editable** | Yes |
+
+Allow or disallow players from right-clicking block faces with a clock to place it directly on the wall as an invisible frame clock.
+
+---
+
+## Permissions (Paper/Spigot Only)
+
+Admins can configure player permissions using standard permission managers (e.g. LuckPerms).
+
+| Permission Node | Description | Default |
+|---|---|---|
+| `clock_time.use` | Allows right-clicking a clock in hand to display the time in chat. | `true` |
+| `clock_time.place` | Allows placing clocks directly on block surfaces (wall clocks). | `true` |
+| `clock_time.break` | Allows breaking wall clocks to retrieve the clock item. | `true` |
+
