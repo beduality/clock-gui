@@ -27,6 +27,7 @@
 | Day Demo | Night Demo | Nether Demo |
 | :---: | :---: | :---: |
 | ![Day](https://raw.githubusercontent.com/beduality/clock-time/main/docs/assets/images/clocktime-demo-day.png) | ![Night](https://raw.githubusercontent.com/beduality/clock-time/main/docs/assets/images/clocktime-demo-night.png) | ![Nether](https://raw.githubusercontent.com/beduality/clock-time/main/docs/assets/images/clocktime-demo-nether.png) |
+| ![Realtime](https://raw.githubusercontent.com/beduality/clock-time/main/docs/assets/images/clocktime-demo-realtime.png) |
 
 ---
 
