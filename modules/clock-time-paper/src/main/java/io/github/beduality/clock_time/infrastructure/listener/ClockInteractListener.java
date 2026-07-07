@@ -8,6 +8,7 @@ import io.github.beduality.clock_time.infrastructure.adapter.PaperItemFrameAdapt
 import io.github.beduality.clock_time.infrastructure.adapter.PaperWorldInfo;
 import io.github.beduality.clock_time.infrastructure.config.ClockTimePluginConfig;
 import java.util.Locale;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
