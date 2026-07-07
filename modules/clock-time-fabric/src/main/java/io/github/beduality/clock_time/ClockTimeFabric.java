@@ -6,9 +6,14 @@ import io.github.beduality.clock_time.domain.service.LocaleTimeFormatter;
 import io.github.beduality.clock_time.domain.service.TimeFormatter;
 import io.github.beduality.clock_time.infrastructure.config.ClockTimeFabricConfig;
 import io.github.beduality.clock_time.infrastructure.listener.FabricClockInteractListener;
+import io.github.beduality.clock_time.infrastructure.listener.FabricClockItemFrameListener;
+import io.github.beduality.clock_time.infrastructure.manager.FabricClockItemFrameRegistry;
+import io.github.beduality.clock_time.infrastructure.manager.FabricClockItemFrameUpdater;
 import io.github.beduality.clock_time.infrastructure.manager.FabricConfigLoader;
 import io.github.beduality.clock_time.infrastructure.manager.FabricTranslationRegistryManager;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,6 +37,27 @@ public class ClockTimeFabric implements ModInitializer {
         new ClockMessageService(timeFormatter, localeTimeFormatter, dimensionTimeResolver);
 
     new FabricClockInteractListener(clockMessageService).register();
+
+    if (config.itemFrameClocks.enabled) {
+      var registry = new FabricClockItemFrameRegistry();
+      var listener = new FabricClockItemFrameListener(registry);
+      var updater =
+          new FabricClockItemFrameUpdater(
+              registry,
+              clockMessageService,
+              config.fallbackLanguage,
+              config.itemFrameClocks.updateInterval);
+
+      listener.setOnRegisterCallback(updater::updateFrame);
+      listener.register();
+
+      ServerWorldEvents.LOAD.register(
+          (server, world) -> {
+            listener.registerAlreadyLoadedFrames(world);
+          });
+
+      ServerTickEvents.END_WORLD_TICK.register(updater::tick);
+    }
 
     LOGGER.info("ClockTime Fabric Mod Initialized");
   }
