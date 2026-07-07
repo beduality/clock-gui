@@ -4,6 +4,8 @@
 
 ClockTime is a multi-platform Minecraft plugin and mod written in Java, designed to bring localized, client-side formatted in-game time displays to players. Built on clean architecture principles, the repository separates platform-agnostic domain logic from specific loader platform implementations.
 
+![ClockTime Realtime Demo](docs/assets/images/clcoktime-demo-realtime.png)
+
 ---
 
 ## Repository Structure

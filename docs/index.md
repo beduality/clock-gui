@@ -54,17 +54,7 @@ A lightweight Minecraft plugin that enhances the in-game clock with localized, c
 2. They **right-click**.
 3. The current in-game time appears in chat, formatted in their language.
 
-=== "Day Demo"
-
-    ![Day Demo](assets/images/clocktime-demo-day.png)
-
-=== "Night Demo"
-
-    ![Night Demo](assets/images/clocktime-demo-night.png)
-
-=== "Nether Demo"
-
-    ![Nether Demo](assets/images/clocktime-demo-nether.png)
+![ClockTime Demo](assets/images/clcoktime-demo-realtime.png)
 
 !!! example "What the player sees (Text Format)"
 

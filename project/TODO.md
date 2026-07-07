@@ -6,6 +6,7 @@
 - Idea: time display via item name?
 - Idea: time display via bar? etc?
 - Add WorldGuard integration
+- Add config to choose real world time or in-game time
 
 - Version docs
   - Add Unreleased docs (always up to date to main branch)
