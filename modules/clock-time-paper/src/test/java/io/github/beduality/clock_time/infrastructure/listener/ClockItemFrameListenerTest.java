@@ -262,4 +262,41 @@ class ClockItemFrameListenerTest {
     verify(frame, never()).remove();
     verify(world, never()).dropItemNaturally(any(), any());
   }
+
+  @Test
+  void testOriginalNamePersistedAndRestoredOnHangingBreak() {
+    ItemFrame frame = mockItemFrame(Material.CLOCK);
+    when(frame.isVisible()).thenReturn(false);
+
+    ItemStack item = frame.getItem();
+    ItemMeta meta = item.getItemMeta();
+    org.bukkit.NamespacedKey key = new org.bukkit.NamespacedKey("clock-time", "original-name");
+    meta.getPersistentDataContainer()
+        .set(key, org.bukkit.persistence.PersistentDataType.STRING, "My Special Clock");
+    item.setItemMeta(meta);
+
+    World world = mock(World.class);
+    when(frame.getWorld()).thenReturn(world);
+    org.bukkit.Location loc = new org.bukkit.Location(world, 0, 64, 0);
+    when(frame.getLocation()).thenReturn(loc);
+
+    HangingBreakEvent event =
+        new HangingBreakEvent(frame, HangingBreakEvent.RemoveCause.OBSTRUCTION);
+    listener.onHangingBreak(event);
+
+    assertTrue(event.isCancelled());
+    verify(frame).remove();
+    verify(world)
+        .dropItemNaturally(
+            eq(loc),
+            argThat(
+                dropped -> {
+                  ItemMeta droppedMeta = dropped.getItemMeta();
+                  return droppedMeta != null
+                      && "My Special Clock".equals(droppedMeta.getDisplayName())
+                      && !droppedMeta
+                          .getPersistentDataContainer()
+                          .has(key, org.bukkit.persistence.PersistentDataType.STRING);
+                }));
+  }
 }
