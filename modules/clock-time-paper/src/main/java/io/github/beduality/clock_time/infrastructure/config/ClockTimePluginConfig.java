@@ -13,7 +13,7 @@ public class ClockTimePluginConfig {
 
   @Setting("config-version")
   @Comment("Configuration version. Do not modify this value.")
-  private int configVersion = 2;
+  private int configVersion = 3;
 
   @Setting("wild-spin-worlds")
   @Comment(
@@ -22,6 +22,9 @@ public class ClockTimePluginConfig {
 
   @Setting("item-frame-clocks")
   private ItemFrameClocks itemFrameClocks = new ItemFrameClocks();
+
+  @Setting("wall-clocks")
+  private WallClocks wallClocks = new WallClocks();
 
   public String getFallbackLanguage() {
     return fallbackLanguage;
@@ -43,6 +46,10 @@ public class ClockTimePluginConfig {
     return itemFrameClocks;
   }
 
+  public WallClocks getWallClocks() {
+    return wallClocks;
+  }
+
   @ConfigSerializable
   public static class ItemFrameClocks {
     @Setting("enabled")
@@ -59,6 +66,17 @@ public class ClockTimePluginConfig {
 
     public int getUpdateInterval() {
       return updateInterval;
+    }
+  }
+
+  @ConfigSerializable
+  public static class WallClocks {
+    @Setting("enabled")
+    @Comment("Allow placing clocks directly on walls/floors/ceilings as invisible frames")
+    private boolean enabled = true;
+
+    public boolean isEnabled() {
+      return enabled;
     }
   }
 }

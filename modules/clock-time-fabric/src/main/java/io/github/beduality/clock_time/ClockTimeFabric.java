@@ -36,7 +36,7 @@ public class ClockTimeFabric implements ModInitializer {
     var clockMessageService =
         new ClockMessageService(timeFormatter, localeTimeFormatter, dimensionTimeResolver);
 
-    new FabricClockInteractListener(clockMessageService).register();
+    new FabricClockInteractListener(config, clockMessageService).register();
 
     if (config.itemFrameClocks.enabled) {
       var registry = new FabricClockItemFrameRegistry();

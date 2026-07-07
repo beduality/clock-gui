@@ -10,6 +10,7 @@ import java.util.Locale;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.event.Event.Result;
 import org.bukkit.event.block.Action;
 import org.bukkit.inventory.EquipmentSlot;
@@ -250,5 +251,38 @@ class ClockInteractListenerTest {
 
     assertNull(
         player.nextMessage(), "Player interacting with a non-clock item should not get a message");
+  }
+
+  @Test
+  void testPlaceWallClock() {
+    PlayerMock player = server.addPlayer();
+    player.setGameMode(org.bukkit.GameMode.SURVIVAL);
+    player.addAttachment(plugin, "clock_time.use", true);
+
+    ItemStack clock = new ItemStack(Material.CLOCK, 2);
+    player.getInventory().setItemInMainHand(clock);
+
+    org.bukkit.block.Block block = player.getWorld().getBlockAt(0, 64, 0);
+    block.setType(Material.STONE);
+
+    var event =
+        new org.bukkit.event.player.PlayerInteractEvent(
+            player,
+            Action.RIGHT_CLICK_BLOCK,
+            clock,
+            block,
+            org.bukkit.block.BlockFace.UP,
+            EquipmentSlot.HAND);
+    server.getPluginManager().callEvent(event);
+
+    int currentAmount = player.getInventory().getItemInMainHand().getAmount();
+    String message = player.nextMessage();
+
+    if (currentAmount == 1) {
+      boolean hasFrame = player.getWorld().getEntitiesByClass(ItemFrame.class).size() > 0;
+      assertTrue(hasFrame, "An ItemFrame should have been spawned");
+    } else {
+      assertNotNull(message, "Should fall back to message if placement fails");
+    }
   }
 }

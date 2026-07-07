@@ -2,17 +2,23 @@ package io.github.beduality.clock_time.infrastructure.listener;
 
 import io.github.beduality.clock_time.domain.service.ClockMessageService;
 import io.github.beduality.clock_time.infrastructure.adapter.FabricWorldInfo;
+import io.github.beduality.clock_time.infrastructure.config.ClockTimeFabricConfig;
 import java.util.Locale;
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.minecraft.entity.decoration.ItemFrameEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,13 +26,59 @@ public class FabricClockInteractListener {
 
   private static final Logger LOGGER = LoggerFactory.getLogger("clock-time");
 
+  private final ClockTimeFabricConfig config;
   private final ClockMessageService clockMessageService;
 
-  public FabricClockInteractListener(ClockMessageService clockMessageService) {
+  public FabricClockInteractListener(
+      ClockTimeFabricConfig config, ClockMessageService clockMessageService) {
+    this.config = config;
     this.clockMessageService = clockMessageService;
   }
 
   public void register() {
+    UseBlockCallback.EVENT.register(
+        (player, world, hand, hitResult) -> {
+          if (world.isClient() || hand != Hand.MAIN_HAND || !config.wallClocks.enabled) {
+            return ActionResult.PASS;
+          }
+
+          ItemStack stack = player.getStackInHand(hand);
+          if (!stack.isOf(Items.CLOCK)) {
+            return ActionResult.PASS;
+          }
+
+          BlockPos pos = hitResult.getBlockPos();
+          net.minecraft.block.BlockState state = world.getBlockState(pos);
+          if (state.onUse(world, player, hitResult).isAccepted()) {
+            if (!player.isSneaking()) {
+              return ActionResult.PASS;
+            }
+          }
+
+          Direction direction = hitResult.getSide();
+          BlockPos spawnPos = pos.offset(direction);
+
+          try {
+            ItemFrameEntity frame = new ItemFrameEntity(world, spawnPos, direction);
+            frame.setInvisible(true);
+            ItemStack itemToPlace = stack.copy();
+            itemToPlace.setCount(1);
+            frame.setHeldItemStack(itemToPlace, true);
+
+            if (frame.canStayAttached()) {
+              world.spawnEntity(frame);
+              if (!player.getAbilities().creativeMode) {
+                stack.decrement(1);
+              }
+              return ActionResult.SUCCESS;
+            }
+          } catch (Exception e) {
+            // Fall back
+          }
+
+          return ActionResult.PASS;
+        });
+
     UseItemCallback.EVENT.register(
         (player, world, hand) -> {
           if (world.isClient() || hand != Hand.MAIN_HAND) {

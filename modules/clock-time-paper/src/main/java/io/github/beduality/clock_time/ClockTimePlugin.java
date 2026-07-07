@@ -38,7 +38,7 @@ public class ClockTimePlugin extends JavaPlugin {
 
     getServer()
         .getPluginManager()
-        .registerEvents(new ClockInteractListener(clockMessageService), this);
+        .registerEvents(new ClockInteractListener(this, config, clockMessageService), this);
 
     if (config.getItemFrameClocks().isEnabled()) {
       clockItemFrameRegistry = new ClockItemFrameRegistry();
