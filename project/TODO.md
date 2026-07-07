@@ -1,5 +1,7 @@
 # TODO
 
+- Fix bug: original item name is not persisted after break. we should perist the original name so we can recover it after drop
+
 - Add support to client-side item frame localization via NMS
 - Flag to disable localization
 - Add feature flags in the config

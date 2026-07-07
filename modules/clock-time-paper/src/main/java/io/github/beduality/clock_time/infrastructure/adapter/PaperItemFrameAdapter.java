@@ -39,6 +39,13 @@ public class PaperItemFrameAdapter implements ClockItemFrameAdapter {
     if (item != null && item.getType() == Material.CLOCK) {
       ItemMeta meta = item.getItemMeta();
       if (meta != null) {
+        org.bukkit.NamespacedKey key = new org.bukkit.NamespacedKey("clock-time", "original-name");
+        if (!meta.getPersistentDataContainer()
+            .has(key, org.bukkit.persistence.PersistentDataType.STRING)) {
+          String originalName = meta.hasDisplayName() ? meta.getDisplayName() : "";
+          meta.getPersistentDataContainer()
+              .set(key, org.bukkit.persistence.PersistentDataType.STRING, originalName);
+        }
         meta.displayName(nameComponent);
         item.setItemMeta(meta);
         itemFrame.setItem(item, false);

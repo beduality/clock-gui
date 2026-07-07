@@ -86,7 +86,7 @@ public class ClockItemFrameListener implements Listener {
   public void onHangingBreak(HangingBreakEvent event) {
     if (event.getEntity() instanceof ItemFrame frame) {
       if (!frame.isVisible() && frame.getItem().getType() == org.bukkit.Material.CLOCK) {
-        org.bukkit.inventory.ItemStack clockDrop = frame.getItem().clone();
+        org.bukkit.inventory.ItemStack clockDrop = getRestoredClockDrop(frame);
         frame.getWorld().dropItemNaturally(frame.getLocation(), clockDrop);
         frame.remove();
         event.setCancelled(true);
@@ -110,7 +110,7 @@ public class ClockItemFrameListener implements Listener {
           }
         }
         if (shouldDrop) {
-          org.bukkit.inventory.ItemStack clockDrop = frame.getItem().clone();
+          org.bukkit.inventory.ItemStack clockDrop = getRestoredClockDrop(frame);
           frame.getWorld().dropItemNaturally(frame.getLocation(), clockDrop);
         }
         frame.remove();
@@ -129,5 +129,27 @@ public class ClockItemFrameListener implements Listener {
                 }
               });
     }
+  }
+
+  private org.bukkit.inventory.ItemStack getRestoredClockDrop(ItemFrame frame) {
+    org.bukkit.inventory.ItemStack clockDrop = frame.getItem().clone();
+    org.bukkit.NamespacedKey key = new org.bukkit.NamespacedKey("clock-time", "original-name");
+    if (clockDrop.hasItemMeta()) {
+      org.bukkit.inventory.meta.ItemMeta meta = clockDrop.getItemMeta();
+      if (meta.getPersistentDataContainer()
+          .has(key, org.bukkit.persistence.PersistentDataType.STRING)) {
+        String originalName =
+            meta.getPersistentDataContainer()
+                .get(key, org.bukkit.persistence.PersistentDataType.STRING);
+        meta.getPersistentDataContainer().remove(key);
+        if (originalName == null || originalName.isEmpty()) {
+          meta.setDisplayName(null);
+        } else {
+          meta.setDisplayName(originalName);
+        }
+        clockDrop.setItemMeta(meta);
+      }
+    }
+    return clockDrop;
   }
 }

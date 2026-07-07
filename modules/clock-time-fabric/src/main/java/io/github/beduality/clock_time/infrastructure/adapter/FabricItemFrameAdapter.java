@@ -43,6 +43,26 @@ public class FabricItemFrameAdapter implements ClockItemFrameAdapter {
         Text text = Text.Serialization.fromJson(json, itemFrame.getWorld().getRegistryManager());
 
         ItemStack newStack = clockItem.copy();
+        net.minecraft.component.type.NbtComponent nbtComponent =
+            newStack.get(DataComponentTypes.CUSTOM_DATA);
+        boolean alreadyHasOriginal =
+            nbtComponent != null && nbtComponent.getNbt().contains("clock_time:original_name");
+
+        if (!alreadyHasOriginal) {
+          Text originalCustomName = newStack.get(DataComponentTypes.CUSTOM_NAME);
+          String originalNameStr = "";
+          if (originalCustomName != null) {
+            originalNameStr =
+                Text.Serialization.toJsonString(
+                    originalCustomName, itemFrame.getWorld().getRegistryManager());
+          }
+          final String finalOriginalName = originalNameStr;
+          net.minecraft.component.type.NbtComponent.set(
+              DataComponentTypes.CUSTOM_DATA,
+              newStack,
+              nbt -> nbt.putString("clock_time:original_name", finalOriginalName));
+        }
+
         newStack.set(DataComponentTypes.CUSTOM_NAME, text);
         itemFrame.setHeldItemStack(newStack, true);
       } catch (Exception e) {
