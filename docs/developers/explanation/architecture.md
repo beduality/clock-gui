@@ -13,6 +13,9 @@ graph TD
         Listener["ClockInteractListener"]
         ClockTimePluginConfig["ClockTimePluginConfig"]
         PaperWorldInfo["PaperWorldInfo (Adapter)"]
+        Registry["ClockItemFrameRegistry"]
+        Updater["ClockItemFrameUpdater"]
+        ItemFrameListener["ClockItemFrameListener"]
     end
 
     subgraph common["clock-time-common (Domain)"]
@@ -30,10 +33,16 @@ graph TD
     Plugin --> Config
     Plugin --> Translations
     Plugin --> Listener
+    Plugin --> Registry
+    Plugin --> Updater
+    Plugin --> ItemFrameListener
     Config --> ClockTimePluginConfig
     Translations --> Adventure
     Listener --> ClockMessage
     Listener --> PaperWorldInfo
+    ItemFrameListener --> Registry
+    Updater --> Registry
+    Updater --> PaperWorldInfo
     PaperWorldInfo --> WorldInfo
     ClockMessage --> Resolver
     ClockMessage --> Formatter
@@ -67,6 +76,9 @@ Bridges the domain module with the Paper API, Configurate-Yaml, and Kyori Advent
 | `infrastructure.manager.ConfigLoader` | Loads, validates, and migrates `config.yml` using Configurate |
 | `infrastructure.manager.TranslationRegistryManager` | Extracts `.properties` files from JAR, loads bundles, and binds translation keys to Adventure's `GlobalTranslator` |
 | `infrastructure.listener.ClockInteractListener` | Handles right-click events, validates permissions, and delegates time messages using `PaperWorldInfo` |
+| `infrastructure.listener.ClockItemFrameListener` | Monitors chunk loading/unloading and placement to register/unregister clock frames |
+| `infrastructure.manager.ClockItemFrameRegistry` | In-memory registry tracking loaded item frames that contain clocks |
+| `infrastructure.manager.ClockItemFrameUpdater` | Task scheduler that updates clock displays when the Minecraft minute changes |
 | `infrastructure.config.ClockTimePluginConfig` | Typed configuration mapping via Configurate's `@ConfigSerializable` |
 
 ## Request Flow
@@ -117,4 +129,8 @@ sequenceDiagram
 **Why always load default translations from the classpath?**
 
 :   While production servers extract language properties to files for custom editing, test/development environments (like MockBukkit) run without fully packed JAR archives where zip extraction fails. Adding all default supported locales to `localesToLoad` dynamically ensures the plugin loads fallback properties directly from the classpath/resource bundles.
+
+**Why is the item frame clock update system event-driven and cached?**
+
+:   Scanning all entities in all worlds or chunks periodically is extremely expensive and causes server lag. Instead, we use `ClockItemFrameListener` to dynamically register/unregister frames upon chunk loading, player interactions, and entity damage, saving them into `ClockItemFrameRegistry`. To keep CPU cycles near zero, `ClockItemFrameUpdater` runs every 16 ticks (the duration of a Minecraft minute) and compares the in-game minute with a cached timestamp. If the minute has not changed, it skips updating the item metadata.
 

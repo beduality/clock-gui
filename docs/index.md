@@ -38,6 +38,14 @@ A lightweight Minecraft plugin that enhances the in-game clock with localized, c
 
     [:octicons-arrow-right-24: Quick start](server-admins/tutorials/installation.md)
 
+-   :material-image-frame:{ .lg .middle } __Item Frame Clocks__
+
+    ---
+
+    Clocks placed in item frames dynamically display the current time in real-time, functioning as visual wall clocks.
+
+    [:octicons-arrow-right-24: Configuration](server-admins/reference/settings.md)
+
 </div>
 
 ## How It Works

@@ -6,6 +6,9 @@ import io.github.beduality.clock_time.domain.service.LocaleTimeFormatter;
 import io.github.beduality.clock_time.domain.service.TimeFormatter;
 import io.github.beduality.clock_time.infrastructure.config.ClockTimePluginConfig;
 import io.github.beduality.clock_time.infrastructure.listener.ClockInteractListener;
+import io.github.beduality.clock_time.infrastructure.listener.ClockItemFrameListener;
+import io.github.beduality.clock_time.infrastructure.manager.ClockItemFrameRegistry;
+import io.github.beduality.clock_time.infrastructure.manager.ClockItemFrameUpdater;
 import io.github.beduality.clock_time.infrastructure.manager.ConfigLoader;
 import io.github.beduality.clock_time.infrastructure.manager.TranslationRegistryManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -15,6 +18,8 @@ import org.bukkit.plugin.java.JavaPlugin;
  * dependency injections.
  */
 public class ClockTimePlugin extends JavaPlugin {
+
+  private ClockItemFrameRegistry clockItemFrameRegistry;
 
   @Override
   public void onEnable() {
@@ -35,11 +40,29 @@ public class ClockTimePlugin extends JavaPlugin {
         .getPluginManager()
         .registerEvents(new ClockInteractListener(clockMessageService), this);
 
+    if (config.getItemFrameClocks().isEnabled()) {
+      clockItemFrameRegistry = new ClockItemFrameRegistry();
+      var itemFrameListener = new ClockItemFrameListener(this, clockItemFrameRegistry);
+      getServer().getPluginManager().registerEvents(itemFrameListener, this);
+
+      var updater =
+          new ClockItemFrameUpdater(
+              clockItemFrameRegistry, clockMessageService, config.getFallbackLanguage());
+      itemFrameListener.setOnRegisterCallback(updater::updateFrame);
+      itemFrameListener.registerAlreadyLoadedFrames();
+
+      updater.runTaskTimer(this, 0L, config.getItemFrameClocks().getUpdateInterval());
+    }
+
     getLogger().info("ClockTime Plugin Enabled");
   }
 
   @Override
   public void onDisable() {
     getLogger().info("ClockTime Plugin Disabled");
+  }
+
+  public ClockItemFrameRegistry getClockItemFrameRegistry() {
+    return clockItemFrameRegistry;
   }
 }

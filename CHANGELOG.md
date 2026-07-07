@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+#### Players
+
+- **[Paper]** Realtime clocks in item frames
+  - Why: Allow players to place clocks in item frames to serve as visual wall clocks that display in-game time in real-time when looked at.
+
+#### Server Administrators
+
+- **[Paper]** Configuration options for item frame clocks
+  - Why: Enable configuration (`item-frame-clocks`) to toggle the feature and set custom update intervals (defaulting to 16 ticks).
+- **[Paper]** Configuration schema version 2 migration path
+  - Why: Automatically upgrade older server config files to version 2 while preserving existing settings.
+
+#### Developers
+
+- **[Paper]** Optimized item frame clock tracking and updates
+  - Why: Track loaded clock-containing frames via an event-driven registry and cache Minecraft minute values to minimize processing overhead.
+
 ## [0.2.0] - 2026-07-05
 
 ### Added

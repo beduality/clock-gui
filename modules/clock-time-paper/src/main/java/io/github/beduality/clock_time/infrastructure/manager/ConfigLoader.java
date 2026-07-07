@@ -49,7 +49,7 @@ public class ConfigLoader {
         config = new ClockTimePluginConfig();
       }
 
-      int targetVersion = 1;
+      int targetVersion = 2;
       if (config.getConfigVersion() < targetVersion) {
         plugin
             .getLogger()
