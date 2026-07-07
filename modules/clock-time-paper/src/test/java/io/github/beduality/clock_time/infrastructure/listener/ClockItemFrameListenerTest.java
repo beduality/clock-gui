@@ -299,4 +299,115 @@ class ClockItemFrameListenerTest {
                           .has(key, org.bukkit.persistence.PersistentDataType.STRING);
                 }));
   }
+
+  @Test
+  void testOriginalNameRestoredOnEntityDamage() {
+    ItemFrame frame = mockItemFrame(Material.CLOCK);
+    when(frame.isVisible()).thenReturn(false);
+
+    ItemStack item = frame.getItem();
+    ItemMeta meta = item.getItemMeta();
+    org.bukkit.NamespacedKey key = new org.bukkit.NamespacedKey("clock-time", "original-name");
+    meta.getPersistentDataContainer()
+        .set(key, org.bukkit.persistence.PersistentDataType.STRING, "Anvil Renamed Clock");
+    meta.displayName(net.kyori.adventure.text.Component.text("12:00 PM"));
+    item.setItemMeta(meta);
+
+    World world = mock(World.class);
+    when(frame.getWorld()).thenReturn(world);
+    org.bukkit.Location loc = new org.bukkit.Location(world, 0, 64, 0);
+    when(frame.getLocation()).thenReturn(loc);
+
+    PlayerMock player = server.addPlayer();
+    player.setGameMode(org.bukkit.GameMode.SURVIVAL);
+    player.addAttachment(plugin, "clock_time.break", true);
+
+    EntityDamageByEntityEvent event =
+        new EntityDamageByEntityEvent(
+            player,
+            frame,
+            org.bukkit.event.entity.EntityDamageEvent.DamageCause.ENTITY_ATTACK,
+            1.0);
+    listener.onEntityDamage(event);
+
+    assertTrue(event.isCancelled());
+    verify(frame).remove();
+    verify(world)
+        .dropItemNaturally(
+            eq(loc),
+            argThat(
+                dropped -> {
+                  ItemMeta droppedMeta = dropped.getItemMeta();
+                  return droppedMeta != null
+                      && "Anvil Renamed Clock".equals(droppedMeta.getDisplayName())
+                      && !droppedMeta
+                          .getPersistentDataContainer()
+                          .has(key, org.bukkit.persistence.PersistentDataType.STRING);
+                }));
+  }
+
+  @Test
+  void testCreativeModeNoDropOnEntityDamage() {
+    ItemFrame frame = mockItemFrame(Material.CLOCK);
+    when(frame.isVisible()).thenReturn(false);
+
+    World world = mock(World.class);
+    when(frame.getWorld()).thenReturn(world);
+    org.bukkit.Location loc = new org.bukkit.Location(world, 0, 64, 0);
+    when(frame.getLocation()).thenReturn(loc);
+
+    PlayerMock player = server.addPlayer();
+    player.setGameMode(org.bukkit.GameMode.CREATIVE);
+    player.addAttachment(plugin, "clock_time.break", true);
+
+    EntityDamageByEntityEvent event =
+        new EntityDamageByEntityEvent(
+            player,
+            frame,
+            org.bukkit.event.entity.EntityDamageEvent.DamageCause.ENTITY_ATTACK,
+            1.0);
+    listener.onEntityDamage(event);
+
+    assertTrue(event.isCancelled());
+    verify(frame).remove();
+    verify(world, never()).dropItemNaturally(any(), any());
+  }
+
+  @Test
+  void testEmptyOriginalNameClearedOnDrop() {
+    ItemFrame frame = mockItemFrame(Material.CLOCK);
+    when(frame.isVisible()).thenReturn(false);
+
+    ItemStack item = frame.getItem();
+    ItemMeta meta = item.getItemMeta();
+    org.bukkit.NamespacedKey key = new org.bukkit.NamespacedKey("clock-time", "original-name");
+    meta.getPersistentDataContainer()
+        .set(key, org.bukkit.persistence.PersistentDataType.STRING, "");
+    meta.displayName(net.kyori.adventure.text.Component.text("3:00 PM"));
+    item.setItemMeta(meta);
+
+    World world = mock(World.class);
+    when(frame.getWorld()).thenReturn(world);
+    org.bukkit.Location loc = new org.bukkit.Location(world, 0, 64, 0);
+    when(frame.getLocation()).thenReturn(loc);
+
+    HangingBreakEvent event =
+        new HangingBreakEvent(frame, HangingBreakEvent.RemoveCause.OBSTRUCTION);
+    listener.onHangingBreak(event);
+
+    assertTrue(event.isCancelled());
+    verify(frame).remove();
+    verify(world)
+        .dropItemNaturally(
+            eq(loc),
+            argThat(
+                dropped -> {
+                  ItemMeta droppedMeta = dropped.getItemMeta();
+                  return droppedMeta != null
+                      && !droppedMeta.hasDisplayName()
+                      && !droppedMeta
+                          .getPersistentDataContainer()
+                          .has(key, org.bukkit.persistence.PersistentDataType.STRING);
+                }));
+  }
 }
