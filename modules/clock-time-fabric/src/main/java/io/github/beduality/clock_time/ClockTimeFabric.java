@@ -1,14 +1,16 @@
 package io.github.beduality.clock_time;
 
+import io.github.beduality.clock_time.domain.manager.ClockItemFrameRegistry;
+import io.github.beduality.clock_time.domain.manager.ClockItemFrameUpdater;
 import io.github.beduality.clock_time.domain.service.ClockMessageService;
 import io.github.beduality.clock_time.domain.service.DimensionTimeResolver;
 import io.github.beduality.clock_time.domain.service.LocaleTimeFormatter;
 import io.github.beduality.clock_time.domain.service.TimeFormatter;
+import io.github.beduality.clock_time.infrastructure.adapter.FabricItemFrameAdapter;
+import io.github.beduality.clock_time.infrastructure.adapter.FabricWorldInfo;
 import io.github.beduality.clock_time.infrastructure.config.ClockTimeFabricConfig;
 import io.github.beduality.clock_time.infrastructure.listener.FabricClockInteractListener;
 import io.github.beduality.clock_time.infrastructure.listener.FabricClockItemFrameListener;
-import io.github.beduality.clock_time.infrastructure.manager.FabricClockItemFrameRegistry;
-import io.github.beduality.clock_time.infrastructure.manager.FabricClockItemFrameUpdater;
 import io.github.beduality.clock_time.infrastructure.manager.FabricConfigLoader;
 import io.github.beduality.clock_time.infrastructure.manager.FabricTranslationRegistryManager;
 import net.fabricmc.api.ModInitializer;
@@ -39,16 +41,21 @@ public class ClockTimeFabric implements ModInitializer {
     new FabricClockInteractListener(config, clockMessageService).register();
 
     if (config.itemFrameClocks.enabled) {
-      var registry = new FabricClockItemFrameRegistry();
+      var registry = new ClockItemFrameRegistry();
       var listener = new FabricClockItemFrameListener(registry);
       var updater =
-          new FabricClockItemFrameUpdater(
+          new ClockItemFrameUpdater(
               registry,
               clockMessageService,
               config.fallbackLanguage,
               config.itemFrameClocks.updateInterval);
 
-      listener.setOnRegisterCallback(updater::updateFrame);
+      listener.setOnRegisterCallback(
+          frame -> {
+            updater.updateFrame(
+                new FabricItemFrameAdapter(frame),
+                new FabricWorldInfo((net.minecraft.server.world.ServerWorld) frame.getWorld()));
+          });
       listener.register();
 
       ServerWorldEvents.LOAD.register(
@@ -56,7 +63,7 @@ public class ClockTimeFabric implements ModInitializer {
             listener.registerAlreadyLoadedFrames(world);
           });
 
-      ServerTickEvents.END_WORLD_TICK.register(updater::tick);
+      ServerTickEvents.END_WORLD_TICK.register(world -> updater.tick(new FabricWorldInfo(world)));
     }
 
     LOGGER.info("ClockTime Fabric Mod Initialized");

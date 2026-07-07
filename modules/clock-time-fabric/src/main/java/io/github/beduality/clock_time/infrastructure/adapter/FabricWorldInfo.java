@@ -20,6 +20,11 @@ public class FabricWorldInfo implements WorldInfo {
   }
 
   @Override
+  public long getTime() {
+    return world != null ? world.getTime() : 0L;
+  }
+
+  @Override
   public String getName() {
     return world != null ? world.getRegistryKey().getValue().getPath() : "";
   }

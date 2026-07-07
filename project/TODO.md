@@ -12,6 +12,3 @@
 
 - Generate config reference using Configurate programmatically
 - Add feature flags in the config
-
-- Refactor to use DI lib
-- Refactor to share more code between platform implementations

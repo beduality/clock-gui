@@ -7,6 +7,13 @@ package io.github.beduality.clock_time.domain.model;
 public interface WorldInfo {
 
   /**
+   * Gets the current game time of this world (in ticks).
+   *
+   * @return the world time
+   */
+  long getTime();
+
+  /**
    * Gets the name of the world.
    *
    * @return the world name

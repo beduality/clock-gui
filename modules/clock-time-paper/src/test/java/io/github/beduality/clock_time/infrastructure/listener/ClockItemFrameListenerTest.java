@@ -6,9 +6,11 @@ import static org.mockito.Mockito.*;
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
 import io.github.beduality.clock_time.ClockTimePlugin;
+import io.github.beduality.clock_time.domain.manager.ClockItemFrameRegistry;
+import io.github.beduality.clock_time.domain.manager.ClockItemFrameUpdater;
 import io.github.beduality.clock_time.domain.service.ClockMessageService;
-import io.github.beduality.clock_time.infrastructure.manager.ClockItemFrameRegistry;
-import io.github.beduality.clock_time.infrastructure.manager.ClockItemFrameUpdater;
+import io.github.beduality.clock_time.infrastructure.adapter.PaperItemFrameAdapter;
+import io.github.beduality.clock_time.infrastructure.adapter.PaperWorldInfo;
 import java.util.UUID;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
@@ -59,14 +61,14 @@ class ClockItemFrameListenerTest {
     ItemFrame clockFrame = mockItemFrame(Material.CLOCK);
     ItemFrame regularFrame = mockItemFrame(Material.BOOK);
 
-    registry.register(clockFrame);
-    registry.register(regularFrame);
+    registry.register(new PaperItemFrameAdapter(clockFrame));
+    registry.register(new PaperItemFrameAdapter(regularFrame));
 
-    assertTrue(registry.getTrackedFrames().contains(clockFrame));
-    assertFalse(registry.getTrackedFrames().contains(regularFrame));
+    assertTrue(registry.getTrackedFrames().contains(new PaperItemFrameAdapter(clockFrame)));
+    assertFalse(registry.getTrackedFrames().contains(new PaperItemFrameAdapter(regularFrame)));
 
-    registry.unregister(clockFrame);
-    assertFalse(registry.getTrackedFrames().contains(clockFrame));
+    registry.unregister(new PaperItemFrameAdapter(clockFrame));
+    assertFalse(registry.getTrackedFrames().contains(new PaperItemFrameAdapter(clockFrame)));
   }
 
   @Test
@@ -80,14 +82,14 @@ class ClockItemFrameListenerTest {
     ChunkLoadEvent loadEvent = new ChunkLoadEvent(chunk, false);
     listener.onChunkLoad(loadEvent);
 
-    assertTrue(registry.getTrackedFrames().contains(frame1));
-    assertTrue(registry.getTrackedFrames().contains(frame2));
+    assertTrue(registry.getTrackedFrames().contains(new PaperItemFrameAdapter(frame1)));
+    assertTrue(registry.getTrackedFrames().contains(new PaperItemFrameAdapter(frame2)));
 
     ChunkUnloadEvent unloadEvent = new ChunkUnloadEvent(chunk);
     listener.onChunkUnload(unloadEvent);
 
-    assertFalse(registry.getTrackedFrames().contains(frame1));
-    assertFalse(registry.getTrackedFrames().contains(frame2));
+    assertFalse(registry.getTrackedFrames().contains(new PaperItemFrameAdapter(frame1)));
+    assertFalse(registry.getTrackedFrames().contains(new PaperItemFrameAdapter(frame2)));
   }
 
   @Test
@@ -102,25 +104,25 @@ class ClockItemFrameListenerTest {
 
     server.getScheduler().performOneTick();
 
-    assertTrue(registry.getTrackedFrames().contains(frame));
+    assertTrue(registry.getTrackedFrames().contains(new PaperItemFrameAdapter(frame)));
   }
 
   @Test
   void testHangingBreak() {
     ItemFrame frame = mockItemFrame(Material.CLOCK);
-    registry.register(frame);
+    registry.register(new PaperItemFrameAdapter(frame));
 
     HangingBreakEvent event =
         new HangingBreakEvent(frame, HangingBreakEvent.RemoveCause.OBSTRUCTION);
     listener.onHangingBreak(event);
 
-    assertFalse(registry.getTrackedFrames().contains(frame));
+    assertFalse(registry.getTrackedFrames().contains(new PaperItemFrameAdapter(frame)));
   }
 
   @Test
   void testEntityDamageKnockout() {
     ItemFrame frame = mockItemFrame(Material.CLOCK);
-    registry.register(frame);
+    registry.register(new PaperItemFrameAdapter(frame));
 
     EntityDamageByEntityEvent event = mock(EntityDamageByEntityEvent.class);
     when(event.getEntity()).thenReturn(frame);
@@ -131,7 +133,7 @@ class ClockItemFrameListenerTest {
 
     server.getScheduler().performOneTick();
 
-    assertFalse(registry.getTrackedFrames().contains(frame));
+    assertFalse(registry.getTrackedFrames().contains(new PaperItemFrameAdapter(frame)));
   }
 
   @Test
@@ -140,20 +142,21 @@ class ClockItemFrameListenerTest {
 
     World world = mock(World.class);
     when(frame.getWorld()).thenReturn(world);
-    when(world.getTime()).thenReturn(6000L);
+    when(world.getTime()).thenReturn(16L); // aligned to update interval
     when(world.getName()).thenReturn("world");
     when(world.getKey()).thenReturn(org.bukkit.NamespacedKey.minecraft("overworld"));
     when(world.getEnvironment()).thenReturn(World.Environment.NORMAL);
 
-    registry.register(frame);
+    registry.register(new PaperItemFrameAdapter(frame));
 
     ClockMessageService mockMessageService = mock(ClockMessageService.class);
     net.kyori.adventure.text.Component expectedComponent =
         net.kyori.adventure.text.Component.text("12:00 PM");
     when(mockMessageService.getClockMessage(any(), anyLong(), any())).thenReturn(expectedComponent);
 
-    ClockItemFrameUpdater updater = new ClockItemFrameUpdater(registry, mockMessageService, "en");
-    updater.run();
+    ClockItemFrameUpdater updater =
+        new ClockItemFrameUpdater(registry, mockMessageService, "en", 16);
+    updater.tick(new PaperWorldInfo(world));
 
     verify(frame)
         .setItem(

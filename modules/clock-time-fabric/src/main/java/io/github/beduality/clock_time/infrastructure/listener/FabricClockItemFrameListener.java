@@ -1,6 +1,7 @@
 package io.github.beduality.clock_time.infrastructure.listener;
 
-import io.github.beduality.clock_time.infrastructure.manager.FabricClockItemFrameRegistry;
+import io.github.beduality.clock_time.domain.manager.ClockItemFrameRegistry;
+import io.github.beduality.clock_time.infrastructure.adapter.FabricItemFrameAdapter;
 import java.util.function.Consumer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
@@ -11,10 +12,10 @@ import net.minecraft.util.ActionResult;
 /** Monitors entity load, unload, and interactions in Fabric to register clock item frames. */
 public class FabricClockItemFrameListener {
 
-  private final FabricClockItemFrameRegistry registry;
+  private final ClockItemFrameRegistry registry;
   private Consumer<ItemFrameEntity> onRegisterCallback;
 
-  public FabricClockItemFrameListener(FabricClockItemFrameRegistry registry) {
+  public FabricClockItemFrameListener(ClockItemFrameRegistry registry) {
     this.registry = registry;
   }
 
@@ -23,7 +24,7 @@ public class FabricClockItemFrameListener {
   }
 
   private void registerFrame(ItemFrameEntity frame) {
-    if (registry.register(frame)) {
+    if (registry.register(new FabricItemFrameAdapter(frame))) {
       if (onRegisterCallback != null) {
         onRegisterCallback.accept(frame);
       }
@@ -41,7 +42,7 @@ public class FabricClockItemFrameListener {
     ServerEntityEvents.ENTITY_UNLOAD.register(
         (entity, world) -> {
           if (entity instanceof ItemFrameEntity frame) {
-            registry.unregister(frame);
+            registry.unregister(new FabricItemFrameAdapter(frame));
           }
         });
 

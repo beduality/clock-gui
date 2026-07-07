@@ -1,14 +1,16 @@
 package io.github.beduality.clock_time;
 
+import io.github.beduality.clock_time.domain.manager.ClockItemFrameRegistry;
+import io.github.beduality.clock_time.domain.manager.ClockItemFrameUpdater;
 import io.github.beduality.clock_time.domain.service.ClockMessageService;
 import io.github.beduality.clock_time.domain.service.DimensionTimeResolver;
 import io.github.beduality.clock_time.domain.service.LocaleTimeFormatter;
 import io.github.beduality.clock_time.domain.service.TimeFormatter;
+import io.github.beduality.clock_time.infrastructure.adapter.PaperItemFrameAdapter;
+import io.github.beduality.clock_time.infrastructure.adapter.PaperWorldInfo;
 import io.github.beduality.clock_time.infrastructure.config.ClockTimePluginConfig;
 import io.github.beduality.clock_time.infrastructure.listener.ClockInteractListener;
 import io.github.beduality.clock_time.infrastructure.listener.ClockItemFrameListener;
-import io.github.beduality.clock_time.infrastructure.manager.ClockItemFrameRegistry;
-import io.github.beduality.clock_time.infrastructure.manager.ClockItemFrameUpdater;
 import io.github.beduality.clock_time.infrastructure.manager.ConfigLoader;
 import io.github.beduality.clock_time.infrastructure.manager.TranslationRegistryManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -47,11 +49,29 @@ public class ClockTimePlugin extends JavaPlugin {
 
       var updater =
           new ClockItemFrameUpdater(
-              clockItemFrameRegistry, clockMessageService, config.getFallbackLanguage());
-      itemFrameListener.setOnRegisterCallback(updater::updateFrame);
+              clockItemFrameRegistry,
+              clockMessageService,
+              config.getFallbackLanguage(),
+              config.getItemFrameClocks().getUpdateInterval());
+
+      itemFrameListener.setOnRegisterCallback(
+          frame -> {
+            updater.updateFrame(
+                new PaperItemFrameAdapter(frame), new PaperWorldInfo(frame.getWorld()));
+          });
       itemFrameListener.registerAlreadyLoadedFrames();
 
-      updater.runTaskTimer(this, 0L, config.getItemFrameClocks().getUpdateInterval());
+      getServer()
+          .getScheduler()
+          .runTaskTimer(
+              this,
+              () -> {
+                for (org.bukkit.World world : getServer().getWorlds()) {
+                  updater.tick(new PaperWorldInfo(world));
+                }
+              },
+              0L,
+              1L);
     }
 
     getLogger().info("ClockTime Plugin Enabled");

@@ -1,6 +1,7 @@
 package io.github.beduality.clock_time.infrastructure.listener;
 
-import io.github.beduality.clock_time.infrastructure.manager.ClockItemFrameRegistry;
+import io.github.beduality.clock_time.domain.manager.ClockItemFrameRegistry;
+import io.github.beduality.clock_time.infrastructure.adapter.PaperItemFrameAdapter;
 import java.util.function.Consumer;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -35,7 +36,7 @@ public class ClockItemFrameListener implements Listener {
   }
 
   private void registerFrame(ItemFrame frame) {
-    if (registry.register(frame)) {
+    if (registry.register(new PaperItemFrameAdapter(frame))) {
       if (onRegisterCallback != null) {
         onRegisterCallback.accept(frame);
       }
@@ -68,7 +69,7 @@ public class ClockItemFrameListener implements Listener {
   public void onChunkUnload(ChunkUnloadEvent event) {
     for (Entity entity : event.getChunk().getEntities()) {
       if (entity instanceof ItemFrame frame) {
-        registry.unregister(frame);
+        registry.unregister(new PaperItemFrameAdapter(frame));
       }
     }
   }
@@ -84,7 +85,7 @@ public class ClockItemFrameListener implements Listener {
   @EventHandler(ignoreCancelled = true)
   public void onHangingBreak(HangingBreakEvent event) {
     if (event.getEntity() instanceof ItemFrame frame) {
-      registry.unregister(frame);
+      registry.unregister(new PaperItemFrameAdapter(frame));
     }
   }
 
@@ -97,7 +98,7 @@ public class ClockItemFrameListener implements Listener {
               plugin,
               () -> {
                 if (!frame.isValid() || frame.getItem().getType() != org.bukkit.Material.CLOCK) {
-                  registry.unregister(frame);
+                  registry.unregister(new PaperItemFrameAdapter(frame));
                 }
               });
     }
