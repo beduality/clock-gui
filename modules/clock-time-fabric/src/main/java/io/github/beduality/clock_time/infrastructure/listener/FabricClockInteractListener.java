@@ -1,6 +1,8 @@
 package io.github.beduality.clock_time.infrastructure.listener;
 
+import io.github.beduality.clock_time.domain.adapter.ClockItemFrameConstants;
 import io.github.beduality.clock_time.domain.service.ClockMessageService;
+import io.github.beduality.clock_time.domain.util.LocaleUtils;
 import io.github.beduality.clock_time.infrastructure.adapter.FabricWorldInfo;
 import io.github.beduality.clock_time.infrastructure.config.ClockTimeFabricConfig;
 import java.util.Locale;
@@ -67,7 +69,7 @@ public class FabricClockInteractListener {
             long time = world.getTime();
             ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
             String langStr = serverPlayer.getClientOptions().language();
-            Locale playerLocale = parseLocale(langStr);
+            Locale playerLocale = LocaleUtils.parseLocale(langStr);
             Component timeComponent =
                 clockMessageService.getFormattedTimeOnly(
                     new FabricWorldInfo((ServerWorld) world),
@@ -88,7 +90,9 @@ public class FabricClockInteractListener {
                   itemToPlace.get(net.minecraft.component.DataComponentTypes.CUSTOM_DATA);
               boolean alreadyHasOriginal =
                   nbtComponent != null
-                      && nbtComponent.getNbt().contains("clock_time:original_name");
+                      && nbtComponent
+                          .getNbt()
+                          .contains(ClockItemFrameConstants.FABRIC_ORIGINAL_NAME_KEY);
 
               if (!alreadyHasOriginal) {
                 Text originalCustomName =
@@ -103,7 +107,9 @@ public class FabricClockInteractListener {
                 net.minecraft.component.type.NbtComponent.set(
                     net.minecraft.component.DataComponentTypes.CUSTOM_DATA,
                     itemToPlace,
-                    nbt -> nbt.putString("clock_time:original_name", finalOriginalName));
+                    nbt ->
+                        nbt.putString(
+                            ClockItemFrameConstants.FABRIC_ORIGINAL_NAME_KEY, finalOriginalName));
               }
               itemToPlace.set(net.minecraft.component.DataComponentTypes.CUSTOM_NAME, text);
             }
@@ -142,7 +148,7 @@ public class FabricClockInteractListener {
 
   private void sendClockTimeMessage(ServerPlayerEntity player, ServerWorld world) {
     long time = world.getTime();
-    Locale locale = parseLocale(player.getClientOptions().language());
+    Locale locale = LocaleUtils.parseLocale(player.getClientOptions().language());
 
     var worldInfo = new FabricWorldInfo(world);
     Component messageComponent = clockMessageService.getClockMessage(worldInfo, time, locale);
@@ -154,20 +160,5 @@ public class FabricClockInteractListener {
     } catch (Exception e) {
       LOGGER.error("Failed to format and send clock time message to player", e);
     }
-  }
-
-  private Locale parseLocale(String localeStr) {
-    if (localeStr == null || localeStr.isEmpty() || localeStr.equalsIgnoreCase("root")) {
-      return Locale.ROOT;
-    }
-    String[] parts = localeStr.split("_");
-    if (parts.length == 1) {
-      return Locale.of(parts[0]);
-    } else if (parts.length == 2) {
-      return Locale.of(parts[0], parts[1]);
-    } else if (parts.length >= 3) {
-      return Locale.of(parts[0], parts[1], parts[2]);
-    }
-    return Locale.of(localeStr);
   }
 }

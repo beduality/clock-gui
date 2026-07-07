@@ -1,5 +1,6 @@
 package io.github.beduality.clock_time.infrastructure.listener;
 
+import io.github.beduality.clock_time.domain.adapter.ClockItemFrameConstants;
 import io.github.beduality.clock_time.domain.manager.ClockItemFrameRegistry;
 import io.github.beduality.clock_time.infrastructure.adapter.PaperItemFrameAdapter;
 import java.util.function.Consumer;
@@ -133,7 +134,10 @@ public class ClockItemFrameListener implements Listener {
 
   private org.bukkit.inventory.ItemStack getRestoredClockDrop(ItemFrame frame) {
     org.bukkit.inventory.ItemStack clockDrop = frame.getItem().clone();
-    org.bukkit.NamespacedKey key = new org.bukkit.NamespacedKey("clock-time", "original-name");
+    org.bukkit.NamespacedKey key =
+        new org.bukkit.NamespacedKey(
+            ClockItemFrameConstants.PAPER_NAMESPACE,
+            ClockItemFrameConstants.PAPER_ORIGINAL_NAME_KEY);
     if (clockDrop.hasItemMeta()) {
       org.bukkit.inventory.meta.ItemMeta meta = clockDrop.getItemMeta();
       if (meta.getPersistentDataContainer()

@@ -1,6 +1,7 @@
 package io.github.beduality.clock_time.infrastructure.adapter;
 
 import io.github.beduality.clock_time.domain.adapter.ClockItemFrameAdapter;
+import io.github.beduality.clock_time.domain.adapter.ClockItemFrameConstants;
 import java.util.UUID;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
@@ -39,7 +40,10 @@ public class PaperItemFrameAdapter implements ClockItemFrameAdapter {
     if (item != null && item.getType() == Material.CLOCK) {
       ItemMeta meta = item.getItemMeta();
       if (meta != null) {
-        org.bukkit.NamespacedKey key = new org.bukkit.NamespacedKey("clock-time", "original-name");
+        org.bukkit.NamespacedKey key =
+            new org.bukkit.NamespacedKey(
+                ClockItemFrameConstants.PAPER_NAMESPACE,
+                ClockItemFrameConstants.PAPER_ORIGINAL_NAME_KEY);
         if (!meta.getPersistentDataContainer()
             .has(key, org.bukkit.persistence.PersistentDataType.STRING)) {
           String originalName = meta.hasDisplayName() ? meta.getDisplayName() : "";

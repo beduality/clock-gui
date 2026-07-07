@@ -1,5 +1,6 @@
 package io.github.beduality.clock_time.infrastructure.mixin;
 
+import io.github.beduality.clock_time.domain.adapter.ClockItemFrameConstants;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.decoration.ItemFrameEntity;
 import net.minecraft.item.Items;
@@ -24,12 +25,14 @@ public class ItemFrameEntityMixin {
         net.minecraft.item.ItemStack clockStack = frame.getHeldItemStack().copy();
         net.minecraft.component.type.NbtComponent nbtComp =
             clockStack.get(net.minecraft.component.DataComponentTypes.CUSTOM_DATA);
-        if (nbtComp != null && nbtComp.getNbt().contains("clock_time:original_name")) {
-          String originalNameJson = nbtComp.getNbt().getString("clock_time:original_name");
+        if (nbtComp != null
+            && nbtComp.getNbt().contains(ClockItemFrameConstants.FABRIC_ORIGINAL_NAME_KEY)) {
+          String originalNameJson =
+              nbtComp.getNbt().getString(ClockItemFrameConstants.FABRIC_ORIGINAL_NAME_KEY);
           net.minecraft.component.type.NbtComponent.set(
               net.minecraft.component.DataComponentTypes.CUSTOM_DATA,
               clockStack,
-              nbt -> nbt.remove("clock_time:original_name"));
+              nbt -> nbt.remove(ClockItemFrameConstants.FABRIC_ORIGINAL_NAME_KEY));
           if (originalNameJson == null || originalNameJson.isEmpty()) {
             clockStack.remove(net.minecraft.component.DataComponentTypes.CUSTOM_NAME);
           } else {

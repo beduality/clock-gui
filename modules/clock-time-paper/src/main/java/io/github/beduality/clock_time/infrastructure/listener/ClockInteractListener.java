@@ -1,9 +1,11 @@
 package io.github.beduality.clock_time.infrastructure.listener;
 
 import io.github.beduality.clock_time.ClockTimePlugin;
+import io.github.beduality.clock_time.domain.adapter.ClockItemFrameConstants;
 import io.github.beduality.clock_time.domain.manager.ClockItemFrameRegistry;
 import io.github.beduality.clock_time.domain.manager.ClockItemFrameUpdater;
 import io.github.beduality.clock_time.domain.service.ClockMessageService;
+import io.github.beduality.clock_time.domain.util.LocaleUtils;
 import io.github.beduality.clock_time.infrastructure.adapter.PaperItemFrameAdapter;
 import io.github.beduality.clock_time.infrastructure.adapter.PaperWorldInfo;
 import io.github.beduality.clock_time.infrastructure.config.ClockTimePluginConfig;
@@ -105,7 +107,7 @@ public class ClockInteractListener implements Listener {
           itemToPlace.setAmount(1);
 
           long time = clickedBlock.getWorld().getTime();
-          Locale playerLocale = Locale.forLanguageTag(player.getLocale().replace('_', '-'));
+          Locale playerLocale = LocaleUtils.parseLocale(player.getLocale());
           Component timeName =
               clockMessageService.getFormattedTimeOnly(
                   new PaperWorldInfo(clickedBlock.getWorld()),
@@ -116,7 +118,9 @@ public class ClockInteractListener implements Listener {
           org.bukkit.inventory.meta.ItemMeta meta = itemToPlace.getItemMeta();
           if (meta != null) {
             org.bukkit.NamespacedKey key =
-                new org.bukkit.NamespacedKey("clock-time", "original-name");
+                new org.bukkit.NamespacedKey(
+                    ClockItemFrameConstants.PAPER_NAMESPACE,
+                    ClockItemFrameConstants.PAPER_ORIGINAL_NAME_KEY);
             if (!meta.getPersistentDataContainer()
                 .has(key, org.bukkit.persistence.PersistentDataType.STRING)) {
               String originalName = meta.hasDisplayName() ? meta.getDisplayName() : "";

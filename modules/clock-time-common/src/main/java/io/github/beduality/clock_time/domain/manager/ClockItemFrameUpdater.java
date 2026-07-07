@@ -3,6 +3,7 @@ package io.github.beduality.clock_time.domain.manager;
 import io.github.beduality.clock_time.domain.adapter.ClockItemFrameAdapter;
 import io.github.beduality.clock_time.domain.model.WorldInfo;
 import io.github.beduality.clock_time.domain.service.ClockMessageService;
+import io.github.beduality.clock_time.domain.util.LocaleUtils;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
@@ -27,7 +28,7 @@ public class ClockItemFrameUpdater {
       String wildSpinSymbol) {
     this.registry = registry;
     this.messageService = messageService;
-    this.fallbackLocale = parseLocale(fallbackLanguage);
+    this.fallbackLocale = LocaleUtils.parseLocale(fallbackLanguage);
     this.updateInterval = updateInterval;
     this.wildSpinSymbol = wildSpinSymbol;
   }
@@ -72,20 +73,5 @@ public class ClockItemFrameUpdater {
         messageService.getFormattedTimeOnly(worldInfo, time, fallbackLocale, wildSpinSymbol);
     frame.setClockCustomName(timeComponent);
     lastMinutes.put(frame.getUniqueId(), (time * 60) / 1000);
-  }
-
-  private Locale parseLocale(String localeStr) {
-    if (localeStr == null || localeStr.isEmpty() || localeStr.equalsIgnoreCase("root")) {
-      return Locale.ROOT;
-    }
-    String[] parts = localeStr.split("_");
-    if (parts.length == 1) {
-      return Locale.of(parts[0]);
-    } else if (parts.length == 2) {
-      return Locale.of(parts[0], parts[1]);
-    } else if (parts.length >= 3) {
-      return Locale.of(parts[0], parts[1], parts[2]);
-    }
-    return Locale.of(localeStr);
   }
 }

@@ -1,6 +1,7 @@
 package io.github.beduality.clock_time.infrastructure.adapter;
 
 import io.github.beduality.clock_time.domain.adapter.ClockItemFrameAdapter;
+import io.github.beduality.clock_time.domain.adapter.ClockItemFrameConstants;
 import java.util.UUID;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
@@ -46,7 +47,8 @@ public class FabricItemFrameAdapter implements ClockItemFrameAdapter {
         net.minecraft.component.type.NbtComponent nbtComponent =
             newStack.get(DataComponentTypes.CUSTOM_DATA);
         boolean alreadyHasOriginal =
-            nbtComponent != null && nbtComponent.getNbt().contains("clock_time:original_name");
+            nbtComponent != null
+                && nbtComponent.getNbt().contains(ClockItemFrameConstants.FABRIC_ORIGINAL_NAME_KEY);
 
         if (!alreadyHasOriginal) {
           Text originalCustomName = newStack.get(DataComponentTypes.CUSTOM_NAME);
@@ -60,7 +62,9 @@ public class FabricItemFrameAdapter implements ClockItemFrameAdapter {
           net.minecraft.component.type.NbtComponent.set(
               DataComponentTypes.CUSTOM_DATA,
               newStack,
-              nbt -> nbt.putString("clock_time:original_name", finalOriginalName));
+              nbt ->
+                  nbt.putString(
+                      ClockItemFrameConstants.FABRIC_ORIGINAL_NAME_KEY, finalOriginalName));
         }
 
         newStack.set(DataComponentTypes.CUSTOM_NAME, text);
