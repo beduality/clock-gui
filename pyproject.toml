@@ -1,6 +1,6 @@
 [project]
 name = "clock-time"
-version = "0.2.0"
+version = "0.3.0"
 description = "Localized in-game time displays for Minecraft"
 requires-python = ">=3.13"
 dependencies = [

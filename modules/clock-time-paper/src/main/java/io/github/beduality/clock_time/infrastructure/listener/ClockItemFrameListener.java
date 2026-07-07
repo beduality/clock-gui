@@ -85,14 +85,41 @@ public class ClockItemFrameListener implements Listener {
   @EventHandler(ignoreCancelled = true)
   public void onHangingBreak(HangingBreakEvent event) {
     if (event.getEntity() instanceof ItemFrame frame) {
+      if (!frame.isVisible() && frame.getItem().getType() == org.bukkit.Material.CLOCK) {
+        org.bukkit.inventory.ItemStack clockDrop = frame.getItem().clone();
+        frame.getWorld().dropItemNaturally(frame.getLocation(), clockDrop);
+        frame.remove();
+        event.setCancelled(true);
+      }
       registry.unregister(new PaperItemFrameAdapter(frame));
     }
   }
 
-  @EventHandler(ignoreCancelled = true)
+  @EventHandler(priority = org.bukkit.event.EventPriority.LOWEST, ignoreCancelled = true)
   public void onEntityDamage(EntityDamageByEntityEvent event) {
     if (event.getEntity() instanceof ItemFrame frame) {
-      // Run 1 tick later to see if the item was knocked out
+      if (!frame.isVisible() && frame.getItem().getType() == org.bukkit.Material.CLOCK) {
+        boolean shouldDrop = true;
+        if (event.getDamager() instanceof org.bukkit.entity.Player player) {
+          if (!player.hasPermission("clock_time.break")) {
+            event.setCancelled(true);
+            return;
+          }
+          if (player.getGameMode() == org.bukkit.GameMode.CREATIVE) {
+            shouldDrop = false;
+          }
+        }
+        if (shouldDrop) {
+          org.bukkit.inventory.ItemStack clockDrop = frame.getItem().clone();
+          frame.getWorld().dropItemNaturally(frame.getLocation(), clockDrop);
+        }
+        frame.remove();
+        event.setCancelled(true);
+        registry.unregister(new PaperItemFrameAdapter(frame));
+        return;
+      }
+
+      // Run 1 tick later to see if the item was knocked out for normal frames
       Bukkit.getScheduler()
           .runTask(
               plugin,

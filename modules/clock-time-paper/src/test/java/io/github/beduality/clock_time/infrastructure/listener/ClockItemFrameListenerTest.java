@@ -5,6 +5,7 @@ import static org.mockito.Mockito.*;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
+import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import io.github.beduality.clock_time.ClockTimePlugin;
 import io.github.beduality.clock_time.domain.manager.ClockItemFrameRegistry;
 import io.github.beduality.clock_time.domain.manager.ClockItemFrameUpdater;
@@ -53,6 +54,7 @@ class ClockItemFrameListenerTest {
     when(frame.getUniqueId()).thenReturn(UUID.randomUUID());
     when(frame.getItem()).thenReturn(new ItemStack(material));
     when(frame.isValid()).thenReturn(true);
+    when(frame.isVisible()).thenReturn(true);
     return frame;
   }
 
@@ -180,5 +182,83 @@ class ClockItemFrameListenerTest {
     listener.onChunkLoad(new ChunkLoadEvent(chunk, false));
 
     verify(callback).accept(frame);
+  }
+
+  @Test
+  void testNoItemFrameDropOnHangingBreak() {
+    ItemFrame frame = mockItemFrame(Material.CLOCK);
+    when(frame.isVisible()).thenReturn(false);
+
+    World world = mock(World.class);
+    when(frame.getWorld()).thenReturn(world);
+    org.bukkit.Location loc = new org.bukkit.Location(world, 0, 64, 0);
+    when(frame.getLocation()).thenReturn(loc);
+
+    HangingBreakEvent event =
+        new HangingBreakEvent(frame, HangingBreakEvent.RemoveCause.OBSTRUCTION);
+    listener.onHangingBreak(event);
+
+    assertTrue(
+        event.isCancelled(), "HangingBreakEvent should be cancelled to prevent default drops");
+    verify(frame).remove();
+    verify(world).dropItemNaturally(eq(loc), argThat(item -> item.getType() == Material.CLOCK));
+  }
+
+  @Test
+  void testNoItemFrameDropOnEntityDamage() {
+    ItemFrame frame = mockItemFrame(Material.CLOCK);
+    when(frame.isVisible()).thenReturn(false);
+
+    World world = mock(World.class);
+    when(frame.getWorld()).thenReturn(world);
+    org.bukkit.Location loc = new org.bukkit.Location(world, 0, 64, 0);
+    when(frame.getLocation()).thenReturn(loc);
+
+    PlayerMock player = server.addPlayer();
+    player.setGameMode(org.bukkit.GameMode.SURVIVAL);
+    player.addAttachment(plugin, "clock_time.break", true);
+
+    EntityDamageByEntityEvent event =
+        new EntityDamageByEntityEvent(
+            player,
+            frame,
+            org.bukkit.event.entity.EntityDamageEvent.DamageCause.ENTITY_ATTACK,
+            1.0);
+    listener.onEntityDamage(event);
+
+    assertTrue(
+        event.isCancelled(),
+        "EntityDamageByEntityEvent should be cancelled to prevent default drops");
+    verify(frame).remove();
+    verify(world).dropItemNaturally(eq(loc), argThat(item -> item.getType() == Material.CLOCK));
+  }
+
+  @Test
+  void testNoItemFrameDropOnEntityDamageNoPermission() {
+    ItemFrame frame = mockItemFrame(Material.CLOCK);
+    when(frame.isVisible()).thenReturn(false);
+
+    World world = mock(World.class);
+    when(frame.getWorld()).thenReturn(world);
+    org.bukkit.Location loc = new org.bukkit.Location(world, 0, 64, 0);
+    when(frame.getLocation()).thenReturn(loc);
+
+    PlayerMock player = server.addPlayer();
+    player.setGameMode(org.bukkit.GameMode.SURVIVAL);
+    player.addAttachment(plugin, "clock_time.break", false);
+
+    EntityDamageByEntityEvent event =
+        new EntityDamageByEntityEvent(
+            player,
+            frame,
+            org.bukkit.event.entity.EntityDamageEvent.DamageCause.ENTITY_ATTACK,
+            1.0);
+    listener.onEntityDamage(event);
+
+    assertTrue(
+        event.isCancelled(),
+        "EntityDamageByEntityEvent should be cancelled to protect the clock wall");
+    verify(frame, never()).remove();
+    verify(world, never()).dropItemNaturally(any(), any());
   }
 }

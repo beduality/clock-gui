@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "io.github.beduality.clock_time.infrastructure.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "ItemFrameEntityMixin"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

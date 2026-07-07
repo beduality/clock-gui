@@ -37,6 +37,14 @@ bukkit {
             description = "Allows the player to right-click a clock to check the time."
             `default` = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.TRUE
         }
+        register("clock_time.place") {
+            description = "Allows the player to place clocks on blocks."
+            `default` = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.TRUE
+        }
+        register("clock_time.break") {
+            description = "Allows the player to break placed clocks."
+            `default` = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.TRUE
+        }
     }
 }
 

@@ -82,16 +82,22 @@ public class ClockInteractListener implements Listener {
           return;
         }
 
+        if (!player.hasPermission("clock_time.place")) {
+          sendClockTimeMessage(player);
+          return;
+        }
+
         BlockFace face = event.getBlockFace();
         try {
           ItemStack itemToPlace = event.getItem().clone();
           itemToPlace.setAmount(1);
 
+          Block targetBlock = clickedBlock.getRelative(face);
           ItemFrame frame =
-              clickedBlock
+              targetBlock
                   .getWorld()
                   .spawn(
-                      clickedBlock.getLocation(),
+                      targetBlock.getLocation(),
                       ItemFrame.class,
                       f -> {
                         f.setFacingDirection(face);

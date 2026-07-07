@@ -258,6 +258,7 @@ class ClockInteractListenerTest {
     PlayerMock player = server.addPlayer();
     player.setGameMode(org.bukkit.GameMode.SURVIVAL);
     player.addAttachment(plugin, "clock_time.use", true);
+    player.addAttachment(plugin, "clock_time.place", true);
 
     ItemStack clock = new ItemStack(Material.CLOCK, 2);
     player.getInventory().setItemInMainHand(clock);
@@ -279,10 +280,47 @@ class ClockInteractListenerTest {
     String message = player.nextMessage();
 
     if (currentAmount == 1) {
-      boolean hasFrame = player.getWorld().getEntitiesByClass(ItemFrame.class).size() > 0;
-      assertTrue(hasFrame, "An ItemFrame should have been spawned");
+      var frames = player.getWorld().getEntitiesByClass(ItemFrame.class);
+      assertFalse(frames.isEmpty(), "An ItemFrame should have been spawned");
+      ItemFrame frame = frames.iterator().next();
+      assertEquals(
+          block.getRelative(org.bukkit.block.BlockFace.UP).getLocation(),
+          frame.getLocation(),
+          "Frame should be spawned at target face location");
     } else {
       assertNotNull(message, "Should fall back to message if placement fails");
     }
+  }
+
+  @Test
+  void testPlaceWallClockNoPermission() {
+    PlayerMock player = server.addPlayer();
+    player.setGameMode(org.bukkit.GameMode.SURVIVAL);
+    player.addAttachment(plugin, "clock_time.use", true);
+    player.addAttachment(plugin, "clock_time.place", false);
+
+    ItemStack clock = new ItemStack(Material.CLOCK, 2);
+    player.getInventory().setItemInMainHand(clock);
+
+    org.bukkit.block.Block block = player.getWorld().getBlockAt(0, 64, 0);
+    block.setType(Material.STONE);
+
+    var event =
+        new org.bukkit.event.player.PlayerInteractEvent(
+            player,
+            Action.RIGHT_CLICK_BLOCK,
+            clock,
+            block,
+            org.bukkit.block.BlockFace.UP,
+            EquipmentSlot.HAND);
+    server.getPluginManager().callEvent(event);
+
+    int currentAmount = player.getInventory().getItemInMainHand().getAmount();
+    assertNotNull(
+        player.nextMessage(), "Should fall back to chat message without place permission");
+    assertEquals(2, currentAmount, "Clock should not be consumed");
+    assertTrue(
+        player.getWorld().getEntitiesByClass(ItemFrame.class).isEmpty(),
+        "No ItemFrame should be spawned");
   }
 }
