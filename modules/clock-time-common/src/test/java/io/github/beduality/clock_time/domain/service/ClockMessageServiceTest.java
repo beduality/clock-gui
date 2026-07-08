@@ -23,6 +23,7 @@ class ClockMessageServiceTest {
   private static final DimensionTimeResolver dimensionTimeResolver =
       new DimensionTimeResolver(List.of());
   private static ClockMessageService messageService;
+  private static ClockMessageService messageServiceNoEncoding;
 
   @BeforeAll
   static void setUpAll() {
@@ -43,7 +44,9 @@ class ClockMessageServiceTest {
 
     GlobalTranslator.translator().addSource(registry);
     messageService =
-        new ClockMessageService(timeFormatter, localeTimeFormatter, dimensionTimeResolver);
+        new ClockMessageService(timeFormatter, localeTimeFormatter, dimensionTimeResolver, true);
+    messageServiceNoEncoding =
+        new ClockMessageService(timeFormatter, localeTimeFormatter, dimensionTimeResolver, false);
   }
 
   @Test
@@ -121,5 +124,46 @@ class ClockMessageServiceTest {
     String plainText = PlainTextComponentSerializer.plainText().serialize(component);
 
     assertEquals("Die Uhr dreht sich wild... Zeit hat hier keine Bedeutung.", plainText);
+  }
+
+  @Test
+  void testGetFormattedTimeOnlyEncodeSpacesEnabled() {
+    // US locale at tick 0 → "6:00 AM" (Java ≤17: U+0020 space; Java 21+: U+202F NNBSP).
+    // With encode-spaces=true both space variants must be replaced with U+00A0.
+    WorldInfo world = mock(WorldInfo.class);
+    when(world.isNetherOrEnd()).thenReturn(false);
+    when(world.getName()).thenReturn("world");
+    when(world.getKey()).thenReturn("minecraft:overworld");
+
+    Component component = messageService.getFormattedTimeOnly(world, 0, Locale.US, "🌀");
+    String plainText = PlainTextComponentSerializer.plainText().serialize(component);
+
+    assertFalse(
+        plainText.contains("\u0020"),
+        "encode-spaces=true: result must contain no regular spaces (U+0020), got: " + plainText);
+    assertFalse(
+        plainText.contains("\u202F"),
+        "encode-spaces=true: result must contain no narrow no-break spaces (U+202F), got: "
+            + plainText);
+    assertTrue(
+        plainText.contains("\u00A0"),
+        "encode-spaces=true: result must contain non-breaking space (U+00A0), got: " + plainText);
+  }
+
+  @Test
+  void testGetFormattedTimeOnlyEncodeSpacesDisabled() {
+    // With encode-spaces=false the formatted string must be returned as-is (no substitution).
+    WorldInfo world = mock(WorldInfo.class);
+    when(world.isNetherOrEnd()).thenReturn(false);
+    when(world.getName()).thenReturn("world");
+    when(world.getKey()).thenReturn("minecraft:overworld");
+
+    Component component = messageServiceNoEncoding.getFormattedTimeOnly(world, 0, Locale.US, "🌀");
+    String plainText = PlainTextComponentSerializer.plainText().serialize(component);
+
+    assertFalse(
+        plainText.contains("\u00A0"),
+        "encode-spaces=false: result must contain no non-breaking spaces (U+00A0), got: "
+            + plainText);
   }
 }

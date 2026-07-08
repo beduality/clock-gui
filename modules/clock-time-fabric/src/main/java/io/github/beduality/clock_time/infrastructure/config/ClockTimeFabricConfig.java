@@ -13,6 +13,7 @@ public class ClockTimeFabricConfig {
     public boolean enabled = true;
     public int updateInterval = 16;
     public String wildSpinSymbol = "🌀";
+    public boolean encodeSpaces = true;
   }
 
   public static class WallClocks {

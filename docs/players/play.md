@@ -25,3 +25,9 @@ In dimensions where standard day and night cycles do not exist (or in custom dim
 | **The Nether** | Wild-spin message (e.g., `The clock spins wildly... Time has no meaning here.`) |
 | **The End** | Wild-spin message (e.g., `The clock spins wildly... Time has no meaning here.`) |
 | **Custom Configured Dimensions** | Wild-spin message (e.g., `The clock spins wildly... Time has no meaning here.`) |
+
+---
+
+## Bedrock Compatibility
+
+When playing on a Bedrock client (e.g., via Geyser), item frame clock names are encoded with non-breaking spaces so they display correctly. This is controlled server-side by the `item-frame-clocks.encode-spaces` setting (enabled by default) and has no effect on chat messages.

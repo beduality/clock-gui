@@ -36,7 +36,11 @@ public class ClockTimeFabric implements ModInitializer {
     var localeTimeFormatter = new LocaleTimeFormatter();
     var dimensionTimeResolver = new DimensionTimeResolver(config.wildSpinWorlds);
     var clockMessageService =
-        new ClockMessageService(timeFormatter, localeTimeFormatter, dimensionTimeResolver);
+        new ClockMessageService(
+            timeFormatter,
+            localeTimeFormatter,
+            dimensionTimeResolver,
+            config.itemFrameClocks.encodeSpaces);
 
     new FabricClockInteractListener(config, clockMessageService).register();
 

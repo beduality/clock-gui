@@ -14,6 +14,7 @@
 
 - **Realtime Clocks in Item Frames (Paper/Spigot)**: Displays current world time dynamically on clocks placed in item frames. Updates are optimized to only modify item name tags when the Minecraft minute actually changes.
 - **Full Multi-Platform Compatibility**: Run it seamlessly as a server-side plugin on **Paper, Purpur, and Spigot**, or as a server/client mod on **Fabric**. Enjoy 100% feature parity across all platforms.
+- **Bedrock Compatible Item Frames**: Time strings in item frame custom names can be encoded with non-breaking spaces (enabled by default via configuration) so Bedrock clients (e.g., via Geyser) render AM/PM times correctly.
 - **Client-Side Locale Detection**: Automatically formats and translates the time according to the player's client language (supporting both 12-hour AM/PM and 24-hour formats natively).
 - **Expandable Translation System**: Bundled with 16+ built-in languages. Scans the `languages/` subfolder dynamically to load custom properties files (e.g. `messages_sv.properties`), allowing effortless expansion.
 - **Dimension-Aware Time Resolution**: Detects environments where standard time has no meaning (like the Nether or The End) and displays a special wild-spin message.

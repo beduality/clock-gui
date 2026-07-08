@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+#### Server Administrators
+
+- **[Paper & Fabric]** `item-frame-clocks.encode-spaces` configuration option (default: `true`)
+  - Why: Bedrock clients (e.g. via Geyser) treat regular spaces (`U+0020`) as word-break boundaries in item `CUSTOM_NAME` fields, causing item frame clock names like `"3:45 PM"` to split or truncate. When enabled, regular spaces in item frame display names are replaced with non-breaking spaces (`U+00A0`). Affects only the item frame / wall clock name path — chat messages are untouched. Disable if running a Java-only server and non-breaking spaces cause unexpected rendering.
+
 ## [0.3.0] - 2026-07-06
 
 ### Added

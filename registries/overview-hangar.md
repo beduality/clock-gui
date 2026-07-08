@@ -13,6 +13,7 @@
 ## Features
 
 - **Realtime Clocks in Item Frames**: Displays current world time dynamically on clocks placed in item frames. Updates are optimized to only modify item name tags when the Minecraft minute actually changes.
+- **Bedrock Compatible**: Time strings in item frame custom names can be encoded with non-breaking spaces (enabled by default) so Bedrock clients (e.g., via Geyser) render them correctly.
 - **Dynamic Localized Formatting**: Auto-detects and formats time using the player's client language locale (supporting both 12-hour AM/PM and 24-hour formats natively).
 - **Extensible Translations**: Ships with 16+ built-in languages. Scans the `languages/` subfolder dynamically to load custom properties files (e.g. `messages_sv.properties`), allowing effortless expansion.
 - **Dimension-Aware Time**: Detects environments where standard time has no meaning (like the Nether or The End) and displays a special wild-spin message.
@@ -49,7 +50,7 @@
 fallback-language: "en"
 
 # Internal config version. Do not modify.
-config-version: 2
+config-version: 3
 
 # Custom world names or dimension keys (e.g. 'custom_world' or 'custom:space')
 # that should be treated as wild-spin dimensions.
@@ -59,6 +60,7 @@ wild-spin-worlds: []
 item-frame-clocks:
   enabled: true
   update-interval: 16
+  encode-spaces: true
 ```
 
 ### Permissions

@@ -64,6 +64,13 @@ public class ClockTimePluginConfig {
     @Comment("The symbol to display in item frame clocks when in a wild-spin dimension")
     private String wildSpinSymbol = "🌀";
 
+    @Setting("encode-spaces")
+    @Comment(
+        "Replace regular spaces with non-breaking spaces (U+00A0) in item frame display names."
+            + " Fixes display truncation for Bedrock clients (e.g. via Geyser) where the item"
+            + " CUSTOM_NAME renderer treats spaces as word-break boundaries.")
+    private boolean encodeSpaces = true;
+
     public boolean isEnabled() {
       return enabled;
     }
@@ -74,6 +81,10 @@ public class ClockTimePluginConfig {
 
     public String getWildSpinSymbol() {
       return wildSpinSymbol;
+    }
+
+    public boolean isEncodeSpaces() {
+      return encodeSpaces;
     }
   }
 

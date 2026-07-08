@@ -16,6 +16,7 @@ public class ClockMessageService {
   private final TimeFormatter timeFormatter;
   private final LocaleTimeFormatter localeTimeFormatter;
   private final DimensionTimeResolver dimensionTimeResolver;
+  private final boolean encodeSpaces;
 
   /*
    * Constructs a ClockMessageService.
@@ -23,14 +24,18 @@ public class ClockMessageService {
    * @param timeFormatter the tick-to-time formatter
    * @param localeTimeFormatter the locale-aware time formatter
    * @param dimensionTimeResolver the dimension time resolver
+   * @param encodeSpaces if true, regular spaces in item frame display names are replaced with
+   *     non-breaking spaces (U+00A0) so Bedrock clients render them correctly
    */
   public ClockMessageService(
       TimeFormatter timeFormatter,
       LocaleTimeFormatter localeTimeFormatter,
-      DimensionTimeResolver dimensionTimeResolver) {
+      DimensionTimeResolver dimensionTimeResolver,
+      boolean encodeSpaces) {
     this.timeFormatter = timeFormatter;
     this.localeTimeFormatter = localeTimeFormatter;
     this.dimensionTimeResolver = dimensionTimeResolver;
+    this.encodeSpaces = encodeSpaces;
   }
 
   /*
@@ -75,6 +80,15 @@ public class ClockMessageService {
 
     LocalTime localTime = timeFormatter.formatTicks(worldTime);
     String formattedTime = localeTimeFormatter.format(localTime, locale);
+    if (encodeSpaces) {
+      // Bedrock's item CUSTOM_NAME renderer treats U+0020 (regular space) and U+202F
+      // (narrow no-break space, emitted by Java 21+ DateTimeFormatter for AM/PM locales)
+      // as word-break boundaries, causing names like "3:45 PM" to split or truncate.
+      // Replace both with U+00A0 (non-breaking space) which Bedrock renders correctly.
+      // This does NOT affect chat messages — only item frame / wall clock display names
+      // pass through this path.
+      formattedTime = formattedTime.replace('\u0020', '\u00A0').replace('\u202F', '\u00A0');
+    }
     return Component.text(formattedTime);
   }
 

@@ -13,7 +13,7 @@ On **Paper/Spigot**, ClockTime is configured through `plugins/ClockTime/config.y
     fallback-language: "en"
 
     # Configuration version. Do not modify this value.
-    config-version: 2
+    config-version: 3
 
     # A list of custom world names or dimension keys (e.g. 'custom_world' or 'custom:space')
     # that should be treated as wild-spin dimensions.
@@ -25,6 +25,9 @@ On **Paper/Spigot**, ClockTime is configured through `plugins/ClockTime/config.y
       enabled: true
       # How often to update the clock time (in ticks, 20 ticks = 1 second)
       update-interval: 16
+      # Replace spaces with non-breaking spaces in item frame display names
+      # for correct rendering on Bedrock clients (e.g. via Geyser).
+      encode-spaces: true
 
     # Settings for placing clocks directly on surfaces (wall/floor/ceiling clocks)
     wall-clocks:
@@ -40,7 +43,8 @@ On **Paper/Spigot**, ClockTime is configured through `plugins/ClockTime/config.y
       "wildSpinWorlds": [],
       "itemFrameClocks": {
         "enabled": true,
-        "updateInterval": 16
+        "updateInterval": 16,
+        "encodeSpaces": true
       },
       "wallClocks": {
         "enabled": true
@@ -103,6 +107,16 @@ Enable or disable dynamic updates for clocks placed in item frames. When enabled
 | **Editable** | Yes |
 
 How often the plugin/mod updates item frame clocks, in ticks (e.g. `16` ticks = ~1 second). Higher values reduce CPU overhead.
+
+#### `item-frame-clocks.encode-spaces` (Fabric: `itemFrameClocks.encodeSpaces`)
+
+| Detail | Description |
+|---|---|
+| **Data Type** | Boolean |
+| **Default Value** | `true` |
+| **Editable** | Yes |
+
+When `true`, regular spaces (`U+0020`) and narrow no-break spaces (`U+202F`, emitted by Java 21+ for AM/PM time strings) in item frame display names are replaced with non-breaking spaces (`U+00A0`). This prevents Bedrock clients (e.g. via Geyser) from splitting or truncating time strings like `3:45 PM` in item frame name tags. Disable only if your server is Java-only and you observe unexpected rendering behaviour from non-breaking spaces.
 
 ### `wall-clocks` (Fabric: `wallClocks`)
 

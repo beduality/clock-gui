@@ -36,7 +36,11 @@ public class ClockTimePlugin extends JavaPlugin {
     var localeTimeFormatter = new LocaleTimeFormatter();
     var dimensionTimeResolver = new DimensionTimeResolver(config.getWildSpinWorlds());
     var clockMessageService =
-        new ClockMessageService(timeFormatter, localeTimeFormatter, dimensionTimeResolver);
+        new ClockMessageService(
+            timeFormatter,
+            localeTimeFormatter,
+            dimensionTimeResolver,
+            config.getItemFrameClocks().isEncodeSpaces());
 
     ClockItemFrameRegistry registry = null;
     ClockItemFrameUpdater updater = null;
