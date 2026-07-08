@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"io.github.beduality.clock_time.domain.model"},{"l":"io.github.beduality.clock_time.domain.service"}];updateSearchResults();
