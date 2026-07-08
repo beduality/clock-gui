@@ -34,7 +34,7 @@ def on_pre_build(config):
             fallback_content = (
                 "# Changes\n\n"
                 "## Unreleased\n\n"
-                "No changes yet or not added to Changelog yet.\n"
+                "No unreleased changes have been documented yet for the next release.\n"
             )
             Path(target).write_text(fallback_content)
             print(f"No Unreleased section found. Wrote fallback to {target}")
