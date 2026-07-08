@@ -92,15 +92,15 @@ def run_command(cmd: list[str], env: dict = None):
         raise subprocess.CalledProcessError(result.returncode, cmd)
 
 @app.command
-def rollback(version: str):
+def rollback(release_version: str):
     """Rollback a release by deleting local and remote tags, and resetting the release commit.
 
     Parameters
     ----------
-    version : str
+    release_version : str
         The version to rollback (e.g., '0.4.0').
     """
-    version_tag = f"v{version}"
+    version_tag = f"v{release_version}"
     console.print(f"[bold yellow]Initiating rollback for release {version_tag}...[/bold yellow]")
     
     # 1. Delete remote tag
@@ -123,7 +123,7 @@ def rollback(version: str):
     try:
         res = subprocess.run(["git", "log", "-1", "--pretty=%s"], capture_output=True, text=True, check=True)
         commit_msg = res.stdout.strip()
-        expected_msg = f"chore: release version {version}"
+        expected_msg = f"chore: release version {release_version}"
         if commit_msg == expected_msg:
             if questionary.confirm(f"Found release commit '{commit_msg}'. Reset this commit and keep modified files?", default=True).ask():
                 run_command(["git", "reset", "HEAD~1"])
