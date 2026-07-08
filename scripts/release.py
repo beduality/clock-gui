@@ -7,7 +7,7 @@ from datetime import date
 from pathlib import Path
 from cyclopts import App
 from rich.console import Console
-from rich.prompt import Prompt, Confirm
+import questionary
 
 console = Console()
 app = App(
@@ -104,7 +104,7 @@ def rollback(version: str):
     console.print(f"[bold yellow]Initiating rollback for release {version_tag}...[/bold yellow]")
     
     # 1. Delete remote tag
-    if Confirm.ask(f"Delete remote tag {version_tag}?", default=True):
+    if questionary.confirm(f"Delete remote tag {version_tag}?", default=True).ask():
         try:
             run_command(["git", "push", "origin", "--delete", version_tag])
             console.print(f"[green]✔[/green] Deleted remote tag {version_tag}")
@@ -112,7 +112,7 @@ def rollback(version: str):
             console.print(f"[yellow]Could not delete remote tag (might not exist): {e}[/yellow]")
             
     # 2. Delete local tag
-    if Confirm.ask(f"Delete local tag {version_tag}?", default=True):
+    if questionary.confirm(f"Delete local tag {version_tag}?", default=True).ask():
         try:
             run_command(["git", "tag", "-d", version_tag])
             console.print(f"[green]✔[/green] Deleted local tag {version_tag}")
@@ -125,7 +125,7 @@ def rollback(version: str):
         commit_msg = res.stdout.strip()
         expected_msg = f"chore: release version {version}"
         if commit_msg == expected_msg:
-            if Confirm.ask(f"Found release commit '{commit_msg}'. Reset this commit and keep modified files?", default=True):
+            if questionary.confirm(f"Found release commit '{commit_msg}'. Reset this commit and keep modified files?", default=True).ask():
                 run_command(["git", "reset", "HEAD~1"])
                 console.print("[green]✔[/green] Reset the last git commit.")
     except Exception as e:
@@ -160,14 +160,22 @@ def main(
     # Wizard Mode
     if bump is None:
         console.print("\n[bold yellow]--- Wizard Mode ---[/bold yellow]")
-        choices = ["patch", "minor", "major", "custom"]
-        choice = Prompt.ask(
+        choice = questionary.select(
             "Select bump type",
-            choices=choices,
+            choices=["patch", "minor", "major", "custom"],
             default="patch",
-        )
+        ).ask()
+        
+        # Handle ctrl+c
+        if choice is None:
+            console.print("[yellow]Release aborted.[/yellow]")
+            sys.exit(0)
+            
         if choice == "custom":
-            bump = Prompt.ask("Enter custom version (e.g., 0.5.0)")
+            bump = questionary.text("Enter custom version (e.g., 0.5.0)").ask()
+            if bump is None:
+                console.print("[yellow]Release aborted.[/yellow]")
+                sys.exit(0)
         else:
             bump = choice
             
@@ -179,7 +187,8 @@ def main(
         
     console.print(f"Target release version: [bold green]{new_version}[/bold green]")
     
-    if not Confirm.ask("Do you want to proceed with the release?"):
+    proceed = questionary.confirm("Do you want to proceed with the release?").ask()
+    if not proceed:
         console.print("[yellow]Release aborted.[/yellow]")
         sys.exit(0)
         
@@ -199,7 +208,7 @@ def main(
         # 3. Dry-Run Verification
         if dry_run:
             console.print("\n[bold]3. Dry-Run Verification...[/bold]")
-            if Confirm.ask("Do you want to run dry-run publication verification?", default=True):
+            if questionary.confirm("Do you want to run dry-run publication verification?", default=True).ask():
                 env = os.environ.copy()
                 env["DRY_RUN"] = "true"
                 env["JAVA_HOME"] = "/usr/lib/jvm/java-21-openjdk"
@@ -216,7 +225,7 @@ def main(
         # 4. Commit and Push Tag
         if push:
             console.print("\n[bold]4. Git Tag & Push...[/bold]")
-            if Confirm.ask(f"Commit, tag as v{new_version}, and push to remote?", default=True):
+            if questionary.confirm(f"Commit, tag as v{new_version}, and push to remote?", default=True).ask():
                 run_command(["git", "add", "gradle.properties", "pyproject.toml", "CHANGELOG.md", "uv.lock"])
                 
                 run_command(["git", "commit", "-m", f"chore: release version {new_version}"])

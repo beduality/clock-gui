@@ -81,10 +81,12 @@ class TestReleaseScript(unittest.TestCase):
         with self.assertRaises(subprocess.CalledProcessError):
             release.run_command(["git", "status"])
 
-    @patch("scripts.release.Confirm.ask")
+    @patch("scripts.release.questionary.confirm")
     @patch("scripts.release.subprocess.run")
     def test_rollback_cmd(self, mock_run, mock_confirm):
-        mock_confirm.side_effect = [True, True, True]
+        mock_confirm_obj = MagicMock()
+        mock_confirm_obj.ask.side_effect = [True, True, True]
+        mock_confirm.return_value = mock_confirm_obj
         
         # Mock git log returning release commit message
         mock_run.return_value = MagicMock(returncode=0, stdout="chore: release version 0.4.0\n")
@@ -95,18 +97,24 @@ class TestReleaseScript(unittest.TestCase):
         run_calls = [call[0][0] for call in mock_run.call_args_list]
         self.assertTrue(any(any("v0.4.0" in arg for arg in cmd) for cmd in run_calls if isinstance(cmd, list)))
 
-    @patch("scripts.release.Confirm.ask")
-    @patch("scripts.release.Prompt.ask")
+    @patch("scripts.release.questionary.confirm")
+    @patch("scripts.release.questionary.select")
     @patch("scripts.release.get_current_version")
     @patch("scripts.release.update_gradle_properties")
     @patch("scripts.release.update_pyproject_toml")
     @patch("scripts.release.update_changelog")
     @patch("scripts.release.run_command")
     @patch("scripts.release.subprocess.run")
-    def test_main_wizard_flow(self, mock_sub_run, mock_run_cmd, mock_up_changelog, mock_up_pyproject, mock_up_gradle, mock_get_ver, mock_prompt, mock_confirm):
+    def test_main_wizard_flow(self, mock_sub_run, mock_run_cmd, mock_up_changelog, mock_up_pyproject, mock_up_gradle, mock_get_ver, mock_select, mock_confirm):
         mock_get_ver.return_value = "0.3.0"
-        mock_prompt.side_effect = ["minor"]  # Wizard chooses minor bump
-        mock_confirm.side_effect = [True, True, True]  # Confirm release, run dry-run, push
+        
+        mock_select_obj = MagicMock()
+        mock_select_obj.ask.return_value = "minor"
+        mock_select.return_value = mock_select_obj
+        
+        mock_confirm_obj = MagicMock()
+        mock_confirm_obj.ask.side_effect = [True, True, True]
+        mock_confirm.return_value = mock_confirm_obj
         
         release.main(bump=None)
         
@@ -118,7 +126,7 @@ class TestReleaseScript(unittest.TestCase):
         run_calls = [call[0][0] for call in mock_run_cmd.call_args_list]
         self.assertTrue(any(any("0.4.0" in arg for arg in cmd) for cmd in run_calls if isinstance(cmd, list)))
 
-    @patch("scripts.release.Confirm.ask")
+    @patch("scripts.release.questionary.confirm")
     @patch("scripts.release.get_current_version")
     @patch("scripts.release.update_gradle_properties")
     @patch("scripts.release.update_pyproject_toml")
@@ -127,7 +135,10 @@ class TestReleaseScript(unittest.TestCase):
     @patch("scripts.release.subprocess.run")
     def test_main_cli_flow_with_rollback(self, mock_sub_run, mock_run_cmd, mock_up_changelog, mock_up_pyproject, mock_up_gradle, mock_get_ver, mock_confirm):
         mock_get_ver.return_value = "0.3.0"
-        mock_confirm.side_effect = [True, True, True]
+        
+        mock_confirm_obj = MagicMock()
+        mock_confirm_obj.ask.side_effect = [True, True, True]
+        mock_confirm.return_value = mock_confirm_obj
         
         # Make one command fail to trigger rollback
         def run_cmd_side_effect(cmd, env=None):
