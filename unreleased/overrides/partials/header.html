@@ -34,6 +34,17 @@
         </div>
       </div>
     </div>
+
+    <!-- Custom Changes Link - Positioned before palette to keep on left side of header -->
+    <div class="md-header__option">
+      <a href="{{ 'changes/' | url }}" class="md-header__button" title="Changes" style="display: flex; align-items: center; gap: 0.35rem; font-size: 0.75rem; padding: 0 0.5rem; color: var(--md-header-fg-color); opacity: 0.85; transition: opacity 0.25s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.85'">
+        <span class="twemoji" style="width: 1.1rem; height: 1.1rem; display: flex; align-items: center; fill: currentColor;">
+          {% include ".icons/material/history.svg" %}
+        </span>
+        <span style="font-weight: 500;">Changes</span>
+      </a>
+    </div>
+
     {% if config.theme.palette %}
       {% if not config.theme.palette is mapping %}
         {% include "partials/palette.html" %}
@@ -45,16 +56,6 @@
     {% if config.extra.alternate %}
       {% include "partials/alternate.html" %}
     {% endif %}
-
-    <!-- Custom Changes Link - Positioned next to Version Dropdown -->
-    <div class="md-header__option">
-      <a href="{{ 'changes/' | url }}" class="md-header__button" title="Changes" style="display: flex; align-items: center; gap: 0.35rem; font-size: 0.75rem; padding: 0 0.5rem; color: var(--md-header-fg-color); opacity: 0.85; transition: opacity 0.25s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.85'">
-        <span class="twemoji" style="width: 1.1rem; height: 1.1rem; display: flex; align-items: center; fill: currentColor;">
-          {% include ".icons/material/history.svg" %}
-        </span>
-        <span style="font-weight: 500;">Changes</span>
-      </a>
-    </div>
 
     {% if "material/search" in config.plugins %}
       {% set search = config.plugins["material/search"] | attr("config") %}
