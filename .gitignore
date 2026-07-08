@@ -9,6 +9,7 @@ bin
 # MkDocs
 site/
 .venv/
+docs/changes.md
 
 **/__pycache__
 
