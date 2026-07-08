@@ -26,6 +26,7 @@ def on_pre_build(config):
     
     # Check if we are being built by mike (mike sets MIKE_VERSION)
     mike_version = os.environ.get("MIKE_VERSION")
+    print(f"DEBUG: mike_version = '{mike_version}', type = {type(mike_version)}")
     
     target_header = None
     if mike_version == "unreleased":
