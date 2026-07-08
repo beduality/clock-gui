@@ -43,16 +43,25 @@ The documentation site is built with [MkDocs](https://www.mkdocs.org/) and the [
 
 ### Local Preview
 
-```bash
-uv run mkdocs serve
-```
+Since we use `mike` for documentation versioning, you can preview the multi-version documentation locally:
 
-This starts a dev server at `http://localhost:8000` with live reload.
+1. Build the documentation versions you want to test (e.g. the unreleased docs):
+   ```bash
+   uv run mike deploy -t "Unreleased" unreleased
+   uv run mike set-default unreleased
+   ```
+
+2. Start the local server:
+   ```bash
+   uv run mike serve
+   ```
+
+This starts a local server at `http://localhost:8000` serving all built versions.
 
 ### Build
 
 ```bash
-uv run mkdocs build
+uv run mike deploy <version> <alias>
 ```
 
 Output goes to `site/` (git-ignored).

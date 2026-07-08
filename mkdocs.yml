@@ -61,10 +61,15 @@ markdown_extensions:
   - toc:
       permalink: true
 
+hooks:
+  - docs/hooks/copy_javadoc.py
+
 plugins:
   - search
 
 extra:
+  version:
+    provider: mike
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/beduality/clock-time
