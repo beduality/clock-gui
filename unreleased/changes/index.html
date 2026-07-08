@@ -149,15 +149,17 @@
     
       <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
-    <!-- Custom Changes Link - Positioned next to Version Dropdown -->
-    <a href="./" class="md-header__button" title="Changes" style="display: flex; align-items: center; gap: 0.35rem; font-size: 0.75rem; padding: 0 0.5rem; margin-right: 0.25rem; color: var(--md-header-fg-color); opacity: 0.85; transition: opacity 0.25s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.85'">
-      <span class="twemoji" style="width: 1.1rem; height: 1.1rem; display: flex; align-items: center; fill: currentColor;">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.5 8H12v5l4.28 2.54.72-1.21-3.5-2.08zM13 3a9 9 0 0 0-9 9H1l3.96 4.03L9 12H6a7 7 0 0 1 7-7 7 7 0 0 1 7 7 7 7 0 0 1-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.9 8.9 0 0 0 13 21a9 9 0 0 0 9-9 9 9 0 0 0-9-9"/></svg>
-      </span>
-      <span style="font-weight: 500;">Changes</span>
-    </a>
-
     
+
+    <!-- Custom Changes Link - Positioned next to Version Dropdown -->
+    <div class="md-header__option">
+      <a href="./" class="md-header__button" title="Changes" style="display: flex; align-items: center; gap: 0.35rem; font-size: 0.75rem; padding: 0 0.5rem; color: var(--md-header-fg-color); opacity: 0.85; transition: opacity 0.25s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.85'">
+        <span class="twemoji" style="width: 1.1rem; height: 1.1rem; display: flex; align-items: center; fill: currentColor;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.5 8H12v5l4.28 2.54.72-1.21-3.5-2.08zM13 3a9 9 0 0 0-9 9H1l3.96 4.03L9 12H6a7 7 0 0 1 7-7 7 7 0 0 1 7 7 7 7 0 0 1-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.9 8.9 0 0 0 13 21a9 9 0 0 0 9-9 9 9 0 0 0-9-9"/></svg>
+        </span>
+        <span style="font-weight: 500;">Changes</span>
+      </a>
+    </div>
 
     
       
