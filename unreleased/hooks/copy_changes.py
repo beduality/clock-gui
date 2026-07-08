@@ -26,6 +26,7 @@ def on_pre_build(config):
     
     # Check if we are being built by mike (mike sets MIKE_VERSION)
     mike_version = os.environ.get("MIKE_VERSION")
+    print(f"ENV VARIABLES: { {k: v for k, v in os.environ.items() if 'MIKE' in k or 'MKDOCS' in k} }")
     print(f"DEBUG: mike_version = '{mike_version}', type = {type(mike_version)}")
     
     target_header = None
