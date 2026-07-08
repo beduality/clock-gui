@@ -66,6 +66,16 @@ uv run mike deploy <version> <alias>
 
 Output goes to `site/` (git-ignored).
 
+### Rebuilding All Versions
+
+If you change templates, overrides, hooks, or configurations and want to apply them across all historical versions (e.g. `0.1.0` through `0.4.0` and `unreleased`), you can run:
+
+```bash
+python3 scripts/redeploy_all_docs.py
+```
+
+This automation script checks out each tag, applies the latest config/overrides/hooks from the `main` branch, compiles the respective Javadocs, and deploys it to the local `gh-pages` branch using `mike`.
+
 ### Structure
 
 ```text

@@ -29,10 +29,16 @@ def on_pre_build(config):
     
     target_header = None
     if mike_version == "unreleased":
-        if "## [Unreleased]" in changelog_content:
-            target_header = "## [Unreleased]"
-        else:
-            target_header = f"## [{version}]"
+        target_header = "## [Unreleased]"
+        if target_header not in changelog_content:
+            fallback_content = (
+                "# Changes\n\n"
+                "## Unreleased\n\n"
+                "No changes yet or not added to Changelog yet.\n"
+            )
+            Path(target).write_text(fallback_content)
+            print(f"No Unreleased section found. Wrote fallback to {target}")
+            return
     else:
         v = mike_version if mike_version else version
         target_header = f"## [{v}]"
