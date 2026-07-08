@@ -2,7 +2,6 @@ import os
 import shutil
 
 def on_post_build(config):
-    # Search for Javadocs in any of the potential locations across different versions
     potential_folders = [
         'modules/clock-time-common/build/docs/javadoc',
         'modules/clock-time-paper/build/docs/javadoc',
