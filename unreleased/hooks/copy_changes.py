@@ -24,10 +24,8 @@ def on_pre_build(config):
     changelog_content = Path(source).read_text()
     version = get_current_version()
     
-    # Check if we are being built by mike (mike sets MIKE_VERSION)
-    mike_version = os.environ.get("MIKE_VERSION")
-    print(f"ENV VARIABLES: { {k: v for k, v in os.environ.items() if 'MIKE' in k or 'MKDOCS' in k} }")
-    print(f"DEBUG: mike_version = '{mike_version}', type = {type(mike_version)}")
+    # Check if we are being built by mike (mike sets MIKE_DOCS_VERSION)
+    mike_version = os.environ.get("MIKE_DOCS_VERSION")
     
     target_header = None
     if mike_version == "unreleased":
