@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.minecraft.entity.decoration.ItemFrameEntity;
+import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 
@@ -48,9 +49,14 @@ public class FabricClockItemFrameListener {
 
     UseEntityCallback.EVENT.register(
         (player, world, hand, entity, hitResult) -> {
-          if (!world.isClient() && entity instanceof ItemFrameEntity frame) {
-            if (world.getServer() != null) {
-              world.getServer().execute(() -> registerFrame(frame));
+          if (entity instanceof ItemFrameEntity frame) {
+            if (frame.getHeldItemStack().isOf(Items.CLOCK)) {
+              return ActionResult.FAIL;
+            }
+            if (!world.isClient()) {
+              if (world.getServer() != null) {
+                world.getServer().execute(() -> registerFrame(frame));
+              }
             }
           }
           return ActionResult.PASS;

@@ -96,6 +96,23 @@ class ClockItemFrameListenerTest {
 
   @Test
   void testPlayerInteractEntity() {
+    ItemFrame frame = mockItemFrame(Material.AIR);
+
+    PlayerInteractEntityEvent event =
+        new PlayerInteractEntityEvent(
+            server.addPlayer(), frame, org.bukkit.inventory.EquipmentSlot.HAND);
+
+    listener.onPlayerInteractEntity(event);
+
+    when(frame.getItem()).thenReturn(new ItemStack(Material.CLOCK));
+
+    server.getScheduler().performOneTick();
+
+    assertTrue(registry.getTrackedFrames().contains(new PaperItemFrameAdapter(frame)));
+  }
+
+  @Test
+  void testPlayerInteractEntityWithClockCancelled() {
     ItemFrame frame = mockItemFrame(Material.CLOCK);
 
     PlayerInteractEntityEvent event =
@@ -104,9 +121,11 @@ class ClockItemFrameListenerTest {
 
     listener.onPlayerInteractEntity(event);
 
+    assertTrue(event.isCancelled());
+
     server.getScheduler().performOneTick();
 
-    assertTrue(registry.getTrackedFrames().contains(new PaperItemFrameAdapter(frame)));
+    assertFalse(registry.getTrackedFrames().contains(new PaperItemFrameAdapter(frame)));
   }
 
   @Test

@@ -78,6 +78,10 @@ public class ClockItemFrameListener implements Listener {
   @EventHandler(ignoreCancelled = true)
   public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
     if (event.getRightClicked() instanceof ItemFrame frame) {
+      if (frame.getItem().getType() == org.bukkit.Material.CLOCK) {
+        event.setCancelled(true);
+        return;
+      }
       // Run 1 tick later to allow the item to be placed or updated in the frame
       Bukkit.getScheduler().runTask(plugin, () -> registerFrame(frame));
     }
