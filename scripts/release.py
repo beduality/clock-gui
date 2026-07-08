@@ -87,8 +87,47 @@ def run_command(cmd: list[str], env: dict = None):
     console.print(f"[bold blue]Running:[/bold blue] {' '.join(cmd)}")
     result = subprocess.run(cmd, env=env)
     if result.returncode != 0:
-        console.print(f"[bold red]Command failed with exit status {result.returncode}[/bold red]")
-        sys.exit(result.returncode)
+        raise subprocess.CalledProcessError(result.returncode, cmd)
+
+@app.command
+def rollback(version: str):
+    """Rollback a release by deleting local and remote tags, and resetting the release commit.
+
+    Parameters
+    ----------
+    version : str
+        The version to rollback (e.g., '0.4.0').
+    """
+    version_tag = f"v{version}"
+    console.print(f"[bold yellow]Initiating rollback for release {version_tag}...[/bold yellow]")
+    
+    # 1. Delete remote tag
+    if Confirm.ask(f"Delete remote tag {version_tag}?", default=True):
+        try:
+            run_command(["git", "push", "origin", "--delete", version_tag])
+            console.print(f"[green]✔[/green] Deleted remote tag {version_tag}")
+        except Exception as e:
+            console.print(f"[yellow]Could not delete remote tag (might not exist): {e}[/yellow]")
+            
+    # 2. Delete local tag
+    if Confirm.ask(f"Delete local tag {version_tag}?", default=True):
+        try:
+            run_command(["git", "tag", "-d", version_tag])
+            console.print(f"[green]✔[/green] Deleted local tag {version_tag}")
+        except Exception as e:
+            console.print(f"[yellow]Could not delete local tag (might not exist): {e}[/yellow]")
+            
+    # 3. Check for release commit
+    try:
+        res = subprocess.run(["git", "log", "-1", "--pretty=%s"], capture_output=True, text=True, check=True)
+        commit_msg = res.stdout.strip()
+        expected_msg = f"chore: release version {version}"
+        if commit_msg == expected_msg:
+            if Confirm.ask(f"Found release commit '{commit_msg}'. Reset this commit and keep modified files?", default=True):
+                run_command(["git", "reset", "HEAD~1"])
+                console.print("[green]✔[/green] Reset the last git commit.")
+    except Exception as e:
+        console.print(f"[yellow]Could not inspect git commit or reset: {e}[/yellow]")
 
 @app.default
 def main(
@@ -142,46 +181,89 @@ def main(
         console.print("[yellow]Release aborted.[/yellow]")
         sys.exit(0)
         
-    # 1. Update Version Numbers and Changelog
-    console.print("\n[bold]1. Updating version numbers & changelog...[/bold]")
+    actions_taken = []
     try:
+        # 1. Update Version Numbers and Changelog
+        console.print("\n[bold]1. Updating version numbers & changelog...[/bold]")
         update_gradle_properties(new_version)
         update_pyproject_toml(new_version)
         update_changelog(new_version)
-    except Exception as e:
-        console.print(f"[bold red]Error updating files:[/bold red] {e}")
-        sys.exit(1)
-        
-    # 2. Run uv lock to update lock file
-    console.print("\n[bold]2. Updating uv.lock...[/bold]")
-    run_command(["uv", "lock"])
-    
-    # 3. Dry-Run Verification
-    if not no_dry_run:
-        console.print("\n[bold]3. Dry-Run Verification...[/bold]")
-        if Confirm.ask("Do you want to run dry-run publication verification?", default=True):
-            env = os.environ.copy()
-            env["DRY_RUN"] = "true"
-            env["JAVA_HOME"] = "/usr/lib/jvm/java-21-openjdk"
-            run_command(
-                [
-                    "./gradlew",
-                    "publishPluginPublicationToHangar",
-                    "modrinth",
-                    "--no-daemon",
-                ],
-                env=env,
-            )
+        actions_taken.append("files_modified")
             
-    # 4. Commit and Push Tag
-    if not no_push:
-        console.print("\n[bold]4. Git Tag & Push...[/bold]")
-        if Confirm.ask(f"Commit, tag as v{new_version}, and push to remote?", default=True):
-            run_command(["git", "add", "gradle.properties", "pyproject.toml", "CHANGELOG.md", "uv.lock"])
-            run_command(["git", "commit", "-m", f"chore: release version {new_version}"])
-            run_command(["git", "tag", f"v{new_version}"])
-            run_command(["git", "push", "origin", "main", "--tags"])
-            console.print(f"\n[bold green]Successfully released v{new_version}![/bold green]")
+        # 2. Run uv lock to update lock file
+        console.print("\n[bold]2. Updating uv.lock...[/bold]")
+        run_command(["uv", "lock"])
+        
+        # 3. Dry-Run Verification
+        if not no_dry_run:
+            console.print("\n[bold]3. Dry-Run Verification...[/bold]")
+            if Confirm.ask("Do you want to run dry-run publication verification?", default=True):
+                env = os.environ.copy()
+                env["DRY_RUN"] = "true"
+                env["JAVA_HOME"] = "/usr/lib/jvm/java-21-openjdk"
+                run_command(
+                    [
+                        "./gradlew",
+                        "publishPluginPublicationToHangar",
+                        "modrinth",
+                        "--no-daemon",
+                    ],
+                    env=env,
+                )
+                
+        # 4. Commit and Push Tag
+        if not no_push:
+            console.print("\n[bold]4. Git Tag & Push...[/bold]")
+            if Confirm.ask(f"Commit, tag as v{new_version}, and push to remote?", default=True):
+                run_command(["git", "add", "gradle.properties", "pyproject.toml", "CHANGELOG.md", "uv.lock"])
+                
+                run_command(["git", "commit", "-m", f"chore: release version {new_version}"])
+                actions_taken.append("committed")
+                
+                run_command(["git", "tag", f"v{new_version}"])
+                actions_taken.append("tagged")
+                
+                run_command(["git", "push", "origin", "main", "--tags"])
+                actions_taken.append("pushed")
+                
+                console.print(f"\n[bold green]Successfully released v{new_version}![/bold green]")
+                
+    except Exception as e:
+        console.print(f"\n[bold red]Error occurred during release process: {e}[/bold red]")
+        console.print("[bold yellow]Initiating automatic rollback...[/bold yellow]")
+        
+        if "pushed" in actions_taken:
+            try:
+                subprocess.run(["git", "push", "origin", "--delete", f"v{new_version}"], check=True)
+                console.print("[green]✔[/green] Rolled back remote tag")
+            except Exception as re_err:
+                console.print(f"[red]Failed to delete remote tag: {re_err}[/red]")
+                
+        if "tagged" in actions_taken:
+            try:
+                subprocess.run(["git", "tag", "-d", f"v{new_version}"], check=True)
+                console.print("[green]✔[/green] Rolled back local tag")
+            except Exception as re_err:
+                console.print(f"[red]Failed to delete local tag: {re_err}[/red]")
+                
+        if "committed" in actions_taken:
+            try:
+                subprocess.run(["git", "reset", "HEAD~1"], check=True)
+                console.print("[green]✔[/green] Reset commit")
+            except Exception as re_err:
+                console.print(f"[red]Failed to reset commit: {re_err}[/red]")
+                
+        if "files_modified" in actions_taken and "committed" not in actions_taken:
+            try:
+                subprocess.run(
+                    ["git", "checkout", "gradle.properties", "pyproject.toml", "CHANGELOG.md", "uv.lock"],
+                    check=True
+                )
+                console.print("[green]✔[/green] Restored modified files")
+            except Exception as re_err:
+                console.print(f"[red]Failed to restore modified files: {re_err}[/red]")
+                
+        sys.exit(1)
 
 if __name__ == "__main__":
     app()

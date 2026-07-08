@@ -108,91 +108,18 @@ Documentation is automatically deployed to GitHub Pages on every push to `main` 
 
 ## Release Process
 
-We use an automated release script to handle bumping versions, updating the changelog, running dry-run verification, and pushing the tag.
+We use an automated release script to handle bumping versions, updating the changelog, running dry-run verification, tagging, and pushing, with built-in rollback capabilities.
 
-### Automated Release Script
+### Running the Release Script
 
 You can run the release script using `uv`:
 
-*   **Wizard Mode** (Interactive):
-    ```bash
-    uv run scripts/release.py
-    ```
-    This prompts you to select a bump type (`patch`, `minor`, `major`, or a custom version), updates the files, runs dry-run verification, and tags/pushes git commits.
-
-*   **CLI Mode**:
-    ```bash
-    uv run scripts/release.py patch
-    uv run scripts/release.py minor
-    uv run scripts/release.py major
-    uv run scripts/release.py 0.5.0
-    ```
-
-*   **Options**:
-    - `--no-dry-run`: Skip the dry-run publish verification task.
-    - `--no-push`: Skip committing, tagging, and pushing changes to git.
-
-### Manual Release Process (Alternative)
-
-If you prefer to perform the steps manually:
-
-#### 1. Update Version Numbers
-
-Update the version string to the new release version in the following files:
-*   [gradle.properties](./gradle.properties): `version = X.Y.Z`
-*   [pyproject.toml](./pyproject.toml): `version = "X.Y.Z"`
-
-### 2. Update Changelog
- 
-Document the new release's features, fixes, and changes in [CHANGELOG.md](./CHANGELOG.md) under a new version heading (following the [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format):
- 
-```markdown
-## [X.Y.Z] - YYYY-MM-DD
- 
-### Added
-- New feature description.
+```bash
+uv run scripts/release.py
 ```
 
-> [!IMPORTANT]
-> The GitHub release parser reads the first header block it finds. **Do not include an empty `## [Unreleased]` header in `CHANGELOG.md` when releasing.** Only add that header when you actually start writing new unreleased features post-release.
-
-### 3. Dry-Run Verification (Optional)
-
-Before pushing the release, you can dry-run the distribution tasks locally:
-
-*   **Dry-run Hangar & Modrinth**:
-    ```bash
-    DRY_RUN=true JAVA_HOME=/usr/lib/jvm/java-21-openjdk ./gradlew publishPluginPublicationToHangar modrinth --no-daemon
-    ```
-
-### 4. Create and Push the Tag
-
-Commit your changes, tag the commit, and push it:
+To see all available CLI modes, options, and commands (including how to trigger a rollback), query the help command:
 
 ```bash
-git add gradle.properties pyproject.toml CHANGELOG.md
-git commit -m "chore: release version X.Y.Z"
-git tag vX.Y.Z
-git push origin main --tags
+uv run scripts/release.py --help
 ```
-
-The GitHub Actions release workflow will automatically:
-
-1. Parse the latest section of `CHANGELOG.md` for release notes.
-2. Build and verify the project using JDK 21.
-3. Create a GitHub Release page with both compiled JARs and release notes.
-4. Publish the release to Hangar and Modrinth.
-
-### Granular Module Releases (Advanced)
-
-While unified versioning via Git tags is the standard, you can manually build and publish individual modules locally if needed:
-
-* **Publish Paper Only**:
-  ```bash
-  RELEASE_CHANGELOG="Changelog details..." HANGAR_API_TOKEN="token" MODRINTH_TOKEN="token" ./gradlew :clock-time-paper:publishPluginPublicationToHangar :clock-time-paper:modrinth
-  ```
-* **Publish Fabric Only**:
-  ```bash
-  RELEASE_CHANGELOG="Changelog details..." MODRINTH_TOKEN="token" ./gradlew :clock-time-fabric:modrinth
-  ```
-
