@@ -10,4 +10,6 @@ bin
 site/
 .venv/
 
+**/__pycache__
+
 .env
