@@ -10,7 +10,9 @@ from rich.console import Console
 from rich.prompt import Prompt, Confirm
 
 console = Console()
-app = App()
+app = App(
+    usage="release.py [BUMP] [OPTIONS]\n       release.py rollback <version>"
+)
 
 def get_current_version() -> str:
     path = Path("gradle.properties")
@@ -132,8 +134,8 @@ def rollback(version: str):
 @app.default
 def main(
     bump: str = None,
-    no_dry_run: bool = False,
-    no_push: bool = False,
+    dry_run: bool = True,
+    push: bool = True,
 ):
     """Automate the release process by bumping versions, updating changelogs, dry-running publications, and tagging.
 
@@ -142,10 +144,10 @@ def main(
     bump : str, optional
         The type of version bump ('major', 'minor', 'patch') or a specific version string.
         If omitted, starts wizard mode.
-    no_dry_run : bool, optional
-        Skip the dry-run publish verification task.
-    no_push : bool, optional
-        Skip committing, tagging, and pushing changes to git.
+    dry_run : bool, optional
+        Run the dry-run publish verification task.
+    push : bool, optional
+        Commit, tag, and push changes to git.
     """
     try:
         current_version = get_current_version()
@@ -195,7 +197,7 @@ def main(
         run_command(["uv", "lock"])
         
         # 3. Dry-Run Verification
-        if not no_dry_run:
+        if dry_run:
             console.print("\n[bold]3. Dry-Run Verification...[/bold]")
             if Confirm.ask("Do you want to run dry-run publication verification?", default=True):
                 env = os.environ.copy()
@@ -212,7 +214,7 @@ def main(
                 )
                 
         # 4. Commit and Push Tag
-        if not no_push:
+        if push:
             console.print("\n[bold]4. Git Tag & Push...[/bold]")
             if Confirm.ask(f"Commit, tag as v{new_version}, and push to remote?", default=True):
                 run_command(["git", "add", "gradle.properties", "pyproject.toml", "CHANGELOG.md", "uv.lock"])
