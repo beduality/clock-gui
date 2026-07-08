@@ -108,9 +108,35 @@ Documentation is automatically deployed to GitHub Pages on every push to `main` 
 
 ## Release Process
 
-We follow a manual tagging and automated publication workflow for releases.
+We use an automated release script to handle bumping versions, updating the changelog, running dry-run verification, and pushing the tag.
 
-### 1. Update Version Numbers
+### Automated Release Script
+
+You can run the release script using `uv`:
+
+*   **Wizard Mode** (Interactive):
+    ```bash
+    uv run scripts/release.py
+    ```
+    This prompts you to select a bump type (`patch`, `minor`, `major`, or a custom version), updates the files, runs dry-run verification, and tags/pushes git commits.
+
+*   **CLI Mode**:
+    ```bash
+    uv run scripts/release.py patch
+    uv run scripts/release.py minor
+    uv run scripts/release.py major
+    uv run scripts/release.py 0.5.0
+    ```
+
+*   **Options**:
+    - `--no-dry-run`: Skip the dry-run publish verification task.
+    - `--no-push`: Skip committing, tagging, and pushing changes to git.
+
+### Manual Release Process (Alternative)
+
+If you prefer to perform the steps manually:
+
+#### 1. Update Version Numbers
 
 Update the version string to the new release version in the following files:
 *   [gradle.properties](./gradle.properties): `version = X.Y.Z`
