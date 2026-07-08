@@ -232,12 +232,16 @@ def main(
         console.print(f"\n[bold red]Error occurred during release process: {e}[/bold red]")
         console.print("[bold yellow]Initiating automatic rollback...[/bold yellow]")
         
+        rollback_failed = False
+        
         if "pushed" in actions_taken:
             try:
                 subprocess.run(["git", "push", "origin", "--delete", f"v{new_version}"], check=True)
                 console.print("[green]✔[/green] Rolled back remote tag")
             except Exception as re_err:
                 console.print(f"[red]Failed to delete remote tag: {re_err}[/red]")
+                console.print(f"[yellow]Manual Step Needed: Run 'git push origin --delete v{new_version}'[/yellow]")
+                rollback_failed = True
                 
         if "tagged" in actions_taken:
             try:
@@ -245,6 +249,8 @@ def main(
                 console.print("[green]✔[/green] Rolled back local tag")
             except Exception as re_err:
                 console.print(f"[red]Failed to delete local tag: {re_err}[/red]")
+                console.print(f"[yellow]Manual Step Needed: Run 'git tag -d v{new_version}'[/yellow]")
+                rollback_failed = True
                 
         if "committed" in actions_taken:
             try:
@@ -252,6 +258,8 @@ def main(
                 console.print("[green]✔[/green] Reset commit")
             except Exception as re_err:
                 console.print(f"[red]Failed to reset commit: {re_err}[/red]")
+                console.print("[yellow]Manual Step Needed: Run 'git reset HEAD~1'[/yellow]")
+                rollback_failed = True
                 
         if "files_modified" in actions_taken and "committed" not in actions_taken:
             try:
@@ -262,7 +270,14 @@ def main(
                 console.print("[green]✔[/green] Restored modified files")
             except Exception as re_err:
                 console.print(f"[red]Failed to restore modified files: {re_err}[/red]")
+                console.print("[yellow]Manual Step Needed: Run 'git restore gradle.properties pyproject.toml CHANGELOG.md uv.lock'[/yellow]")
+                rollback_failed = True
                 
+        if rollback_failed:
+            console.print("\n[bold red]Automatic rollback was only partially successful. Please complete the manual step(s) listed above.[/bold red]")
+        else:
+            console.print("\n[bold green]Automatic rollback completed successfully. Repository has been restored to its pre-release state.[/bold green]")
+            
         sys.exit(1)
 
 if __name__ == "__main__":
