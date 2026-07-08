@@ -1,5 +1,5 @@
 {#-
-  This file overrides the default header to inject a "Changes" button next to search/GitHub
+  This file overrides the default header to inject a "Changes" button next to the version selector
 -#}
 {% set class = "md-header" %}
 {% if "navigation.tabs.sticky" in features %}
@@ -45,6 +45,15 @@
     {% if config.extra.alternate %}
       {% include "partials/alternate.html" %}
     {% endif %}
+
+    <!-- Custom Changes Link - Positioned after Version Dropdown -->
+    <a href="{{ 'changes/' | url }}" class="md-header__button" title="Changes" style="display: flex; align-items: center; gap: 0.35rem; font-size: 0.75rem; padding: 0 0.5rem; margin-right: 0.25rem; color: var(--md-header-fg-color); opacity: 0.85; transition: opacity 0.25s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.85'">
+      <span class="twemoji" style="width: 1.1rem; height: 1.1rem; display: flex; align-items: center; fill: currentColor;">
+        {% include ".icons/material/history.svg" %}
+      </span>
+      <span style="font-weight: 500;">Changes</span>
+    </a>
+
     {% if "material/search" in config.plugins %}
       {% set search = config.plugins["material/search"] | attr("config") %}
       {% if search.enabled %}
@@ -55,15 +64,6 @@
         {% include "partials/search.html" %}
       {% endif %}
     {% endif %}
-    
-    <!-- Custom Changes Link -->
-    <a href="{{ 'changes/' | url }}" class="md-header__button" title="Changes" style="display: flex; align-items: center; gap: 0.35rem; font-size: 0.75rem; padding: 0 0.5rem; margin-right: 0.25rem;">
-      <span class="twemoji" style="width: 1.1rem; height: 1.1rem; display: flex; align-items: center;">
-        {% include ".icons/material/history.svg" %}
-      </span>
-      <span style="font-weight: 500;">Changes</span>
-    </a>
-
     {% if config.repo_url %}
       <div class="md-header__source">
         {% include "partials/source.html" %}
