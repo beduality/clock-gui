@@ -1,5 +1,6 @@
 # TODO
 
+- Fix hardcoded code in `scripts/redeploy_all_docs.py` and write test for it
 - Add config to choose real world time or in-game time
 - Add support to client-side item frame localization via NMS
 - Flag to disable localization
